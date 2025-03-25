@@ -1,0 +1,73 @@
+{
+  "site": {
+    "title": "AiluroWander - China Travel Agency",
+    "description": "Discover authentic China with AiluroWander, your trusted travel partner"
+  },
+  "nav": {
+    "home": "Home",
+    "tours": "Tours",
+    "about": "About",
+    "contact": "Contact",
+    "admin": "Admin"
+  },
+  "home": {
+    "hero": {
+      "title": "Discover the Authentic China Experience",
+      "subtitle": "Expertly curated tours that showcase the beauty, culture, and history of China",
+      "cta_primary": "Explore Tours",
+      "cta_secondary": "Contact Us"
+    },
+    "featured": {
+      "title": "Featured Tours",
+      "subtitle": "Experience the best of China with our hand-picked tours, designed to showcase the country's rich heritage and breathtaking landscapes",
+      "view_all": "View All Tours",
+      "view_details": "View Details"
+    },
+    "why_us": {
+      "title": "Why Choose AiluroWander",
+      "subtitle": "We're dedicated to providing you with an authentic and memorable experience of China",
+      "guides": {
+        "title": "Expert Local Guides",
+        "description": "Our guides are passionate locals with deep knowledge of Chinese culture, history, and hidden gems"
+      },
+      "experiences": {
+        "title": "Tailored Experiences",
+        "description": "We customize your journey to match your interests, ensuring an unforgettable China experience"
+      },
+      "worry_free": {
+        "title": "Worry-Free Travel",
+        "description": "From accommodation to transport, we handle all the details so you can focus on enjoying your trip"
+      }
+    },
+    "destinations": {
+      "title": "Popular Destinations",
+      "subtitle": "From ancient cities to modern metropolises, discover the diverse destinations that make China so special"
+    },
+    "testimonials": {
+      "title": "What Our Travelers Say",
+      "subtitle": "Hear from travelers who have experienced China with AiluroWander"
+    },
+    "newsletter": {
+      "title": "Join Our Newsletter",
+      "subtitle": "Stay updated with our latest tours and special offers",
+      "placeholder": "Your email address",
+      "button": "Subscribe"
+    }
+  },
+  "tours": {
+    "duration": "Duration",
+    "price": "Price",
+    "from": "from"
+  },
+  "footer": {
+    "company_description": "Authentic China travel experiences tailored for international travelers",
+    "explore": "Explore",
+    "destinations": "Destinations",
+    "experiences": "Experiences",
+    "company": "Company",
+    "about_us": "About Us",
+    "terms": "Terms & Conditions",
+    "connect": "Connect",
+    "rights": "All rights reserved"
+  }
+}

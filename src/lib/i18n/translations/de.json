@@ -1,0 +1,73 @@
+{
+  "site": {
+    "title": "AiluroWander - China-Reisebüro",
+    "description": "Entdecken Sie das authentische China mit AiluroWander, Ihrem vertrauenswürdigen Reisepartner"
+  },
+  "nav": {
+    "home": "Startseite",
+    "tours": "Touren",
+    "about": "Über uns",
+    "contact": "Kontakt",
+    "admin": "Admin"
+  },
+  "home": {
+    "hero": {
+      "title": "Entdecken Sie das authentische China",
+      "subtitle": "Fachkundig kuratierte Touren, die die Schönheit, Kultur und Geschichte Chinas präsentieren",
+      "cta_primary": "Touren erkunden",
+      "cta_secondary": "Kontaktiere uns"
+    },
+    "featured": {
+      "title": "Ausgewählte Touren",
+      "subtitle": "Erleben Sie das Beste von China mit unseren handverlesenen Touren, die das reiche Erbe und die atemberaubenden Landschaften des Landes zeigen",
+      "view_all": "Alle Touren anzeigen",
+      "view_details": "Details anzeigen"
+    },
+    "why_us": {
+      "title": "Warum AiluroWander wählen",
+      "subtitle": "Wir sind bestrebt, Ihnen ein authentisches und unvergessliches Erlebnis in China zu bieten",
+      "guides": {
+        "title": "Erfahrene lokale Reiseleiter",
+        "description": "Unsere Reiseleiter sind leidenschaftliche Einheimische mit fundiertem Wissen über chinesische Kultur, Geschichte und versteckte Schätze"
+      },
+      "experiences": {
+        "title": "Maßgeschneiderte Erlebnisse",
+        "description": "Wir passen Ihre Reise an Ihre Interessen an und sorgen für ein unvergessliches China-Erlebnis"
+      },
+      "worry_free": {
+        "title": "Sorgenfreies Reisen",
+        "description": "Von der Unterkunft bis zum Transport kümmern wir uns um alle Details, damit Sie sich auf Ihren Urlaub konzentrieren können"
+      }
+    },
+    "destinations": {
+      "title": "Beliebte Reiseziele",
+      "subtitle": "Von alten Städten bis hin zu modernen Metropolen, entdecken Sie die vielfältigen Reiseziele, die China so besonders machen"
+    },
+    "testimonials": {
+      "title": "Was unsere Reisenden sagen",
+      "subtitle": "Hören Sie von Reisenden, die China mit AiluroWander erlebt haben"
+    },
+    "newsletter": {
+      "title": "Abonnieren Sie unseren Newsletter",
+      "subtitle": "Bleiben Sie über unsere neuesten Touren und Sonderangebote informiert",
+      "placeholder": "Ihre E-Mail-Adresse",
+      "button": "Abonnieren"
+    }
+  },
+  "tours": {
+    "duration": "Dauer",
+    "price": "Preis",
+    "from": "ab"
+  },
+  "footer": {
+    "company_description": "Authentische China-Reiseerlebnisse, maßgeschneidert für internationale Reisende",
+    "explore": "Erkunden",
+    "destinations": "Reiseziele",
+    "experiences": "Erlebnisse",
+    "company": "Unternehmen",
+    "about_us": "Über uns",
+    "terms": "AGB",
+    "connect": "Verbinden",
+    "rights": "Alle Rechte vorbehalten"
+  }
+}

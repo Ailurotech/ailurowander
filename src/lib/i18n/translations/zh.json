@@ -1,0 +1,73 @@
+{
+  "site": {
+    "title": "AiluroWander - 中国旅游机构",
+    "description": "与AiluroWander一起探索真实的中国，您值得信赖的旅行伙伴"
+  },
+  "nav": {
+    "home": "首页",
+    "tours": "旅游路线",
+    "about": "关于我们",
+    "contact": "联系我们",
+    "admin": "管理后台"
+  },
+  "home": {
+    "hero": {
+      "title": "发现真实的中国体验",
+      "subtitle": "精心策划的旅游路线，展示中国的美丽、文化和历史",
+      "cta_primary": "探索旅游路线",
+      "cta_secondary": "联系我们"
+    },
+    "featured": {
+      "title": "精选旅游路线",
+      "subtitle": "体验我们精心挑选的中国旅游路线，展示国家丰富的遗产和令人惊叹的景观",
+      "view_all": "查看所有路线",
+      "view_details": "查看详情"
+    },
+    "why_us": {
+      "title": "为什么选择AiluroWander",
+      "subtitle": "我们致力于为您提供真实而难忘的中国体验",
+      "guides": {
+        "title": "专业本地导游",
+        "description": "我们的导游是热情的当地人，对中国文化、历史和隐藏景点有深入了解"
+      },
+      "experiences": {
+        "title": "定制体验",
+        "description": "我们根据您的兴趣定制行程，确保您获得难忘的中国体验"
+      },
+      "worry_free": {
+        "title": "无忧旅行",
+        "description": "从住宿到交通，我们处理所有细节，让您专注于享受旅行"
+      }
+    },
+    "destinations": {
+      "title": "热门目的地",
+      "subtitle": "从古老城市到现代大都市，探索使中国如此特别的多样化目的地"
+    },
+    "testimonials": {
+      "title": "旅行者的评价",
+      "subtitle": "听听与AiluroWander一起体验中国的旅行者的分享"
+    },
+    "newsletter": {
+      "title": "订阅我们的通讯",
+      "subtitle": "了解我们最新的旅游路线和特别优惠",
+      "placeholder": "您的电子邮箱",
+      "button": "订阅"
+    }
+  },
+  "tours": {
+    "duration": "行程天数",
+    "price": "价格",
+    "from": "起价"
+  },
+  "footer": {
+    "company_description": "为国际旅行者量身定制的真实中国旅行体验",
+    "explore": "探索",
+    "destinations": "目的地",
+    "experiences": "体验",
+    "company": "公司",
+    "about_us": "关于我们",
+    "terms": "条款与条件",
+    "connect": "关注我们",
+    "rights": "版权所有"
+  }
+}

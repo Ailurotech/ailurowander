@@ -1,0 +1,73 @@
+{
+  "site": {
+    "title": "AiluroWander - 中国旅行代理店",
+    "description": "信頼できる旅行パートナーであるAiluroWanderと共に本物の中国を発見しましょう"
+  },
+  "nav": {
+    "home": "ホーム",
+    "tours": "ツアー",
+    "about": "会社概要",
+    "contact": "お問い合わせ",
+    "admin": "管理画面"
+  },
+  "home": {
+    "hero": {
+      "title": "本物の中国体験を発見する",
+      "subtitle": "中国の美しさ、文化、歴史を紹介する専門家が厳選したツアー",
+      "cta_primary": "ツアーを探す",
+      "cta_secondary": "お問い合わせ"
+    },
+    "featured": {
+      "title": "おすすめツアー",
+      "subtitle": "中国の豊かな遺産と息を呑むような景観を紹介するために設計された厳選ツアーで最高の中国を体験",
+      "view_all": "すべてのツアーを見る",
+      "view_details": "詳細を見る"
+    },
+    "why_us": {
+      "title": "AiluroWanderを選ぶ理由",
+      "subtitle": "私たちは、中国での本物で思い出に残る体験を提供することに専念しています",
+      "guides": {
+        "title": "専門の現地ガイド",
+        "description": "私たちのガイドは、中国の文化、歴史、隠れた名所に関する深い知識を持つ情熱的な現地の人々です"
+      },
+      "experiences": {
+        "title": "カスタマイズされた体験",
+        "description": "忘れられない中国体験を確保するために、あなたの興味に合わせて旅をカスタマイズします"
+      },
+      "worry_free": {
+        "title": "心配無用の旅行",
+        "description": "宿泊から交通まで、すべての詳細を処理し、旅行を楽しむことに集中できるようにします"
+      }
+    },
+    "destinations": {
+      "title": "人気の目的地",
+      "subtitle": "古代都市から現代の大都市まで、中国をこれほど特別にしている多様な目的地を発見してください"
+    },
+    "testimonials": {
+      "title": "旅行者の声",
+      "subtitle": "AiluroWanderと中国を体験した旅行者の声をお聞きください"
+    },
+    "newsletter": {
+      "title": "ニュースレターに登録する",
+      "subtitle": "最新のツアーと特別オファーの最新情報を入手してください",
+      "placeholder": "メールアドレス",
+      "button": "購読する"
+    }
+  },
+  "tours": {
+    "duration": "期間",
+    "price": "価格",
+    "from": "から"
+  },
+  "footer": {
+    "company_description": "国際的な旅行者のためにカスタマイズされた本物の中国旅行体験",
+    "explore": "探検",
+    "destinations": "目的地",
+    "experiences": "体験",
+    "company": "会社",
+    "about_us": "会社概要",
+    "terms": "利用規約",
+    "connect": "接続する",
+    "rights": "全著作権所有"
+  }
+}
