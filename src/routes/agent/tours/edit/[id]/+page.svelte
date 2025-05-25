@@ -6,12 +6,31 @@
   import Button from '../../../../../components/atoms/Button.svelte';
   import Divider from '../../../../../components/atoms/Divider.svelte';
   import ChineseIcon from '../../../../../components/atoms/ChineseIcon.svelte';
+  import { goto } from '$app/navigation';
   
   // Tour ID from URL
   const tourId = $page.params.id;
   
   // Form state with default values (will be replaced with actual tour data)
-  let tourData = {
+  let tourData: {
+    _id: string;
+    title: string;
+    description: string;
+    shortDescription: string;
+    duration: { days: number; nights: number };
+    price: { amount: number; currency: string };
+    destination: string;
+    maxGroupSize: number;
+    highlights: string[];
+    inclusions: string[];
+    exclusions: string[];
+    itinerary: { day: number; title: string; description: string }[];
+    images: { main: string; gallery: string[] };
+    featured: boolean;
+    discount: number;
+    tags: string[];
+  } = {
+    _id: '',
     title: '',
     description: '',
     shortDescription: '',
@@ -19,13 +38,14 @@
     price: { amount: 0, currency: 'USD' },
     destination: '',
     maxGroupSize: 10,
-    included: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-    notIncluded: ['International flights', 'Travel insurance', 'Personal expenses'],
+    highlights: [],
+    inclusions: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
+    exclusions: ['International flights', 'Travel insurance', 'Personal expenses'],
     itinerary: [{ day: 1, title: 'Arrival Day', description: 'Welcome to China! Transfer to hotel and rest.' }],
-    images: { main: '', gallery: [] as string[] },
+    images: { main: '', gallery: [] },
     featured: false,
     discount: 0,
-    tags: [] as string[]
+    tags: []
   };
   
   // Available icons for tour selection
@@ -55,6 +75,12 @@
   let submitSuccess = false;
   let submitError = '';
   
+  // Add these variables at the top of the script section
+  let mainImageFile: File | null = null;
+  let galleryImageFiles: File[] = [];
+  let mainImagePreview: string | null = null;
+  let galleryImagePreviews: string[] = [];
+  
   // Load tour data
   async function loadTourData() {
     isLoading = true;
@@ -73,6 +99,7 @@
       
       // Map the API data to our form structure
       tourData = {
+        _id: tour._id || '',
         title: tour.title || '',
         description: tour.description || '',
         shortDescription: tour.shortDescription || '',
@@ -80,13 +107,14 @@
         price: tour.price || { amount: 0, currency: 'USD' },
         destination: tour.destination || '',
         maxGroupSize: tour.maxGroupSize || 10,
-        included: tour.included || ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-        notIncluded: tour.notIncluded || ['International flights', 'Travel insurance', 'Personal expenses'],
+        inclusions: tour.inclusions || ['Hotel accommodation', 'English speaking guide', 'Transportation'],
+        exclusions: tour.exclusions || ['International flights', 'Travel insurance', 'Personal expenses'],
         itinerary: tour.itinerary || [{ day: 1, title: 'Arrival Day', description: 'Welcome to China! Transfer to hotel and rest.' }],
         images: tour.images || { main: '', gallery: [] },
         featured: tour.featured || false,
         discount: tour.discount || 0,
-        tags: tour.tags || []
+        tags: tour.tags || [],
+        highlights: tour.highlights || []
       };
       
       // Set the icon
@@ -122,25 +150,71 @@
   
   // Add a new included item
   function addIncludedItem() {
-    tourData.included = [...tourData.included, ''];
+    tourData.inclusions = [...tourData.inclusions, ''];
   }
   
   // Remove an included item
   function removeIncludedItem(index: number) {
-    tourData.included = tourData.included.filter((_, i) => i !== index);
+    tourData.inclusions = tourData.inclusions.filter((_, i) => i !== index);
   }
   
   // Add a new not included item
   function addNotIncludedItem() {
-    tourData.notIncluded = [...tourData.notIncluded, ''];
+    tourData.exclusions = [...tourData.exclusions, ''];
   }
   
   // Remove a not included item
   function removeNotIncludedItem(index: number) {
-    tourData.notIncluded = tourData.notIncluded.filter((_, i) => i !== index);
+    tourData.exclusions = tourData.exclusions.filter((_, i) => i !== index);
   }
   
-  // Handle form submission for updating tour
+  // Add a new highlight item
+  function addHighlightItem() {
+    tourData.highlights = [...tourData.highlights, ''];
+  }
+  
+  // Remove a highlight item
+  function removeHighlightItem(index: number) {
+    tourData.highlights = tourData.highlights.filter((_, i) => i !== index);
+  }
+  
+  // Add these functions before handleSubmit
+  function handleMainImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      mainImageFile = input.files[0];
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        mainImagePreview = e.target?.result as string;
+      };
+      reader.readAsDataURL(mainImageFile);
+    }
+  }
+
+  function handleGalleryImageChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files) {
+      const newFiles = Array.from(input.files);
+      galleryImageFiles = [...galleryImageFiles, ...newFiles];
+      
+      // Create previews
+      newFiles.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          galleryImagePreviews = [...galleryImagePreviews, e.target?.result as string];
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  }
+
+  function removeGalleryImage(index: number) {
+    galleryImageFiles = galleryImageFiles.filter((_, i) => i !== index);
+    galleryImagePreviews = galleryImagePreviews.filter((_, i) => i !== index);
+  }
+  
+  // Update the handleSubmit function
   async function handleSubmit() {
     isSubmitting = true;
     submitSuccess = false;
@@ -152,40 +226,45 @@
         throw new Error('Please fill out all required fields');
       }
       
-      // Ensure required values are numbers
-      if (isNaN(tourData.duration.days) || tourData.duration.days <= 0) {
-        throw new Error('Please enter a valid duration in days');
+      // Create FormData for file upload
+      const formData = new FormData();
+      
+      // Add tour data
+      formData.append('title', tourData.title);
+      formData.append('description', tourData.description);
+      formData.append('shortDescription', tourData.shortDescription);
+      formData.append('destination', tourData.destination);
+      formData.append('durationDays', tourData.duration.days.toString());
+      formData.append('durationNights', tourData.duration.nights.toString());
+      formData.append('price', tourData.price.amount.toString());
+      formData.append('featured', tourData.featured.toString());
+      formData.append('itinerary', JSON.stringify(tourData.itinerary));
+      
+      // Add highlights
+      tourData.highlights.forEach(item => {
+        formData.append('highlights', item);
+      });
+      
+      // Add inclusions and exclusions
+      tourData.inclusions.forEach(item => {
+        formData.append('included', item);
+      });
+      tourData.exclusions.forEach(item => {
+        formData.append('notIncluded', item);
+      });
+      
+      // Add images if they've been changed
+      if (mainImageFile) {
+        formData.append('mainImage', mainImageFile);
       }
-      
-      if (isNaN(tourData.price.amount) || tourData.price.amount < 0) {
-        throw new Error('Please enter a valid price amount');
-      }
-      
-      // Ensure gallery is an array of strings
-      if (!Array.isArray(tourData.images.gallery)) {
-        tourData.images.gallery = [];
-      }
-      
-      // Format and add tags if destination is not already in tags
-      if (!tourData.tags.includes(tourData.destination)) {
-        tourData.tags = [tourData.destination, ...tourData.tags];
-      }
-      
-      // Format data for submission
-      const formattedTourData = {
-        ...tourData,
-        iconType: selectedIcon,
-      };
-      
-      console.log('Updating tour data:', formattedTourData);
+      galleryImageFiles.forEach(file => {
+        formData.append('galleryImages', file);
+      });
       
       // Make an API call to update the tour
-      const response = await fetch(`/api/tours/${tourId}`, {
+      const response = await fetch(`/api/tours/${tourData._id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formattedTourData)
+        body: formData
       });
       
       if (!response.ok) {
@@ -198,6 +277,12 @@
       
       // Show success message
       submitSuccess = true;
+      
+      // Wait for 2 seconds to show the success message
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Navigate back to tours page
+      goto('/agent/tours');
       
     } catch (error) {
       submitError = error instanceof Error ? error.message : 'Failed to update tour. Please try again.';
@@ -256,37 +341,36 @@
     </div>
   {:else}
     {#if submitSuccess}
-      <div class="bg-green-50 border-l-4 border-green-500 p-4 mb-8">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <div class="flex items-center justify-center mb-4">
+            <svg class="h-12 w-12 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <div class="ml-3">
-            <p class="text-sm text-green-700">
-              Tour was successfully updated!
-            </p>
-            <div class="mt-2">
-              <Button href="/agent/tours" variant="secondary" size="sm">Return to Tours</Button>
-            </div>
-          </div>
+          <h3 class="text-lg font-medium text-center mb-2">Tour Updated Successfully!</h3>
+          <p class="text-neutral-600 text-center">Redirecting to tours page...</p>
         </div>
       </div>
     {/if}
     
     {#if submitError}
-      <div class="bg-red-50 border-l-4 border-red-500 p-4 mb-8">
-        <div class="flex">
-          <div class="flex-shrink-0">
-            <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+      <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+          <div class="flex items-center justify-center mb-4">
+            <svg class="h-12 w-12 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
-          <div class="ml-3">
-            <p class="text-sm text-red-700">
-              {submitError}
-            </p>
+          <h3 class="text-lg font-medium text-center mb-2">Update Failed</h3>
+          <p class="text-neutral-600 text-center mb-4">{submitError}</p>
+          <div class="flex justify-center">
+            <button 
+              class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors"
+              on:click={() => submitError = ''}
+            >
+              Close
+            </button>
           </div>
         </div>
       </div>
@@ -508,6 +592,41 @@
         </div>
       </div>
       
+      <!-- Tour Highlights -->
+      <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-heading font-bold">Tour Highlights</h2>
+          <button 
+            type="button"
+            class="btn btn--outline"
+            on:click={addHighlightItem}
+          >
+            Add Highlight
+          </button>
+        </div>
+        
+        <div class="space-y-3">
+          {#each tourData.highlights as item, index}
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                bind:value={tourData.highlights[index]} 
+                required
+                class="input flex-grow" 
+                placeholder="e.g. Great Wall of China"
+              />
+              <button 
+                type="button"
+                class="btn btn--outline text-red-600 border-red-600 px-3"
+                on:click={() => removeHighlightItem(index)}
+              >
+                Remove
+              </button>
+            </div>
+          {/each}
+        </div>
+      </div>
+      
       <!-- Inclusions & Exclusions -->
       <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
         <h2 class="text-xl font-heading font-bold mb-4">Inclusions & Exclusions</h2>
@@ -526,11 +645,11 @@
             </div>
             
             <div class="space-y-3">
-              {#each tourData.included as item, index}
+              {#each tourData.inclusions as item, index}
                 <div class="flex gap-2">
                   <input 
                     type="text" 
-                    bind:value={tourData.included[index]} 
+                    bind:value={tourData.inclusions[index]} 
                     required
                     class="input flex-grow" 
                     placeholder="e.g. Hotel accommodations"
@@ -539,7 +658,7 @@
                     type="button"
                     class="btn btn--outline text-red-600 border-red-600 px-3"
                     on:click={() => removeIncludedItem(index)}
-                    disabled={tourData.included.length === 1}
+                    disabled={tourData.inclusions.length === 1}
                   >
                     Remove
                   </button>
@@ -561,11 +680,11 @@
             </div>
             
             <div class="space-y-3">
-              {#each tourData.notIncluded as item, index}
+              {#each tourData.exclusions as item, index}
                 <div class="flex gap-2">
                   <input 
                     type="text" 
-                    bind:value={tourData.notIncluded[index]} 
+                    bind:value={tourData.exclusions[index]} 
                     required
                     class="input flex-grow" 
                     placeholder="e.g. International flights"
@@ -574,7 +693,7 @@
                     type="button"
                     class="btn btn--outline text-red-600 border-red-600 px-3"
                     on:click={() => removeNotIncludedItem(index)}
-                    disabled={tourData.notIncluded.length === 1}
+                    disabled={tourData.exclusions.length === 1}
                   >
                     Remove
                   </button>
@@ -590,46 +709,106 @@
         <h2 class="text-xl font-heading font-bold mb-4">Images</h2>
         
         <div class="form-group">
-          <label for="main-image" class="form-label">Main Image URL*</label>
-          <input 
-            type="text" 
-            id="main-image" 
-            bind:value={tourData.images.main} 
-            required
-            class="input w-full" 
-            placeholder="e.g. https://example.com/image.jpg"
-          />
-          <p class="text-xs text-neutral-500 mt-1">Enter the URL for the main image. For a real application, this would be an image upload function.</p>
+          <label for="main-image" class="form-label">Main Image</label>
+          <div class="mt-2">
+            <input 
+              type="file" 
+              id="main-image" 
+              accept="image/*"
+              on:change={handleMainImageChange}
+              class="hidden"
+            />
+            <label 
+              for="main-image" 
+              class="cursor-pointer inline-flex items-center px-4 py-2 border border-neutral-300 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+            >
+              <svg class="h-5 w-5 mr-2 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Change Main Image
+            </label>
+          </div>
+          {#if mainImagePreview}
+            <div class="mt-4">
+              <img 
+                src={mainImagePreview} 
+                alt="Main image preview" 
+                class="max-w-xs rounded-lg shadow-sm"
+              />
+            </div>
+          {:else if tourData.images.main}
+            <div class="mt-4">
+              <img 
+                src={tourData.images.main} 
+                alt="Current main image" 
+                class="max-w-xs rounded-lg shadow-sm"
+              />
+            </div>
+          {/if}
         </div>
         
-        <div class="form-group mt-4">
+        <div class="form-group mt-6">
           <label class="form-label">Gallery Images</label>
-          <div class="space-y-3">
-            {#each tourData.images.gallery as image, index}
-              <div class="flex gap-2">
-                <input 
-                  type="text" 
-                  bind:value={tourData.images.gallery[index]} 
-                  class="input flex-grow" 
-                  placeholder="Image URL"
-                />
-                <button 
-                  type="button"
-                  class="btn btn--outline text-red-600 border-red-600 px-3"
-                  on:click={() => tourData.images.gallery = tourData.images.gallery.filter((_, i) => i !== index)}
-                >
-                  Remove
-                </button>
-              </div>
-            {/each}
-            <button 
-              type="button"
-              class="btn btn--outline w-full"
-              on:click={() => tourData.images.gallery = [...tourData.images.gallery, '']}
+          <div class="mt-2">
+            <input 
+              type="file" 
+              id="gallery-images" 
+              accept="image/*"
+              multiple
+              on:change={handleGalleryImageChange}
+              class="hidden"
+            />
+            <label 
+              for="gallery-images" 
+              class="cursor-pointer inline-flex items-center px-4 py-2 border border-neutral-300 rounded-md shadow-sm text-sm font-medium text-neutral-700 bg-white hover:bg-neutral-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
             >
-              Add Gallery Image
-            </button>
+              <svg class="h-5 w-5 mr-2 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+              Add Gallery Images
+            </label>
           </div>
+          
+          {#if galleryImagePreviews.length > 0 || tourData.images.gallery.length > 0}
+            <div class="mt-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {#each galleryImagePreviews as preview, index}
+                <div class="relative group">
+                  <img 
+                    src={preview} 
+                    alt="Gallery image preview" 
+                    class="w-full h-32 object-cover rounded-lg shadow-sm"
+                  />
+                  <button 
+                    type="button"
+                    class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    on:click={() => removeGalleryImage(index)}
+                  >
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              {/each}
+              {#each tourData.images.gallery as image, index}
+                <div class="relative group">
+                  <img 
+                    src={image} 
+                    alt="Gallery image" 
+                    class="w-full h-32 object-cover rounded-lg shadow-sm"
+                  />
+                  <button 
+                    type="button"
+                    class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    on:click={() => tourData.images.gallery = tourData.images.gallery.filter((_, i) => i !== index)}
+                  >
+                    <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              {/each}
+            </div>
+          {/if}
         </div>
       </div>
       

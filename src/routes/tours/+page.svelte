@@ -72,9 +72,11 @@
             id: tour._id?.toString() || '',
             title: tour.title,
             description: tour.description,
-            image: tour.image,
+            image: tour.image || '/images/placeholder.jpg',
             duration: tour.duration,
-            price: tour.price
+            price: tour.price,
+            location: tour.destination,
+            isPopular: tour.featured
           }} />
         {/each}
       </div>

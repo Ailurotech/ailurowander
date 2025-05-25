@@ -2,7 +2,7 @@
   import { t } from '$lib/i18n';
   import ParallaxHero from '../components/molecules/ParallaxHero.svelte';
   import Section from '../components/atoms/Section.svelte';
-  import TourCard from '../components/organisms/TourCard.svelte';
+  import TourCard from '../components/tours/TourCard.svelte';
   import Card from '../components/molecules/Card.svelte';
   import Divider from '../components/atoms/Divider.svelte';
   import Button from '../components/atoms/Button.svelte';
@@ -11,10 +11,11 @@
   import TestimonialCard from '../components/home/TestimonialCard.svelte';
   import Newsletter from '../components/common/Newsletter.svelte';
   import { onMount } from 'svelte';
+  import ChinaMap from '../components/home/ChinaMap.svelte';
   
   // Declare tours state
   let featuredTours: Array<{
-    id: number | string;
+    id: string | number;
     title: string;
     description: string;
     image: string;
@@ -43,19 +44,33 @@
       }
       
       const apiTours = await response.json();
+      console.log('API Tours:', apiTours); // Debug log
       
       // Transform API tours to match our component's expected format
-      featuredTours = apiTours.map(tour => ({
-        id: tour._id, 
-        title: tour.title,
-        description: tour.shortDescription || tour.description.substring(0, 120) + '...',
-        image: tour.images?.main || '/images/placeholder.jpg',
-        duration: tour.duration?.days ? `${tour.duration.days} days` : 'Multiple days',
-        price: tour.price?.amount || 0,
-        location: tour.destination,
-        isPopular: tour.featured,
-        discount: tour.discount || 0
-      }));
+      featuredTours = apiTours.map((tour: { 
+        _id: string;
+        title: string;
+        description: string;
+        image: string;
+        duration: string;
+        price: number;
+        destination: string;
+        featured: boolean;
+      }) => {
+        console.log('Processing tour:', tour); // Debug log
+        return {
+          id: tour._id?.toString() || '',
+          title: tour.title,
+          description: tour.description,
+          image: tour.image || '/images/placeholder.jpg',
+          duration: tour.duration,
+          price: tour.price || 0,
+          location: tour.destination,
+          isPopular: tour.featured
+        };
+      });
+      
+      console.log('Transformed tours:', featuredTours); // Debug log
       
     } catch (error) {
       console.error('Error loading tours:', error);
@@ -186,22 +201,21 @@
   </div>
 </Section>
 
-<!-- Popular Destinations -->
+<!-- Replace the Popular Destinations section with the Interactive Map -->
 <Section 
   variant="light" 
   spacing="lg"
 >
   <svelte:fragment slot="header">
     <div class="text-center mb-12">
-      <h2 class="mb-3">{$t('home.destinations.title')}</h2>
-      <p class="text-lg text-neutral-700 max-w-2xl mx-auto">{$t('home.destinations.subtitle')}</p>
+      <h2 class="mb-3">Explore China by Region</h2>
+      <p class="text-lg text-neutral-700 max-w-2xl mx-auto">
+        Discover our tours across different provinces of China. Hover over a region to see available tours and learn more about each area.
+      </p>
     </div>
   </svelte:fragment>
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {#each destinations as destination}
-      <DestinationCard {destination} />
-    {/each}
-  </div>
+  
+  <ChinaMap />
 </Section>
 
 <!-- Testimonials -->

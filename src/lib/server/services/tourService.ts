@@ -1,6 +1,8 @@
 import { ObjectId } from 'mongodb';
 import { getTours } from '../db';
 import type { Tour, TourSummary } from '$lib/types/tour';
+import { getDB } from '$lib/server/db';
+import { uploadToS3, generateS3Key } from '$lib/server/s3';
 
 // Get all tours or featured tours
 export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> {
@@ -24,7 +26,7 @@ export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> 
     _id: tour._id,
     title: tour.title,
     description: tour.description,
-    image: tour.images?.main || '',
+    image: tour.images?.main || '/images/placeholder.jpg',
     duration: tour.duration ? `${tour.duration.days} days` : 'N/A',
     price: tour.price?.amount || 0,
     destination: tour.destination || '',
@@ -129,10 +131,68 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
     _id: tour._id,
     title: tour.title,
     description: tour.description,
-    image: tour.images.main,
+    image: tour.images?.main || '/images/placeholder.jpg',
     duration: `${tour.duration.days} days`,
     price: tour.price.amount,
     destination: tour.destination,
     featured: tour.featured
   }));
+}
+
+/**
+ * Upload tour images to S3
+ * @param images Array of image files
+ * @param tourId The ID of the tour
+ * @returns Object containing URLs for main and gallery images
+ */
+export async function uploadTourImages(images: { main: File; gallery: File[] }, tourId: string): Promise<{ main: string; gallery: string[] }> {
+  try {
+    // Upload main image
+    const mainImageKey = generateS3Key(images.main.name, `tours/${tourId}/`);
+    const mainImageUrl = await uploadToS3(
+      await images.main.arrayBuffer(),
+      mainImageKey,
+      images.main.type
+    );
+
+    // Upload gallery images
+    const galleryUrls = await Promise.all(
+      images.gallery.map(async (image) => {
+        const key = generateS3Key(image.name, `tours/${tourId}/gallery/`);
+        return uploadToS3(
+          await image.arrayBuffer(),
+          key,
+          image.type
+        );
+      })
+    );
+
+    return {
+      main: mainImageUrl,
+      gallery: galleryUrls
+    };
+  } catch (error) {
+    console.error('Error uploading tour images:', error);
+    throw new Error('Failed to upload tour images');
+  }
+}
+
+/**
+ * Update tour with new image URLs
+ * @param tourId The ID of the tour
+ * @param imageUrls Object containing main and gallery image URLs
+ */
+export async function updateTourImages(tourId: string, imageUrls: { main: string; gallery: string[] }): Promise<void> {
+  const db = await getDB();
+  const toursCollection = db.collection('tours');
+
+  await toursCollection.updateOne(
+    { _id: new ObjectId(tourId) },
+    {
+      $set: {
+        'images.main': imageUrls.main,
+        'images.gallery': imageUrls.gallery
+      }
+    }
+  );
 } 

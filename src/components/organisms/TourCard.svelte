@@ -4,6 +4,7 @@
   import Divider from '../atoms/Divider.svelte';
   import ChineseIcon from '../atoms/ChineseIcon.svelte';
   import LoadingSkeleton from '../atoms/LoadingSkeleton.svelte';
+  import { slugify } from '$lib/utils/slugify';
   
   export let tour: {
     id: number;
@@ -68,7 +69,7 @@
     imageAlt={`${tour.title} tour`}
     {badge}
     {icon}
-    link={{ url: `/tours/${tour.id}`, text: 'View Details' }}
+    link={{ url: `/tours/${slugify(tour.title)}`, text: 'View Details' }}
     decorative={true}
   >
     <div class="flex flex-col">

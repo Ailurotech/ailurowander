@@ -71,14 +71,45 @@ async function initTours() {
           price: { amount: 1299, currency: 'USD' },
           destination: 'Beijing',
           maxGroupSize: 15,
-          included: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-          notIncluded: ['International flights', 'Travel insurance', 'Personal expenses'],
+          highlights: ['Great Wall of China', 'Forbidden City', 'Tiananmen Square', 'Summer Palace'],
+          inclusions: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
+          exclusions: ['International flights', 'Travel insurance', 'Personal expenses'],
           itinerary: [
-            { day: 1, title: 'Arrival Day', description: 'Welcome to Beijing! Transfer to hotel and rest.' },
-            { day: 2, title: 'Forbidden City', description: 'Visit Tiananmen Square and Forbidden City.' },
-            { day: 3, title: 'Great Wall', description: 'Day trip to the Great Wall of China.' },
-            { day: 4, title: 'Summer Palace', description: 'Visit the Summer Palace and Temple of Heaven.' },
-            { day: 5, title: 'Departure', description: 'Free time for shopping before departure.' }
+            { 
+              day: 1, 
+              title: 'Arrival Day', 
+              description: 'Welcome to Beijing! Transfer to hotel and rest.',
+              accommodation: 'Beijing Hotel',
+              meals: ['Dinner']
+            },
+            { 
+              day: 2, 
+              title: 'Forbidden City', 
+              description: 'Visit Tiananmen Square and Forbidden City.',
+              accommodation: 'Beijing Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 3, 
+              title: 'Great Wall', 
+              description: 'Day trip to the Great Wall of China.',
+              accommodation: 'Beijing Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 4, 
+              title: 'Summer Palace', 
+              description: 'Visit the Summer Palace and Temple of Heaven.',
+              accommodation: 'Beijing Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 5, 
+              title: 'Departure', 
+              description: 'Free time for shopping before departure.',
+              accommodation: 'None',
+              meals: ['Breakfast']
+            }
           ],
           images: { 
             main: '/images/beijing.jpg', 
@@ -97,13 +128,38 @@ async function initTours() {
           price: { amount: 999, currency: 'USD' },
           destination: 'Shanghai',
           maxGroupSize: 12,
-          included: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-          notIncluded: ['International flights', 'Travel insurance', 'Personal expenses'],
+          highlights: ['The Bund', 'Yu Garden', 'Shanghai Tower', 'Nanjing Road'],
+          inclusions: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
+          exclusions: ['International flights', 'Travel insurance', 'Personal expenses'],
           itinerary: [
-            { day: 1, title: 'Arrival Day', description: 'Welcome to Shanghai! Transfer to hotel and rest.' },
-            { day: 2, title: 'The Bund', description: 'Explore the Bund and Nanjing Road.' },
-            { day: 3, title: 'Yu Garden', description: 'Visit Yu Garden and Shanghai Tower.' },
-            { day: 4, title: 'Departure', description: 'Free time before departure.' }
+            { 
+              day: 1, 
+              title: 'Arrival Day', 
+              description: 'Welcome to Shanghai! Transfer to hotel and rest.',
+              accommodation: 'Shanghai Hotel',
+              meals: ['Dinner']
+            },
+            { 
+              day: 2, 
+              title: 'The Bund', 
+              description: 'Explore the Bund and Nanjing Road.',
+              accommodation: 'Shanghai Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 3, 
+              title: 'Yu Garden', 
+              description: 'Visit Yu Garden and Shanghai Tower.',
+              accommodation: 'Shanghai Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 4, 
+              title: 'Departure', 
+              description: 'Free time before departure.',
+              accommodation: 'None',
+              meals: ['Breakfast']
+            }
           ],
           images: { 
             main: '/images/shanghai.jpg', 
@@ -122,12 +178,31 @@ async function initTours() {
           price: { amount: 899, currency: 'USD' },
           destination: 'Xian',
           maxGroupSize: 10,
-          included: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-          notIncluded: ['International flights', 'Travel insurance', 'Personal expenses'],
+          highlights: ['Terracotta Warriors', 'Ancient City Wall', 'Big Wild Goose Pagoda', 'Muslim Quarter'],
+          inclusions: ['Hotel accommodation', 'English speaking guide', 'Transportation'],
+          exclusions: ['International flights', 'Travel insurance', 'Personal expenses'],
           itinerary: [
-            { day: 1, title: 'Arrival Day', description: 'Welcome to Xian! Transfer to hotel and city wall.' },
-            { day: 2, title: 'Terracotta Warriors', description: 'Full day at the Terracotta Warriors.' },
-            { day: 3, title: 'Departure', description: 'Visit Big Wild Goose Pagoda before departure.' }
+            { 
+              day: 1, 
+              title: 'Arrival Day', 
+              description: 'Welcome to Xian! Transfer to hotel and city wall.',
+              accommodation: 'Xian Hotel',
+              meals: ['Dinner']
+            },
+            { 
+              day: 2, 
+              title: 'Terracotta Warriors', 
+              description: 'Full day at the Terracotta Warriors.',
+              accommodation: 'Xian Hotel',
+              meals: ['Breakfast', 'Lunch']
+            },
+            { 
+              day: 3, 
+              title: 'Departure', 
+              description: 'Visit Big Wild Goose Pagoda before departure.',
+              accommodation: 'None',
+              meals: ['Breakfast']
+            }
           ],
           images: { 
             main: '/images/xian.jpg', 

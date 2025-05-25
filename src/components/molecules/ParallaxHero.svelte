@@ -101,15 +101,15 @@
       {#if primaryCta || secondaryCta}
         <div class="flex flex-wrap gap-4 mt-8 {centered ? 'justify-center' : ''}">
           {#if primaryCta}
-            <Button href={primaryCta.href} variant="primary" size="lg">
+            <a href={primaryCta.href} class="bannerButton">
               {primaryCta.text}
-            </Button>
+            </a>
           {/if}
           
           {#if secondaryCta}
-            <Button href={secondaryCta.href} variant="outline" size="lg">
+            <a href={secondaryCta.href} class="bannerButton">
               {secondaryCta.text}
-            </Button>
+            </a>
           {/if}
         </div>
       {/if}
