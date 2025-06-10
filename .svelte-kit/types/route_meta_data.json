@@ -1,0 +1,51 @@
+{
+	"/": [
+		"src/routes/+page.ts"
+	],
+	"/about": [],
+	"/agent": [],
+	"/agent/tours": [],
+	"/agent/tours/add": [],
+	"/agent/tours/edit/[id]": [],
+	"/agent/users": [],
+	"/api/contact": [
+		"src/routes/api/contact/+server.ts"
+	],
+	"/api/tours": [
+		"src/routes/api/tours/+server.ts"
+	],
+	"/api/tours/by-province": [
+		"src/routes/api/tours/by-province/+server.ts"
+	],
+	"/api/tours/by-slug/[slug]": [
+		"src/routes/api/tours/by-slug/[slug]/+server.ts"
+	],
+	"/api/tours/create": [
+		"src/routes/api/tours/create/+server.ts"
+	],
+	"/api/tours/destinations": [
+		"src/routes/api/tours/destinations/+server.ts"
+	],
+	"/api/tours/[id]": [
+		"src/routes/api/tours/[id]/+server.ts"
+	],
+	"/api/users": [
+		"src/routes/api/users/+server.ts"
+	],
+	"/api/users/create": [
+		"src/routes/api/users/create/+server.ts"
+	],
+	"/api/users/[id]": [
+		"src/routes/api/users/[id]/+server.ts"
+	],
+	"/contact": [],
+	"/tours": [
+		"src/routes/tours/+page.ts"
+	],
+	"/tours/by-id/[id]": [
+		"src/routes/tours/by-id/[id]/+page.ts"
+	],
+	"/tours/[name]": [
+		"src/routes/tours/[name]/+page.ts"
+	]
+}

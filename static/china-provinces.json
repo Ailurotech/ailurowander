@@ -1,0 +1,95 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Beijing"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [116.4, 39.9],
+            [116.5, 39.9],
+            [116.5, 40.0],
+            [116.4, 40.0],
+            [116.4, 39.9]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Shanghai"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [121.4, 31.2],
+            [121.5, 31.2],
+            [121.5, 31.3],
+            [121.4, 31.3],
+            [121.4, 31.2]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Guangdong"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [113.2, 23.1],
+            [113.3, 23.1],
+            [113.3, 23.2],
+            [113.2, 23.2],
+            [113.2, 23.1]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Sichuan"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [104.0, 30.6],
+            [104.1, 30.6],
+            [104.1, 30.7],
+            [104.0, 30.7],
+            [104.0, 30.6]
+          ]
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Xinjiang"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [87.6, 43.8],
+            [87.7, 43.8],
+            [87.7, 43.9],
+            [87.6, 43.9],
+            [87.6, 43.8]
+          ]
+        ]
+      }
+    }
+  ]
+}
