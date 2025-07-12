@@ -1,7 +1,5 @@
-import { initDatabase } from '$lib/server/init';
-
-// Initialize database when the server starts
-initDatabase().catch(console.error);
+// src/hooks.server.ts
+// No global database initialization needed anymore.
 
 export const config = {
   runtime: 'nodejs18.x',

@@ -19,15 +19,21 @@
     errorMessage = '';
     
     try {
-      // Simulate an API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
       
-      // For demo purposes, accept any login with non-empty values
-      if (username && password) {
-        // Redirect to tours management page
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Login successful, redirect to tours management page
         goto('/agent/tours');
       } else {
-        errorMessage = 'Please enter both username and password.';
+        errorMessage = data.error || 'Login failed. Please try again.';
       }
     } catch (error) {
       errorMessage = 'Login failed. Please try again.';

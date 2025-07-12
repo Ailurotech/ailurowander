@@ -3,11 +3,28 @@
 		"src/routes/+page.ts"
 	],
 	"/about": [],
-	"/agent": [],
-	"/agent/tours": [],
-	"/agent/tours/add": [],
-	"/agent/tours/edit/[id]": [],
-	"/agent/users": [],
+	"/agent": [
+		"src/routes/agent/+layout.server.ts",
+		"src/routes/agent/+layout.server.ts"
+	],
+	"/agent/tours": [
+		"src/routes/agent/+layout.server.ts"
+	],
+	"/agent/tours/add": [
+		"src/routes/agent/+layout.server.ts"
+	],
+	"/agent/tours/edit/[id]": [
+		"src/routes/agent/+layout.server.ts"
+	],
+	"/agent/users": [
+		"src/routes/agent/+layout.server.ts"
+	],
+	"/api/auth/login": [
+		"src/routes/api/auth/login/+server.ts"
+	],
+	"/api/auth/logout": [
+		"src/routes/api/auth/logout/+server.ts"
+	],
 	"/api/contact": [
 		"src/routes/api/contact/+server.ts"
 	],

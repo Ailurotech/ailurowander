@@ -1,8 +1,23 @@
 <script lang="ts">
   import { page } from '$app/stores';
+  import { goto } from '$app/navigation';
   
   // Check if the route is the login page
   $: isLoginPage = $page.url.pathname === '/agent' || $page.url.pathname === '/agent/';
+  
+  // Get agent data from the server load function
+  export let data: { agent?: { id: string; username: string; email: string; role: string } };
+  
+  // Handle logout
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      goto('/agent');
+    } catch (error) {
+      console.error('Logout error:', error);
+      goto('/agent');
+    }
+  }
 </script>
 
 {#if isLoginPage}
@@ -50,17 +65,17 @@
         
         <div class="flex items-center space-x-4">
           <div class="hidden md:block">
-            <span class="text-sm">Welcome, Agent</span>
+            <span class="text-sm">Welcome, {data.agent?.username || 'Agent'}</span>
           </div>
           
           <div class="border-l border-white/20 h-6 mx-2 hidden md:block"></div>
           
-          <a 
-            href="/agent" 
-            class="hover:bg-white/10 px-3 py-1 rounded-md text-sm"
+          <button 
+            on:click={handleLogout}
+            class="hover:bg-white/10 px-3 py-1 rounded-md text-sm cursor-pointer"
           >
             Logout
-          </a>
+          </button>
         </div>
       </div>
     </header>
