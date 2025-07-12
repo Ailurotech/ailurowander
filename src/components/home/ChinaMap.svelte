@@ -23,6 +23,8 @@
       
       // Get the SVG element
       const svg = tempDiv.querySelector('svg');
+      console.log('SVG element found:', !!svg);
+      
       if (svg) {
         // Set viewBox to show the entire map
         svg.setAttribute('viewBox', '0 0 1000 800');
@@ -32,7 +34,14 @@
       
       // Add hover effects to all paths
       const paths = tempDiv.querySelectorAll('path');
-      paths.forEach(path => {
+      console.log('Number of paths found:', paths.length);
+      
+      paths.forEach((path, index) => {
+        console.log(`Processing path ${index}:`, {
+          id: path.id,
+          hasTitle: !!path.querySelector('title'),
+          titleAttribute: path.getAttribute('title')
+        });
         path.setAttribute('class', 'province-path');
         path.setAttribute('fill', '#e5e7eb');
         path.setAttribute('stroke', '#9ca3af');
@@ -51,17 +60,27 @@
         });
 
         path.addEventListener('mouseenter', () => {
-          console.log('Mouse entered path:', title);
+          console.log('Mouse entered path:', {
+            title,
+            pathId: path.id,
+            currentHoveredProvince: hoveredProvince
+          });
           hoveredProvince = {
             id: path.id || (title as string).toLowerCase().replace(/\s+/g, '-'),
             name: title as string,
             description: `Explore tours and attractions in ${title}`
           };
+          console.log('Updated hoveredProvince:', hoveredProvince);
         });
 
         path.addEventListener('mouseleave', () => {
-          console.log('Mouse left path:', title);
+          console.log('Mouse left path:', {
+            title,
+            pathId: path.id,
+            currentHoveredProvince: hoveredProvince
+          });
           hoveredProvince = null;
+          console.log('Cleared hoveredProvince');
         });
       });
       

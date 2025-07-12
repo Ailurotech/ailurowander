@@ -39,7 +39,7 @@
     <div class="flex items-start justify-between mb-3">
       <div>
         {#if badge}
-          <Badge variant={badge.variant} class="mb-3">
+          <Badge variant={badge.variant} className="mb-3">
             {badge.text}
           </Badge>
         {/if}
@@ -73,7 +73,9 @@
     <!-- Link/button -->
     {#if link}
       <div class="mt-4">
-        <Button href={link.url} variant="primary" size="sm">{link.text}</Button>
+        <a href={link.url} class="btn btn-accent text-white bg-primary font-semibold hover:bg-primary hover:scale-105 hover:text-white transition-all duration-200 text-center py-3 px-6 rounded-lg">
+          {link.text}
+        </a>
       </div>
     {/if}
     
