@@ -5,8 +5,8 @@ import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 const snsClient = new SNSClient({
   region: 'ap-southeast-2', // Sydney region
   credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY || ''
+    accessKeyId: process.env.SNS_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.SNS_SECRET_ACCESS_KEY || ''
   }
 });
 

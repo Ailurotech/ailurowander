@@ -4,14 +4,14 @@ import { env } from '$env/dynamic/private';
 
 // Initialize S3 client
 const s3Client = new S3Client({
-  region: env.AWS_REGION || 'us-east-1',
+  region: env.S3_REGION || 'us-east-1',
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY_ID || '',
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY || ''
+    accessKeyId: env.S3_ACCESS_KEY_ID || '',
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY || ''
   }
 });
 
-const BUCKET_NAME = env.AWS_S3_BUCKET_NAME || '';
+const BUCKET_NAME = env.S3_BUCKET_NAME || '';
 
 /**
  * Upload a file to S3
