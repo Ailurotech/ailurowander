@@ -11,6 +11,9 @@
 	"/api/contact": [
 		"src/routes/api/contact/+server.ts"
 	],
+	"/api/debug": [
+		"src/routes/api/debug/+server.ts"
+	],
 	"/api/tours": [
 		"src/routes/api/tours/+server.ts"
 	],

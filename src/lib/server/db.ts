@@ -5,17 +5,40 @@ import { env } from '$env/dynamic/private';
 const MONGODB_URI = env.MONGODB_URI || 'mongodb://localhost:27017/ailuroWander';
 
 console.log('MongoDB connection string:', MONGODB_URI);
+console.log('Environment variables check:');
+console.log('- MONGODB_URI exists:', !!env.MONGODB_URI);
+console.log('- S3_REGION exists:', !!env.S3_REGION);
+console.log('- S3_ACCESS_KEY_ID exists:', !!env.S3_ACCESS_KEY_ID);
+console.log('- S3_SECRET_ACCESS_KEY exists:', !!env.S3_SECRET_ACCESS_KEY);
+console.log('- S3_BUCKET_NAME exists:', !!env.S3_BUCKET_NAME);
 
 const client = new MongoClient(MONGODB_URI);
 
 export async function connectDB() {
   try {
     console.log('Attempting to connect to MongoDB...');
+    console.log('MongoDB URI length:', MONGODB_URI.length);
+    console.log('MongoDB URI starts with mongodb:', MONGODB_URI.startsWith('mongodb'));
+    
     await client.connect();
     console.log('Connected to MongoDB successfully');
     
     // Get database name from connection string or default to ailuroWander
-    const dbName = MONGODB_URI.split('/').pop() || 'ailuroWander';
+    // Handle MongoDB Atlas connection strings with query parameters
+    let dbName = 'ailuroWander'; // default
+    if (MONGODB_URI.includes('mongodb+srv://') || MONGODB_URI.includes('mongodb://')) {
+      // Extract database name from connection string
+      const uriParts = MONGODB_URI.split('/');
+      if (uriParts.length > 3) {
+        const lastPart = uriParts[uriParts.length - 1];
+        // Remove query parameters if present
+        dbName = lastPart.split('?')[0];
+        // If dbName is empty or just whitespace, use default
+        if (!dbName || dbName.trim() === '') {
+          dbName = 'ailuroWander';
+        }
+      }
+    }
     console.log(`Using database: ${dbName}`);
     
     const db = client.db(dbName);

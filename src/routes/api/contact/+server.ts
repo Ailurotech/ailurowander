@@ -1,12 +1,13 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
+import { env } from '$env/dynamic/private';
 
 const snsClient = new SNSClient({
   region: 'ap-southeast-2', // Sydney region
   credentials: {
-    accessKeyId: process.env.SNS_ACCESS_KEY_ID || '',
-    secretAccessKey: process.env.SNS_SECRET_ACCESS_KEY || ''
+    accessKeyId: env.SNS_ACCESS_KEY_ID || '',
+    secretAccessKey: env.SNS_SECRET_ACCESS_KEY || ''
   }
 });
 
@@ -47,7 +48,7 @@ This message was sent from the AiluroWander contact form.
 
     // Send email using SNS
     const command = new PublishCommand({
-      TopicArn: process.env.SNS_TOPIC_ARN,
+      TopicArn: env.SNS_TOPIC_ARN,
       Subject: `New Contact Form Submission: ${subject}`,
       Message: emailMessage,
       MessageAttributes: {
