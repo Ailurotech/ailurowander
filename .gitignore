@@ -141,4 +141,5 @@ dist
 # Local Netlify folder
 .netlify
 
+.svelte-kit
 .svelte-kit/
