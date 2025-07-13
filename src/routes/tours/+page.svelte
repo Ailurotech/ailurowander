@@ -21,7 +21,7 @@
 <Hero 
   title="Explore Our Tours"
   subtitle="Discover the perfect journey through China's most inspiring destinations"
-  backgroundImage="/images/tours-hero.jpg"
+  backgroundImage="/images/tours-hero.png"
   primaryCta={{ text: "Browse All Tours", href: "#tours-listing" }}
 />
 

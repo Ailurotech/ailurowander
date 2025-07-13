@@ -52,8 +52,8 @@
 <div class="min-h-screen flex flex-col justify-center bg-neutral-50">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
     <div class="text-center">
-      <div class="inline-block p-2 rounded-full bg-primary/5 mb-4">
-        <ChineseIcon icon="pagoda" size="xl" color="#B91C1C" />
+      <div class="flex justify-center items-center mb-4">
+        <img src="/ailuro-logo.png" alt="AiluroWander" class="h-12 w-auto" />
       </div>
       <h2 class="text-3xl font-bold font-heading text-neutral-900">
         {$t('agent.login.title')}

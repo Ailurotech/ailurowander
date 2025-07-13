@@ -83,31 +83,33 @@
   {/if}
   
   <!-- Content -->
-  <div class="relative z-10 container mx-auto px-4 {centered ? 'text-center' : ''}">
-    <div class="max-w-4xl {centered ? 'mx-auto' : ''}">
+  <div class="relative z-10 container mx-auto px-4 text-center">
+    <div class="max-w-4xl mx-auto">
       <!-- Decorative Chinese font for subtitle -->
       {#if subtitle}
-        <p class="font-decorative text-lg md:text-2xl mb-4 animate-fadeIn text-{textColor} opacity-90">{subtitle}</p>
+        <p class="font-decorative text-lg md:text-2xl mb-4 text-{textColor} opacity-90">
+          {subtitle}
+        </p>
       {/if}
       
-      <!-- Main title with subtle animation -->
+      <!-- Main title -->
       {#if title}
-        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 animate-slideUp text-{textColor}">
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-heading font-bold mb-6 text-{textColor}">
           {title}
         </h1>
       {/if}
       
       <!-- Call to action buttons -->
       {#if primaryCta || secondaryCta}
-        <div class="flex flex-wrap gap-4 mt-8 {centered ? 'justify-center' : ''}">
+        <div class="flex flex-wrap gap-4 mt-8 justify-center">
           {#if primaryCta}
-            <a href={primaryCta.href} class="bannerButton">
+            <a href={primaryCta.href} class="bannerButton hover:scale-105 transition-transform duration-300">
               {primaryCta.text}
             </a>
           {/if}
           
           {#if secondaryCta}
-            <a href={secondaryCta.href} class="bannerButton">
+            <a href={secondaryCta.href} class="bannerButton hover:scale-105 transition-transform duration-300">
               {secondaryCta.text}
             </a>
           {/if}

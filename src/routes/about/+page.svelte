@@ -61,7 +61,7 @@
 <Hero 
   title="About AiluroWander"
   subtitle="Your Gateway to Authentic Asian Travel Experiences"
-  backgroundImage="/images/about-hero.jpg"
+  backgroundImage="/images/about-hero.png"
   primaryCta={{ text: "Explore Our Tours", href: "/tours" }}
 />
 

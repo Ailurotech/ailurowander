@@ -6,7 +6,10 @@
   <div class="container">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
       <div>
-        <h3 class="text-xl font-bold mb-4">AiluroWander</h3>
+        <div class="flex items-center space-x-2 mb-4">
+          <img src="/ailuro-logo.png" alt="AiluroWander" class="h-8 w-auto" />
+          <h3 class="text-xl font-bold">AiluroWander</h3>
+        </div>
         <p class="text-gray-200 max-w-xs">{$t('footer.company_description')}</p>
       </div>
       

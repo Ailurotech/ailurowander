@@ -45,6 +45,7 @@
     {disabled}
     class={getClasses()} 
     aria-label={ariaLabel}
+    on:click
   >
     {#if icon && iconPosition === 'left'}
       <span class="mr-2">{@html icon}</span>

@@ -164,22 +164,23 @@
   
   // Add a new itinerary day
   function addItineraryDay() {
+    console.log('addItineraryDay called');
     const newDay = tourData.itinerary.length + 1;
-    tourData.itinerary = [...tourData.itinerary, { 
-      day: newDay, 
-      title: `Day ${newDay}`, 
-      description: '' 
-    }];
+    tourData = {
+      ...tourData,
+      itinerary: [...tourData.itinerary, { 
+        day: newDay, 
+        title: `Day ${newDay}`, 
+        description: '' 
+      }]
+    };
   }
   
   // Remove an itinerary day
   function removeItineraryDay(index: number) {
-    tourData.itinerary = tourData.itinerary.filter((_, i) => i !== index);
-    // Update day numbers
-    tourData.itinerary = tourData.itinerary.map((item, i) => ({
-      ...item,
-      day: i + 1
-    }));
+    const newItinerary = tourData.itinerary.filter((_, i) => i !== index)
+      .map((item, i) => ({ ...item, day: i + 1 }));
+    tourData = { ...tourData, itinerary: newItinerary };
   }
   
   // Add a new included item

@@ -32,7 +32,10 @@
   <div class="container py-3">
     <div class="flex items-center justify-between">
       <!-- Logo -->
-      <a href="/" class="text-xl font-bold">AiluroWander</a>
+      <a href="/" class="flex items-center space-x-2">
+        <img src="/ailuro-logo.png" alt="AiluroWander" class="h-8 w-auto" />
+        <span class="text-xl font-bold">AiluroWander</span>
+      </a>
       
       <!-- Mobile Menu Button -->
       <button class="md:hidden" on:click={toggleMenu} aria-label="Toggle menu">

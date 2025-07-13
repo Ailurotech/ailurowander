@@ -31,6 +31,7 @@
       <div class="container mx-auto px-4 py-3 flex justify-between items-center">
         <div class="flex items-center space-x-8">
           <a href="/agent/tours" class="text-xl font-bold flex items-center">
+            <img src="/ailuro-logo.png" alt="AiluroWander" class="h-6 w-auto mr-2" />
             <span class="font-decorative">AiluroWander</span>
             <span class="ml-2 text-sm font-normal bg-white/20 px-2 py-0.5 rounded">Agent</span>
           </a>

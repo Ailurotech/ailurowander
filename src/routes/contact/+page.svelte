@@ -55,7 +55,7 @@
 <Hero 
   title="Contact Us"
   subtitle="We're here to help plan your perfect Asian adventure"
-  backgroundImage="/images/contact-hero.jpg"
+  backgroundImage="/images/contact-hero.png"
 />
 
 <Section 
