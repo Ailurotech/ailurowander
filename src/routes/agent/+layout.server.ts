@@ -27,7 +27,7 @@ export const load: LayoutServerLoad = async ({ cookies, url }) => {
   // Return agent data for the client
   return {
     agent: {
-      id: agent._id,
+      id: agent._id?.toString(),
       username: agent.username,
       email: agent.email,
       role: agent.role

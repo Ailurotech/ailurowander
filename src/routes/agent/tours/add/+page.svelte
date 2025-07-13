@@ -321,12 +321,12 @@
     try {
       // Validate required fields
       if (!tourData.title || !tourData.description || !tourData.destination) {
-        throw new Error('Please fill out all required fields');
+        throw new Error($t('agent.tours.validation.title_required'));
       }
       
       // Validate main image
       if (!mainImageFile) {
-        throw new Error('Please upload a main image');
+        throw new Error($t('agent.tours.validation.main_image_required'));
       }
       
       // Create FormData for file upload
@@ -387,7 +387,7 @@
       galleryImagePreviews = [];
       
     } catch (error) {
-      submitError = error instanceof Error ? error.message : 'Failed to create tour. Please try again.';
+      submitError = error instanceof Error ? error.message : $t('agent.tours.error');
       console.error('Error creating tour:', error);
     } finally {
       isSubmitting = false;
@@ -396,15 +396,15 @@
 </script>
 
 <svelte:head>
-  <title>Add New Tour | Agent Dashboard</title>
+  <title>{$t('agent.tours.add_new')} | {$t('site.title')}</title>
   <meta name="robots" content="noindex,nofollow" />
 </svelte:head>
 
 <Section variant="light" spacing="md">
   <svelte:fragment slot="header">
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-3xl font-heading font-bold">Add New Tour</h1>
-      <Button href="/agent/tours" variant="outline">Back to Tours</Button>
+      <h1 class="text-3xl font-heading font-bold">{$t('agent.tours.add_new')}</h1>
+      <Button href="/agent/tours" variant="outline">{$t('agent.dashboard.view_tours')}</Button>
     </div>
     <Divider type="simple" />
   </svelte:fragment>
@@ -419,10 +419,10 @@
         </div>
         <div class="ml-3">
           <p class="text-sm text-green-700">
-            Tour was successfully created!
+            {$t('agent.tours.success')}
           </p>
           <div class="mt-2">
-            <Button href="/agent/tours" variant="secondary" size="sm">Return to Tours</Button>
+            <Button href="/agent/tours" variant="secondary" size="sm">{$t('agent.dashboard.view_tours')}</Button>
           </div>
         </div>
       </div>
@@ -449,23 +449,23 @@
   <form on:submit|preventDefault={handleSubmit} class="space-y-8">
     <!-- Basic Information -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
-      <h2 class="text-xl font-heading font-bold mb-4">Basic Information</h2>
+      <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.basic_info')}</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="form-group">
-          <label for="title" class="form-label">Tour Title*</label>
+          <label for="title" class="form-label">{$t('agent.tours.title_label')}*</label>
           <input 
             type="text" 
             id="title" 
             bind:value={tourData.title} 
             required
             class="input w-full" 
-            placeholder="e.g. Classic Beijing & Shanghai Tour"
+            placeholder={$t('agent.tours.title_placeholder')}
           />
         </div>
         
         <div class="form-group">
-          <label for="destination" class="form-label">Main Location*</label>
+          <label for="destination" class="form-label">{$t('agent.tours.destination_label')}*</label>
           <div class="relative">
             <input 
               type="text" 
@@ -474,7 +474,7 @@
               on:focus={() => showDestinationDropdown = true}
               required
               class="input w-full" 
-              placeholder="Enter or select a destination"
+              placeholder={$t('agent.tours.destination_placeholder')}
             />
             {#if showDestinationDropdown && previousDestinations.length > 0}
               <div class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg border border-neutral-200 max-h-60 overflow-y-auto">
@@ -512,7 +512,7 @@
         </div>
         
         <div class="form-group">
-          <label for="duration" class="form-label">Duration (Days/Nights)*</label>
+          <label for="duration" class="form-label">{$t('agent.tours.duration_label')} ({$t('agent.tours.days')}/{$t('agent.tours.nights')})*</label>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <input 
@@ -522,7 +522,7 @@
                 required
                 min="1"
                 class="input w-full" 
-                placeholder="Days"
+                placeholder={$t('agent.tours.days')}
               />
             </div>
             <div>
@@ -533,14 +533,14 @@
                 required
                 min="0"
                 class="input w-full" 
-                placeholder="Nights"
+                placeholder={$t('agent.tours.nights')}
               />
             </div>
           </div>
         </div>
         
         <div class="form-group">
-          <label for="icon" class="form-label">Tour Icon</label>
+          <label for="icon" class="form-label">{$t('agent.tours.icon_type')}</label>
           <div class="grid grid-cols-5 gap-2 mt-2">
             {#each availableIcons as icon}
               <button 
@@ -558,7 +558,7 @@
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
         <div class="form-group">
-          <label for="price" class="form-label">Price*</label>
+          <label for="price" class="form-label">{$t('agent.tours.price_label')}*</label>
           <div class="grid grid-cols-3 gap-4">
             <div class="col-span-2">
               <input 
@@ -569,7 +569,7 @@
                 min="0"
                 step="0.01"
                 class="input w-full" 
-                placeholder="Amount"
+                placeholder={$t('agent.tours.amount')}
               />
             </div>
             <div>
@@ -589,7 +589,7 @@
         </div>
         
         <div class="form-group">
-          <label for="discount" class="form-label">Discount (USD)</label>
+          <label for="discount" class="form-label">{$t('agent.tours.discount')}</label>
           <input 
             type="number" 
             id="discount" 
@@ -601,7 +601,7 @@
         </div>
         
         <div class="form-group">
-          <label for="max-group-size" class="form-label">Max Group Size</label>
+          <label for="max-group-size" class="form-label">{$t('agent.tours.max_group_size')}</label>
           <input 
             type="number" 
             id="max-group-size" 
@@ -622,7 +622,7 @@
             class="w-5 h-5 text-primary rounded focus:ring-primary"
           />
           <label for="featured" class="ml-2 text-sm font-medium text-neutral-700">
-            Featured Tour
+            {$t('agent.tours.featured')}
           </label>
         </div>
         <p class="text-xs text-neutral-500 mt-1">Featured tours are highlighted on the home page.</p>
@@ -631,17 +631,17 @@
     
     <!-- Tour Description -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
-      <h2 class="text-xl font-heading font-bold mb-4">Tour Description</h2>
+      <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.description_label')}</h2>
       
       <div class="form-group">
-        <label for="shortDescription" class="form-label">Short Description (Card Preview)*</label>
+        <label for="shortDescription" class="form-label">{$t('agent.tours.short_description_label')}*</label>
         <input 
           type="text" 
           id="shortDescription" 
           bind:value={tourData.shortDescription} 
           required
           class="input w-full" 
-          placeholder="Brief description for tour cards (max 150 characters)"
+          placeholder={$t('agent.tours.short_description_placeholder')}
           maxlength="150"
         />
         <div class="text-xs text-neutral-500 mt-1">
@@ -650,13 +650,13 @@
       </div>
       
       <div class="form-group mt-4">
-        <label for="description" class="form-label">Full Description*</label>
+        <label for="description" class="form-label">{$t('agent.tours.description_label')}*</label>
         <textarea 
           id="description" 
           bind:value={tourData.description} 
           required
           class="input w-full h-32" 
-          placeholder="Detailed tour description with information about attractions, experience, etc."
+          placeholder={$t('agent.tours.description_placeholder')}
         ></textarea>
       </div>
     </div>
@@ -664,21 +664,21 @@
     <!-- Tour Itinerary -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
       <div class="flex justify-between items-center mb-4">
-        <h2 class="text-xl font-heading font-bold">Itinerary</h2>
+        <h2 class="text-xl font-heading font-bold">{$t('agent.tours.itinerary_label')}</h2>
         <Button 
           variant="secondary" 
           size="sm" 
           on:click={addItineraryDay} 
           type="button"
         >
-          Add Day
+          {$t('agent.tours.add_day')}
         </Button>
       </div>
       
       {#each tourData.itinerary as day, index}
         <div class="border border-neutral-200 rounded-md p-4 mb-4">
           <div class="flex justify-between items-center mb-3">
-            <h3 class="font-bold">Day {day.day}</h3>
+            <h3 class="font-bold">{$t('agent.tours.day')} {day.day}</h3>
             {#if tourData.itinerary.length > 1}
               <button 
                 type="button" 
@@ -693,7 +693,7 @@
           </div>
           
           <div class="form-group mb-3">
-            <label class="form-label">Day Title*</label>
+            <label class="form-label">{$t('agent.tours.day_title')}*</label>
             <input 
               type="text" 
               bind:value={day.title} 
@@ -704,7 +704,7 @@
           </div>
           
           <div class="form-group">
-            <label class="form-label">Day Description*</label>
+            <label class="form-label">{$t('agent.tours.day_description')}*</label>
             <textarea 
               bind:value={day.description} 
               required
@@ -718,13 +718,13 @@
     
     <!-- Inclusions & Exclusions -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
-      <h2 class="text-xl font-heading font-bold mb-4">Inclusions & Exclusions</h2>
+      <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.inclusions_label')} & {$t('agent.tours.exclusions_label')}</h2>
       
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <!-- Included -->
         <div>
           <div class="flex justify-between items-center mb-2">
-            <h3 class="font-bold">What's Included</h3>
+            <h3 class="font-bold">{$t('agent.tours.inclusions_label')}</h3>
             <button 
               type="button" 
               class="text-primary"
@@ -742,7 +742,7 @@
                 type="text" 
                 bind:value={tourData.inclusions[index]} 
                 class="input w-full" 
-                placeholder="e.g. Breakfast at hotel"
+                placeholder={$t('agent.tours.inclusions_placeholder')}
               />
               <button 
                 type="button" 
@@ -761,7 +761,7 @@
         <!-- Not Included -->
         <div>
           <div class="flex justify-between items-center mb-2">
-            <h3 class="font-bold">What's Not Included</h3>
+            <h3 class="font-bold">{$t('agent.tours.exclusions_label')}</h3>
             <button 
               type="button" 
               class="text-primary"
@@ -779,7 +779,7 @@
                 type="text" 
                 bind:value={tourData.exclusions[index]} 
                 class="input w-full" 
-                placeholder="e.g. International flights"
+                placeholder={$t('agent.tours.exclusions_placeholder')}
               />
               <button 
                 type="button" 
@@ -799,10 +799,10 @@
     
     <!-- Images -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
-      <h2 class="text-xl font-heading font-bold mb-4">Images</h2>
+      <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.images_label')}</h2>
       
       <div class="form-group">
-        <label for="main-image" class="form-label">Main Image*</label>
+        <label for="main-image" class="form-label">{$t('agent.tours.main_image')}*</label>
         <div class="mt-2">
           <input 
             type="file" 
@@ -819,7 +819,7 @@
             <svg class="h-5 w-5 mr-2 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            Choose Main Image
+            {$t('agent.tours.select_image')}
           </label>
         </div>
         {#if mainImagePreview}
@@ -834,7 +834,7 @@
       </div>
       
       <div class="form-group mt-6">
-        <label class="form-label">Gallery Images</label>
+        <label class="form-label">{$t('agent.tours.gallery_images')}</label>
         <div class="mt-2">
           <input 
             type="file" 
@@ -851,7 +851,7 @@
             <svg class="h-5 w-5 mr-2 text-neutral-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
             </svg>
-            Add Gallery Images
+            {$t('agent.tours.upload_images')}
           </label>
         </div>
         
@@ -882,15 +882,15 @@
     
     <!-- Tags -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
-      <h2 class="text-xl font-heading font-bold mb-4">Tags for Search</h2>
+      <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.tags_label')}</h2>
       
       <div class="form-group">
-        <label for="tags" class="form-label">Tags (comma separated)</label>
+        <label for="tags" class="form-label">{$t('agent.tours.tags_label')} (comma separated)</label>
         <input 
           type="text" 
           id="tags" 
           class="input w-full" 
-          placeholder="e.g. family, adventure, culture"
+          placeholder={$t('agent.tours.tags_placeholder')}
           on:blur={(e) => {
             // Convert comma-separated tags to array
             const inputValue = (e.target as HTMLInputElement).value;
@@ -920,7 +920,7 @@
           variant="primary" 
           disabled={isSubmitting}
         >
-          {isSubmitting ? 'Creating Tour...' : 'Create Tour'}
+          {isSubmitting ? $t('agent.tours.updating') : $t('agent.tours.submit')}
         </Button>
       </div>
     </div>

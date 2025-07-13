@@ -33,10 +33,10 @@
         // Login successful, redirect to tours management page
         goto('/agent/tours');
       } else {
-        errorMessage = data.error || 'Login failed. Please try again.';
+        errorMessage = data.error || $t('agent.login.login_failed');
       }
     } catch (error) {
-      errorMessage = 'Login failed. Please try again.';
+      errorMessage = $t('agent.login.login_failed');
       console.error('Login error:', error);
     } finally {
       isLoading = false;
@@ -45,7 +45,7 @@
 </script>
 
 <svelte:head>
-  <title>Agent Login | AiluroWander Travel</title>
+  <title>{$t('agent.login.title')} | {$t('site.title')}</title>
   <meta name="robots" content="noindex,nofollow" />
 </svelte:head>
 
@@ -56,10 +56,10 @@
         <ChineseIcon icon="pagoda" size="xl" color="#B91C1C" />
       </div>
       <h2 class="text-3xl font-bold font-heading text-neutral-900">
-        Agent Portal
+        {$t('agent.login.title')}
       </h2>
       <p class="mt-2 text-sm text-neutral-600">
-        Sign in to manage tours and bookings
+        {$t('agent.login.subtitle')}
       </p>
     </div>
   </div>
@@ -86,7 +86,7 @@
       <form class="space-y-6" on:submit|preventDefault={handleLogin}>
         <div>
           <label for="username" class="form-label">
-            Username
+            {$t('agent.login.username')}
           </label>
           <div class="mt-1">
             <input
@@ -104,7 +104,7 @@
 
         <div>
           <label for="password" class="form-label">
-            Password
+            {$t('agent.login.password')}
           </label>
           <div class="mt-1">
             <input
@@ -130,13 +130,13 @@
               class="h-4 w-4 text-primary focus:ring-primary rounded"
             />
             <label for="remember-me" class="ml-2 block text-sm text-neutral-700">
-              Remember me
+              {$t('agent.login.remember_me')}
             </label>
           </div>
 
           <div class="text-sm">
             <a href="#" class="font-medium text-primary hover:text-primary-dark">
-              Forgot your password?
+              {$t('agent.login.forgot_password')}
             </a>
           </div>
         </div>
@@ -148,7 +148,7 @@
             fullWidth={true} 
             disabled={isLoading}
           >
-            {isLoading ? 'Signing in...' : 'Sign in'}
+            {isLoading ? $t('agent.login.signing_in') : $t('agent.login.sign_in')}
           </Button>
         </div>
       </form>
@@ -160,18 +160,18 @@
           </div>
           <div class="relative flex justify-center text-sm">
             <span class="px-2 bg-white text-neutral-500">
-              Need assistance?
+              {$t('agent.login.need_assistance')}
             </span>
           </div>
         </div>
 
         <div class="mt-6 text-center text-sm">
           <p class="text-neutral-600">
-            Contact administrator for account access
+            {$t('agent.login.contact_admin')}
           </p>
           <p class="mt-1">
             <a href="/" class="font-medium text-primary hover:text-primary-dark">
-              Return to website
+              {$t('agent.login.return_to_website')}
             </a>
           </p>
         </div>
@@ -181,6 +181,6 @@
   
   <!-- Footer -->
   <div class="mt-12 text-center text-xs text-neutral-500">
-    <p>© {new Date().getFullYear()} AiluroWander Travel. All rights reserved.</p>
+    <p>© {new Date().getFullYear()} {$t('site.title')}. {$t('footer.rights')}</p>
   </div>
 </div> 

@@ -199,26 +199,26 @@
 </script>
 
 <svelte:head>
-  <title>Manage Tours | Agent Dashboard</title>
+  <title>{$t('agent.tours.title')} | {$t('site.title')}</title>
   <meta name="robots" content="noindex,nofollow" />
 </svelte:head>
 
 <Section variant="light" spacing="md">
   <svelte:fragment slot="header">
     <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-6">
-      <h1 class="text-3xl font-heading font-bold">Manage Tours</h1>
+      <h1 class="text-3xl font-heading font-bold">{$t('agent.tours.title')}</h1>
       <div class="flex gap-2">
         <Button on:click={refreshTours} variant="secondary">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
-          Refresh
+          {$t('agent.tours.management.refresh')}
         </Button>
         <Button href="/agent/tours/add" variant="primary">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
-          Add New Tour
+          {$t('agent.tours.add_new')}
         </Button>
       </div>
     </div>
@@ -239,7 +239,7 @@
           <input
             id="search"
             type="text"
-            placeholder="Search by tour name or location"
+            placeholder={$t('agent.tours.management.search_placeholder')}
             class="input pl-10 w-full"
             bind:value={searchQuery}
           />
@@ -253,9 +253,9 @@
           class="input w-full"
           bind:value={statusFilter}
         >
-          <option value="all">All Tours</option>
-          <option value="active">Active Tours</option>
-          <option value="inactive">Inactive Tours</option>
+          <option value="all">{$t('agent.tours.management.filter_all')}</option>
+          <option value="active">{$t('agent.tours.management.filter_active')}</option>
+          <option value="inactive">{$t('agent.tours.management.filter_inactive')}</option>
         </select>
       </div>
     </div>
@@ -292,13 +292,13 @@
       <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-neutral-300 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
       </svg>
-      <h2 class="text-xl font-heading font-bold mb-2">No Tours Found</h2>
+      <h2 class="text-xl font-heading font-bold mb-2">{$t('agent.tours.management.no_tours_found')}</h2>
       <p class="text-neutral-600 mb-4">
         {searchQuery || statusFilter !== 'all' 
-          ? 'Try adjusting your search or filter criteria.' 
-          : 'There are no tours available. Add your first tour to get started.'}
+          ? $t('agent.tours.management.search_adjust_message')
+          : $t('agent.tours.management.no_tours_message')}
       </p>
-      <Button href="/agent/tours/add" variant="primary">Add New Tour</Button>
+      <Button href="/agent/tours/add" variant="primary">{$t('agent.tours.add_new')}</Button>
     </div>
   {:else}
     <div class="bg-white rounded-lg shadow-sm overflow-hidden border border-neutral-200">
@@ -307,22 +307,22 @@
           <thead class="bg-neutral-50">
             <tr>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Tour
+                {$t('agent.tours.management.table_tour')}
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Location
+                {$t('agent.tours.management.table_location')}
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Duration
+                {$t('agent.tours.management.table_duration')}
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Price
+                {$t('agent.tours.management.table_price')}
               </th>
               <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Status
+                {$t('agent.tours.management.table_status')}
               </th>
               <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-neutral-500 uppercase tracking-wider">
-                Actions
+                {$t('agent.tours.management.table_actions')}
               </th>
             </tr>
           </thead>
@@ -355,7 +355,7 @@
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
                   <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {tour.isActive ? 'bg-green-100 text-green-800' : 'bg-neutral-100 text-neutral-800'}">
-                    {tour.isActive ? 'Active' : 'Inactive'}
+                    {tour.isActive ? $t('agent.tours.management.status_active') : $t('agent.tours.management.status_inactive')}
                   </span>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
@@ -364,16 +364,16 @@
                       class="text-secondary-dark hover:text-secondary"
                       on:click={() => toggleTourStatus(tour._id)}
                     >
-                      {tour.isActive ? 'Deactivate' : 'Activate'}
+                      {tour.isActive ? $t('agent.tours.management.action_deactivate') : $t('agent.tours.management.action_activate')}
                     </button>
                     <a href={`/agent/tours/edit/${tour._id}`} class="text-primary-dark hover:text-primary">
-                      Edit
+                      {$t('agent.tours.management.action_edit')}
                     </a>
                     <button 
                       class="text-red-600 hover:text-red-800"
                       on:click={() => confirmDelete(tour._id)}
                     >
-                      Delete
+                      {$t('agent.tours.management.action_delete')}
                     </button>
                   </div>
                 </td>
@@ -404,11 +404,11 @@
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <h3 class="text-lg leading-6 font-medium text-neutral-900" id="modal-title">
-                Delete Tour
+                {$t('agent.tours.management.delete_modal_title')}
               </h3>
               <div class="mt-2">
                 <p class="text-sm text-neutral-500">
-                  Are you sure you want to delete this tour? This action cannot be undone and all associated data will be permanently removed.
+                  {$t('agent.tours.management.delete_modal_message')}
                 </p>
                 {#if deleteError}
                   <p class="mt-2 text-sm text-red-600">{deleteError}</p>
@@ -423,14 +423,14 @@
             class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
             on:click={deleteTour}
           >
-            Delete
+            {$t('agent.tours.management.delete_modal_confirm')}
           </button>
           <button 
             type="button" 
             class="mt-3 w-full inline-flex justify-center rounded-md border border-neutral-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-neutral-700 hover:bg-neutral-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
             on:click={cancelDelete}
           >
-            Cancel
+            {$t('agent.tours.management.delete_modal_cancel')}
           </button>
         </div>
       </div>
