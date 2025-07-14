@@ -6,6 +6,7 @@
   import Badge from '../../../components/atoms/Badge.svelte';
   import Button from '../../../components/atoms/Button.svelte';
   import ChineseIcon from '../../../components/atoms/ChineseIcon.svelte';
+  import PhotoGalleryPopup from '../../../components/atoms/PhotoGalleryPopup.svelte';
   
   // Data loaded from +page.ts
   export let data: {
@@ -13,6 +14,23 @@
   };
   
   const { tour } = data;
+  
+  // Photo gallery popup state
+  let isGalleryOpen = false;
+  let galleryImages: string[] = [];
+  let currentGalleryIndex = 0;
+  
+  // Open gallery popup
+  function openGallery(index: number) {
+    currentGalleryIndex = index;
+    galleryImages = [tour.images.main, ...(tour.images.gallery || [])];
+    isGalleryOpen = true;
+  }
+  
+  // Close gallery popup
+  function closeGallery() {
+    isGalleryOpen = false;
+  }
   
   // Format price with currency
   const formatPrice = (price: number, currency: string = 'USD') => {
@@ -54,7 +72,8 @@
   <img 
     src={tour.images.main} 
     alt={tour.title} 
-    class="absolute inset-0 w-full h-full object-cover"
+    class="absolute inset-0 w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
+    on:click={() => openGallery(0)}
   />
   <div class="relative z-20 container mx-auto px-4 flex flex-col justify-center items-center h-[60vh] text-white text-center">
     <div class="inline-flex items-center mb-4">
@@ -250,7 +269,12 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
         {#each tour.images.gallery as image, index}
           <div class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer">
-            <img src={image} alt={`${tour.title} - Image ${index + 1}`} class="w-full h-64 object-cover hover:scale-105 transition-transform duration-500" />
+            <img 
+              src={image} 
+              alt={`${tour.title} - Image ${index + 1}`} 
+              class="w-full h-64 object-cover hover:scale-105 transition-transform duration-500" 
+              on:click={() => openGallery(index + 1)}
+            />
           </div>
         {/each}
       </div>
@@ -335,4 +359,12 @@
       </div>
     </div>
   </Section>
+  
+  <!-- Photo Gallery Popup -->
+  <PhotoGalleryPopup
+    images={galleryImages}
+    initialIndex={currentGalleryIndex}
+    isOpen={isGalleryOpen}
+    on:close={closeGallery}
+  />
 </div> 
