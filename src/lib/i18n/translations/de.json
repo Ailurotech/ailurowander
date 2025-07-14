@@ -55,9 +55,138 @@
     }
   },
   "tours": {
+    "page": {
+      "title": "Unsere Touren erkunden",
+      "subtitle": "Entdecken Sie die perfekte Reise durch Chinas inspirierendste Reiseziele",
+      "search_placeholder": "Touren nach Reiseziel oder Stichwort suchen",
+      "search_button": "Suchen",
+      "searching": "Suche läuft...",
+      "clear": "Löschen",
+      "loading": "Touren werden geladen...",
+      "no_tours_found": "Keine Touren gefunden",
+      "no_tours_message": "Wir aktualisieren derzeit unser Tourenangebot. Bitte schauen Sie bald wieder vorbei!",
+      "no_search_results": "Wir konnten keine Touren finden, die zu \"{query}\" passen. Bitte versuchen Sie einen anderen Suchbegriff.",
+      "available_tours": "Verfügbare Touren",
+      "available_tours_subtitle": "Finden Sie Ihr perfektes Abenteuer aus unserer sorgfältig kuratierten Sammlung von Touren"
+    },
     "duration": "Dauer",
     "price": "Preis",
-    "from": "ab"
+    "from": "ab",
+    "book_now": "Jetzt buchen",
+    "view_details": "Details anzeigen",
+    "days": "Tage",
+    "nights": "Nächte",
+    "featured": "Empfohlen",
+    "starting_from": "Ab",
+    "group_size": "Gruppengröße",
+    "up_to": "Bis zu",
+    "people": "Personen"
+  },
+  "about": {
+    "page": {
+      "title": "Über AiluroWander",
+      "subtitle": "Ihr Tor zu authentischen asiatischen Reiseerlebnissen",
+      "hero_cta": "Unsere Touren erkunden"
+    },
+    "story": {
+      "title": "Unsere Geschichte",
+      "subtitle": "Seit 2010 schaffen wir unvergessliche asiatische Reiseerlebnisse",
+      "paragraph1": "Gegründet im Jahr 2010, hat sich AiluroWander von einem kleinen lokalen Reiseveranstalter zu einer führenden Reiseagentur entwickelt, die sich auf authentische asiatische Reiseerlebnisse spezialisiert hat. Unsere Reise begann mit einer einfachen Mission: Reisenden zu helfen, das echte Asien jenseits der typischen Touristenpfade zu entdecken.",
+      "paragraph2": "Was uns auszeichnet, ist unsere tiefe Verbindung zu den lokalen Kulturen und Gemeinschaften, denen wir dienen. Unser Team aus erfahrenen Reiseleitern und Reiseexperten ist leidenschaftlich daran interessiert, das reiche Erbe, die Traditionen und versteckten Schätze Asiens mit unseren Gästen zu teilen.",
+      "paragraph3": "Heute sind wir stolz darauf, Tausenden von Reisenden geholfen zu haben, bleibende Erinnerungen durch unsere sorgfältig kuratierten Touren und personalisierten Reiseerlebnisse zu schaffen."
+    },
+    "mission": {
+      "title": "Unsere Mission",
+      "subtitle": "Reisende mit authentischen asiatischen Erlebnissen verbinden",
+      "intro": "Bei AiluroWander glauben wir, dass Reisen mehr ist als nur Orte zu besuchen – es geht darum, bedeutungsvolle Verbindungen zu verschiedenen Kulturen und Gemeinschaften zu schaffen. Unsere Mission ist es:",
+      "points": {
+        "authentic": "Authentische und immersive Reiseerlebnisse zu bieten, die über typische Touristenattraktionen hinausgehen",
+        "sustainable": "Lokale Gemeinschaften zu unterstützen und nachhaltige Tourismuspraktiken zu fördern",
+        "knowledge": "Unser tiefes Wissen und unsere Leidenschaft für asiatische Kulturen mit unseren Gästen zu teilen",
+        "memories": "Unvergessliche Erinnerungen durch personalisierten Service und Liebe zum Detail zu schaffen"
+      }
+    },
+    "why_choose": {
+      "title": "Warum uns wählen",
+      "subtitle": "Erleben Sie den AiluroWander-Unterschied"
+    },
+    "team": {
+      "title": "Lernen Sie unser Team kennen",
+      "subtitle": "Die Experten hinter Ihrer Reise"
+    },
+    "cta": {
+      "title": "Bereit für Ihr asiatisches Abenteuer?",
+      "subtitle": "Begleiten Sie uns bei der Entdeckung der Wunder Asiens. Unser Expertenteam ist bereit, Ihnen bei der Planung Ihrer perfekten Reise zu helfen.",
+      "explore_tours": "Touren erkunden",
+      "contact_us": "Kontaktiere uns"
+    }
+  },
+  "contact": {
+    "page": {
+      "title": "Kontaktiere uns",
+      "subtitle": "Wir sind hier, um Ihnen bei der Planung Ihres perfekten asiatischen Abenteuers zu helfen"
+    },
+    "form": {
+      "title": "Kontakt aufnehmen",
+      "subtitle": "Haben Sie Fragen zu unseren Touren? Wir würden gerne von Ihnen hören.",
+      "name": "Name",
+      "email": "E-Mail",
+      "subject": "Betreff",
+      "message": "Nachricht",
+      "name_placeholder": "Ihr Name",
+      "email_placeholder": "ihre.email@beispiel.com",
+      "subject_placeholder": "Worum geht es?",
+      "message_placeholder": "Ihre Nachricht...",
+      "send_message": "Nachricht senden",
+      "sending": "Wird gesendet...",
+      "success": "Vielen Dank für Ihre Nachricht. Wir werden uns bald bei Ihnen melden!",
+      "error": "Entschuldigung, beim Senden Ihrer Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut."
+    },
+    "info": {
+      "title": "Kontaktinformationen",
+      "subtitle": "Wir sind hier, um Ihnen bei der Planung Ihres perfekten asiatischen Abenteuers zu helfen.",
+      "phone": "0474 212 611",
+      "hours": "Mo-Fr: 9:00 AM - 6:00 PM AEST",
+      "whatsapp": "Auf WhatsApp chatten"
+    },
+    "why_contact": {
+      "title": "Warum uns kontaktieren?",
+      "subtitle": "Unser Team von Reiseexperten ist bereit, Ihnen bei Folgendem zu helfen:",
+      "points": {
+        "customize": "Anpassung Ihres Tour-Itinerars",
+        "questions": "Beantwortung von Fragen zu unseren Touren",
+        "requests": "Sonderwünsche und Unterkünfte",
+        "groups": "Gruppenbuchungen und Geschäftsreisen"
+      }
+    }
+  },
+  "tour_detail": {
+    "book_tour": "Diese Tour buchen",
+    "starting_from": "Ab",
+    "duration": "Dauer",
+    "group_size": "Gruppengröße",
+    "request_private": "Private Tour anfragen",
+    "free_cancellation": "Kostenlose Stornierung bis 30 Tage vorher",
+    "customer_support": "24/7 Kundenservice",
+    "highlights": "Tour-Highlights",
+    "itinerary": "Tour-Itinerar",
+    "itinerary_subtitle": "Tagesplan Ihrer Reise",
+    "day": "Tag",
+    "accommodation": "Unterkunft",
+    "meals": "Mahlzeiten",
+    "included": "Was inbegriffen ist",
+    "not_included": "Was nicht inbegriffen ist",
+    "photo_gallery": "Fotogalerie",
+    "gallery_subtitle": "Einblicke in Ihr bevorstehendes Abenteuer",
+    "topics": "Themen",
+    "cta": {
+      "title": "Bereit für dieses Abenteuer?",
+      "subtitle": "Buchen Sie heute Ihren Platz und bereiten Sie sich auf ein unvergessliches Erlebnis bei der Erkundung des Besten von China vor.",
+      "book_now": "Jetzt buchen",
+      "contact_us": "Kontaktiere uns"
+    },
+    "related_tours": "Das könnte Ihnen auch gefallen",
+    "related_subtitle": "Ähnliche Touren, die Sie interessieren könnten"
   },
   "footer": {
     "company_description": "Authentische China-Reiseerlebnisse, maßgeschneidert für internationale Reisende",

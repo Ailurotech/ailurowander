@@ -6,7 +6,7 @@
   export let secondaryCta: { text: string; href: string } | null = null;
 </script>
 
-<section class="hero min-h-[80vh] relative flex items-center justify-center" style="background-image: url('{backgroundImage}');">
+<section class="hero min-h-[80vh] relative flex items-center justify-center" style="background-image: url('{backgroundImage}'); background-size: cover; background-position: center; background-repeat: no-repeat;">
   <div class="hero-overlay bg-gradient-to-r from-black/70 to-black/30"></div>
   <div class="hero-content text-white text-center relative z-10">
     <div class="max-w-4xl mx-auto px-4">

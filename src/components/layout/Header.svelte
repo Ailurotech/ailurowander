@@ -24,7 +24,8 @@
     'zh': 'CHN',
     'de': 'DEU',
     'ja': 'JPN',
-    'es': 'ESP'
+    'es': 'ESP',
+    'th': 'THA'
   };
 </script>
 
@@ -81,6 +82,8 @@
                 🇯🇵
               {:else if $locale === 'es'}
                 🇪🇸
+              {:else if $locale === 'th'}
+                🇹🇭
               {/if}
             </span>
             <span class="text-xs font-medium">{langAbbrev[$locale]}</span>
@@ -104,6 +107,8 @@
                       🇯🇵
                     {:else if lang.code === 'es'}
                       🇪🇸
+                    {:else if lang.code === 'th'}
+                      🇹🇭
                     {/if}
                   </span>
                   <span class="text-xs font-medium">{langAbbrev[lang.code]}</span>

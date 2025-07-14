@@ -59,64 +59,64 @@
 </svelte:head>
 
 <Hero 
-  title="About AiluroWander"
-  subtitle="Your Gateway to Authentic Asian Travel Experiences"
+  title={$t('about.page.title')}
+  subtitle={$t('about.page.subtitle')}
   backgroundImage="/images/about-hero.png"
-  primaryCta={{ text: "Explore Our Tours", href: "/tours" }}
+  primaryCta={{ text: $t('about.page.hero_cta'), href: "/tours" }}
 />
 
 <!-- Our Story -->
 <Section 
-  title="Our Story"
-  subtitle="Crafting Unforgettable Asian Travel Experiences Since 2010"
+  title={$t('about.story.title')}
+  subtitle={$t('about.story.subtitle')}
   background="white"
 >
   <div class="max-w-3xl mx-auto text-lg text-neutral-700">
     <p class="mb-6">
-      Founded in 2010, AiluroWander has grown from a small local tour operator to a leading travel agency specializing in authentic Asian travel experiences. Our journey began with a simple mission: to help travelers discover the real Asia beyond the typical tourist trails.
+      {$t('about.story.paragraph1')}
     </p>
     <p class="mb-6">
-      What sets us apart is our deep connection to the local cultures and communities we serve. Our team of experienced guides and travel experts are passionate about sharing the rich heritage, traditions, and hidden gems of Asia with our guests.
+      {$t('about.story.paragraph2')}
     </p>
     <p>
-      Today, we're proud to have helped thousands of travelers create lasting memories through our carefully curated tours and personalized travel experiences.
+      {$t('about.story.paragraph3')}
     </p>
   </div>
 </Section>
 
 <!-- Our Mission -->
 <Section 
-  title="Our Mission"
-  subtitle="Connecting Travelers with Authentic Asian Experiences"
+  title={$t('about.mission.title')}
+  subtitle={$t('about.mission.subtitle')}
   background="gray"
 >
   <div class="grid md:grid-cols-2 gap-12 items-center">
     <div class="space-y-6">
       <p class="text-lg text-neutral-700">
-        At AiluroWander, we believe that travel is more than just visiting places – it's about creating meaningful connections with different cultures and communities. Our mission is to:
+        {$t('about.mission.intro')}
       </p>
       <ul class="space-y-4">
         <li class="flex items-start">
           <span class="text-primary mr-3">✦</span>
-          <span>Provide authentic and immersive travel experiences that go beyond typical tourist attractions</span>
+          <span>{$t('about.mission.points.authentic')}</span>
         </li>
         <li class="flex items-start">
           <span class="text-primary mr-3">✦</span>
-          <span>Support local communities and promote sustainable tourism practices</span>
+          <span>{$t('about.mission.points.sustainable')}</span>
         </li>
         <li class="flex items-start">
           <span class="text-primary mr-3">✦</span>
-          <span>Share our deep knowledge and passion for Asian cultures with our guests</span>
+          <span>{$t('about.mission.points.knowledge')}</span>
         </li>
         <li class="flex items-start">
           <span class="text-primary mr-3">✦</span>
-          <span>Create unforgettable memories through personalized service and attention to detail</span>
+          <span>{$t('about.mission.points.memories')}</span>
         </li>
       </ul>
     </div>
     <div class="relative">
       <img 
-        src="/images/about-mission.jpg" 
+        src="/images/about-mission.png" 
         alt="Our mission in action" 
         class="rounded-lg shadow-lg"
       />
@@ -127,8 +127,8 @@
 
 <!-- Why Choose Us -->
 <Section 
-  title="Why Choose Us"
-  subtitle="Experience the AiluroWander Difference"
+  title={$t('about.why_choose.title')}
+  subtitle={$t('about.why_choose.subtitle')}
   background="white"
 >
   <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -145,8 +145,8 @@
 
 <!-- Our Team -->
 <Section 
-  title="Meet Our Team"
-  subtitle="The Experts Behind Your Journey"
+  title={$t('about.team.title')}
+  subtitle={$t('about.team.subtitle')}
   background="gray"
 >
   <div class="grid md:grid-cols-3 gap-8">
@@ -167,13 +167,13 @@
 <section class="py-16 text-white bg-primary">
   <div class="container">
     <div class="text-center max-w-3xl mx-auto">
-      <h2 class="text-3xl font-bold mb-6">Ready to Start Your Asian Adventure?</h2>
+      <h2 class="text-3xl font-bold mb-6">{$t('about.cta.title')}</h2>
       <p class="text-lg mb-8">
-        Join us in discovering the wonders of Asia. Our expert team is ready to help you plan your perfect journey.
+        {$t('about.cta.subtitle')}
       </p>
       <div class="flex justify-center gap-4">
-        <a href="/tours" class="btn btn-light">Explore Tours</a>
-        <a href="/contact" class="btn btn-outline-light">Contact Us</a>
+        <a href="/tours" class="btn btn-light">{$t('about.cta.explore_tours')}</a>
+        <a href="/contact" class="btn btn-outline-light">{$t('about.cta.contact_us')}</a>
       </div>
     </div>
   </div>

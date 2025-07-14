@@ -96,7 +96,7 @@
       
       <!-- Highlights -->
       <div class="mb-12">
-        <h2 class="text-2xl font-bold mb-6">Tour Highlights</h2>
+        <h2 class="text-2xl font-bold mb-6">{$t('tour_detail.highlights')}</h2>
         {#if tour.highlights && tour.highlights.length > 0}
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             {#each tour.highlights as highlight}
@@ -118,27 +118,27 @@
     
     <!-- Booking Card -->
     <div class="card bg-white shadow-xl p-6 border border-gray-100 h-min sticky top-8">
-      <h3 class="text-2xl font-bold mb-4">Book This Tour</h3>
+      <h3 class="text-2xl font-bold mb-4">{$t('tour_detail.book_tour')}</h3>
       <div class="chinese-divider"></div>
       
       <div class="mb-6">
         <div class="flex justify-between items-center mb-2">
-          <span class="text-gray-600">Starting from</span>
+          <span class="text-gray-600">{$t('tour_detail.starting_from')}</span>
           <span class="text-2xl font-bold text-primary">{formatPrice(tour.price.amount, tour.price.currency)}</span>
         </div>
         <div class="flex justify-between items-center mb-2">
-          <span class="text-gray-600">Duration</span>
-          <span>{tour.duration.days} days, {tour.duration.nights} nights</span>
+          <span class="text-gray-600">{$t('tour_detail.duration')}</span>
+          <span>{tour.duration.days} {$t('tours.days')}, {tour.duration.nights} {$t('tours.nights')}</span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-gray-600">Group Size</span>
-          <span>Up to 15 people</span>
+          <span class="text-gray-600">{$t('tour_detail.group_size')}</span>
+          <span>{$t('tours.up_to')} 15 {$t('tours.people')}</span>
         </div>
       </div>
       
       <div class="flex flex-col gap-4">
-        <Button variant="primary" fullWidth={true}>Book Now</Button>
-        <Button variant="outline" fullWidth={true}>Request Private Tour</Button>
+        <Button variant="primary" fullWidth={true}>{$t('tours.book_now')}</Button>
+        <Button variant="outline" fullWidth={true}>{$t('tour_detail.request_private')}</Button>
       </div>
       
       <div class="mt-6 text-sm text-gray-500">
@@ -146,20 +146,20 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          Free cancellation up to 30 days before
+          {$t('tour_detail.free_cancellation')}
         </p>
         <p class="flex items-center">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
-          24/7 customer support
+          {$t('tour_detail.customer_support')}
         </p>
       </div>
     </div>
   </div>
   
   <!-- Itinerary -->
-  <Section title="Tour Itinerary" subtitle="Day-by-day schedule of your journey" background="white">
+  <Section title={$t('tour_detail.itinerary')} subtitle={$t('tour_detail.itinerary_subtitle')} background="white">
     <div class="space-y-8 mb-16">
       {#each tour.itinerary || [] as day, index}
         <div class="relative pl-8 border-l-2 border-primary pb-8 {index === tour.itinerary.length - 1 ? 'border-transparent' : ''}">
@@ -175,7 +175,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
-                <span>Accommodation: {day.accommodation}</span>
+                <span>{$t('tour_detail.accommodation')}: {day.accommodation}</span>
               </div>
             {/if}
             
@@ -184,7 +184,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <span>Meals: {day.meals.join(', ')}</span>
+                <span>{$t('tour_detail.meals')}: {day.meals.join(', ')}</span>
               </div>
             {/if}
           </div>
@@ -203,7 +203,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </span>
-        What's Included
+        {$t('tour_detail.included')}
       </h3>
       <ul class="space-y-3">
         {#each tour.inclusions || [] as item}
@@ -227,7 +227,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </span>
-        What's Not Included
+        {$t('tour_detail.not_included')}
       </h3>
       <ul class="space-y-3">
         {#each tour.exclusions || [] as item}
@@ -246,7 +246,7 @@
   
   <!-- Photo Gallery -->
   {#if tour.images.gallery && tour.images.gallery.length > 0}
-    <Section title="Photo Gallery" subtitle="Glimpses of your upcoming adventure" background="white">
+    <Section title={$t('tour_detail.photo_gallery')} subtitle={$t('tour_detail.gallery_subtitle')} background="white">
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
         {#each tour.images.gallery as image, index}
           <div class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer">
@@ -260,7 +260,7 @@
   <!-- Tags -->
   {#if tour.tags && tour.tags.length > 0}
     <div class="mb-16">
-      <h3 class="text-xl font-bold mb-4">Topics</h3>
+      <h3 class="text-xl font-bold mb-4">{$t('tour_detail.topics')}</h3>
       <div class="flex flex-wrap gap-2">
         {#each tour.tags as tag}
           <Badge variant="accent">{tag}</Badge>
@@ -271,16 +271,16 @@
   
   <!-- CTA Section -->
   <div class="bg-primary text-white rounded-2xl p-8 md:p-12 text-center mb-16">
-    <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Embark on This Adventure?</h2>
-    <p class="text-lg max-w-2xl mx-auto mb-8">Book your spot today and get ready for an unforgettable experience exploring the best of China.</p>
+    <h2 class="text-3xl md:text-4xl font-bold mb-4">{$t('tour_detail.cta.title')}</h2>
+    <p class="text-lg max-w-2xl mx-auto mb-8">{$t('tour_detail.cta.subtitle')}</p>
     <div class="flex flex-col sm:flex-row justify-center gap-4">
-      <Button variant="accent" size="lg">Book Now</Button>
-      <Button variant="outline" size="lg">Contact Us</Button>
+      <Button variant="accent" size="lg">{$t('tour_detail.cta.book_now')}</Button>
+      <Button variant="outline" size="lg">{$t('tour_detail.cta.contact_us')}</Button>
     </div>
   </div>
   
   <!-- Related Tours -->
-  <Section title="You Might Also Like" subtitle="Similar tours you might be interested in" background="white">
+  <Section title={$t('tour_detail.related_tours')} subtitle={$t('tour_detail.related_subtitle')} background="white">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
       <!-- Sample related tours - These would be dynamically populated -->
       <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">

@@ -6,6 +6,7 @@
   import Button from '../../../../../components/atoms/Button.svelte';
   import Divider from '../../../../../components/atoms/Divider.svelte';
   import ChineseIcon from '../../../../../components/atoms/ChineseIcon.svelte';
+  import TranslateButton from '../../../../../components/atoms/TranslateButton.svelte';
   import { goto } from '$app/navigation';
   
   // Tour ID from URL
@@ -384,26 +385,44 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="form-group">
             <label for="title" class="form-label">Tour Title*</label>
-            <input 
-              type="text" 
-              id="title" 
-              bind:value={tourData.title} 
-              required
-              class="input w-full" 
-              placeholder="e.g. Classic Beijing & Shanghai Tour"
-            />
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="title" 
+                bind:value={tourData.title} 
+                required
+                class="input flex-1" 
+                placeholder="e.g. Classic Beijing & Shanghai Tour"
+              />
+              <TranslateButton 
+                text={tourData.title}
+                context="tour_title"
+                category="tours"
+                size="sm"
+                on:apply={(e) => tourData.title = e.detail.translation}
+              />
+            </div>
           </div>
           
           <div class="form-group">
             <label for="destination" class="form-label">Main Location*</label>
-            <input 
-              type="text" 
-              id="destination" 
-              bind:value={tourData.destination} 
-              required
-              class="input w-full" 
-              placeholder="e.g. Beijing, Shanghai"
-            />
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="destination" 
+                bind:value={tourData.destination} 
+                required
+                class="input flex-1" 
+                placeholder="e.g. Beijing, Shanghai"
+              />
+              <TranslateButton 
+                text={tourData.destination}
+                context="tour_destination"
+                category="destinations"
+                size="sm"
+                on:apply={(e) => tourData.destination = e.detail.translation}
+              />
+            </div>
           </div>
           
           <div class="form-group">
@@ -511,15 +530,24 @@
         
         <div class="form-group">
           <label for="shortDescription" class="form-label">Short Description (Card Preview)*</label>
-          <input 
-            type="text" 
-            id="shortDescription" 
-            bind:value={tourData.shortDescription} 
-            required
-            class="input w-full" 
-            placeholder="Brief description for tour cards (max 150 characters)"
-            maxlength="150"
-          />
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="shortDescription" 
+              bind:value={tourData.shortDescription} 
+              required
+              class="input flex-1" 
+              placeholder="Brief description for tour cards (max 150 characters)"
+              maxlength="150"
+            />
+            <TranslateButton 
+              text={tourData.shortDescription}
+              context="tour_short_description"
+              category="tours"
+              size="sm"
+              on:apply={(e) => tourData.shortDescription = e.detail.translation}
+            />
+          </div>
           <div class="text-xs text-neutral-500 mt-1">
             {tourData.shortDescription.length}/150 characters
           </div>
@@ -527,13 +555,22 @@
         
         <div class="form-group mt-4">
           <label for="description" class="form-label">Full Description*</label>
-          <textarea 
-            id="description" 
-            bind:value={tourData.description} 
-            required
-            class="input w-full h-32" 
-            placeholder="Detailed tour description with information about attractions, experience, etc."
-          ></textarea>
+          <div class="flex gap-2">
+            <textarea 
+              id="description" 
+              bind:value={tourData.description} 
+              required
+              class="input flex-1 h-32" 
+              placeholder="Detailed tour description with information about attractions, experience, etc."
+            ></textarea>
+            <TranslateButton 
+              text={tourData.description}
+              context="tour_description"
+              category="tours"
+              size="sm"
+              on:apply={(e) => tourData.description = e.detail.translation}
+            />
+          </div>
         </div>
       </div>
       
@@ -567,25 +604,43 @@
               
               <div class="form-group">
                 <label for={`day-${index}-title`} class="form-label">Day Title*</label>
-                <input 
-                  type="text" 
-                  id={`day-${index}-title`} 
-                  bind:value={tourData.itinerary[index].title} 
-                  required
-                  class="input w-full" 
-                  placeholder="e.g. Exploring the Forbidden City"
-                />
+                <div class="flex gap-2">
+                  <input 
+                    type="text" 
+                    id={`day-${index}-title`} 
+                    bind:value={tourData.itinerary[index].title} 
+                    required
+                    class="input flex-1" 
+                    placeholder="e.g. Exploring the Forbidden City"
+                  />
+                  <TranslateButton 
+                    text={tourData.itinerary[index].title}
+                    context="itinerary_day_title"
+                    category="tours"
+                    size="sm"
+                    on:apply={(e) => tourData.itinerary[index].title = e.detail.translation}
+                  />
+                </div>
               </div>
               
               <div class="form-group mt-3">
                 <label for={`day-${index}-description`} class="form-label">Description*</label>
-                <textarea 
-                  id={`day-${index}-description`} 
-                  bind:value={tourData.itinerary[index].description} 
-                  required
-                  class="input w-full h-24" 
-                  placeholder="Describe the activities and sights for this day of the tour"
-                ></textarea>
+                <div class="flex gap-2">
+                  <textarea 
+                    id={`day-${index}-description`} 
+                    bind:value={tourData.itinerary[index].description} 
+                    required
+                    class="input flex-1 h-24" 
+                    placeholder="Describe the activities and sights for this day of the tour"
+                  ></textarea>
+                  <TranslateButton 
+                    text={tourData.itinerary[index].description}
+                    context="itinerary_day_description"
+                    category="tours"
+                    size="sm"
+                    on:apply={(e) => tourData.itinerary[index].description = e.detail.translation}
+                  />
+                </div>
               </div>
             </div>
           {/each}

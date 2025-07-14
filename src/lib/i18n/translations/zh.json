@@ -55,9 +55,32 @@
     }
   },
   "tours": {
+    "page": {
+      "title": "探索我们的旅游路线",
+      "subtitle": "发现穿越中国最令人向往目的地的完美旅程",
+      "search_placeholder": "按目的地或关键词搜索旅游路线",
+      "search_button": "搜索",
+      "searching": "搜索中...",
+      "clear": "清除",
+      "loading": "加载旅游路线中...",
+      "no_tours_found": "未找到旅游路线",
+      "no_tours_message": "我们正在更新旅游路线。请稍后再来查看！",
+      "no_search_results": "我们找不到匹配\"{query}\"的旅游路线。请尝试其他搜索词。",
+      "available_tours": "可用旅游路线",
+      "available_tours_subtitle": "从我们精心策划的旅游路线集合中找到您的完美冒险"
+    },
     "duration": "行程天数",
     "price": "价格",
-    "from": "起价"
+    "from": "起价",
+    "book_now": "立即预订",
+    "view_details": "查看详情",
+    "days": "天",
+    "nights": "夜",
+    "featured": "精选",
+    "starting_from": "起价",
+    "group_size": "团队规模",
+    "up_to": "最多",
+    "people": "人"
   },
   "agent": {
     "login": {
@@ -174,6 +197,112 @@
         "delete_modal_cancel": "取消"
       }
     }
+  },
+  "about": {
+    "page": {
+      "title": "关于AiluroWander",
+      "subtitle": "您通往真实亚洲旅行体验的门户",
+      "hero_cta": "探索我们的旅游路线"
+    },
+    "story": {
+      "title": "我们的故事",
+      "subtitle": "自2010年以来，打造难忘的亚洲旅行体验",
+      "paragraph1": "AiluroWander成立于2010年，从一个小型本地旅游运营商发展成为专门从事真实亚洲旅行体验的领先旅行社。我们的旅程始于一个简单的使命：帮助旅行者发现典型旅游路线之外的真实亚洲。",
+      "paragraph2": "我们的独特之处在于与我们所服务的当地文化和社区的深厚联系。我们经验丰富的导游和旅行专家团队热衷于与客人分享亚洲丰富的遗产、传统和隐藏的瑰宝。",
+      "paragraph3": "今天，我们很自豪能够通过精心策划的旅游路线和个性化旅行体验帮助数千名旅行者创造持久的回忆。"
+    },
+    "mission": {
+      "title": "我们的使命",
+      "subtitle": "连接旅行者与真实的亚洲体验",
+      "intro": "在AiluroWander，我们相信旅行不仅仅是参观地方——它是关于与不同文化和社区建立有意义的联系。我们的使命是：",
+      "points": {
+        "authentic": "提供超越典型旅游景点的真实和沉浸式旅行体验",
+        "sustainable": "支持当地社区并促进可持续旅游实践",
+        "knowledge": "与客人分享我们对亚洲文化的深厚知识和热情",
+        "memories": "通过个性化服务和关注细节创造难忘的回忆"
+      }
+    },
+    "why_choose": {
+      "title": "为什么选择我们",
+      "subtitle": "体验AiluroWander的与众不同"
+    },
+    "team": {
+      "title": "认识我们的团队",
+      "subtitle": "您旅程背后的专家"
+    },
+    "cta": {
+      "title": "准备开始您的亚洲冒险？",
+      "subtitle": "加入我们探索亚洲的奇观。我们的专家团队随时准备帮助您规划完美的旅程。",
+      "explore_tours": "探索旅游路线",
+      "contact_us": "联系我们"
+    }
+  },
+  "contact": {
+    "page": {
+      "title": "联系我们",
+      "subtitle": "我们在这里帮助您规划完美的亚洲冒险"
+    },
+    "form": {
+      "title": "与我们联系",
+      "subtitle": "对我们的旅游路线有疑问？我们很乐意听到您的声音。",
+      "name": "姓名",
+      "email": "邮箱",
+      "subject": "主题",
+      "message": "消息",
+      "name_placeholder": "您的姓名",
+      "email_placeholder": "your.email@example.com",
+      "subject_placeholder": "这是关于什么的？",
+      "message_placeholder": "您的消息...",
+      "send_message": "发送消息",
+      "sending": "发送中...",
+      "success": "感谢您的消息。我们会尽快回复您！",
+      "error": "抱歉，发送消息时出现错误。请重试。"
+    },
+    "info": {
+      "title": "联系信息",
+      "subtitle": "我们在这里帮助您规划完美的亚洲冒险。",
+      "phone": "0474 212 611",
+      "hours": "周一至周五：上午9:00 - 下午6:00 AEST",
+      "whatsapp": "在WhatsApp上聊天"
+    },
+    "why_contact": {
+      "title": "为什么联系我们？",
+      "subtitle": "我们的旅行专家团队随时准备帮助您：",
+      "points": {
+        "customize": "定制您的旅游行程",
+        "questions": "回答关于我们旅游路线的问题",
+        "requests": "特殊要求和住宿",
+        "groups": "团体预订和企业旅行"
+      }
+    }
+  },
+  "tour_detail": {
+    "book_tour": "预订此旅游",
+    "starting_from": "起价",
+    "duration": "时长",
+    "group_size": "团队规模",
+    "request_private": "请求私人旅游",
+    "free_cancellation": "出发前30天免费取消",
+    "customer_support": "24/7客户支持",
+    "highlights": "旅游亮点",
+    "itinerary": "旅游行程",
+    "itinerary_subtitle": "您旅程的每日安排",
+    "day": "天",
+    "accommodation": "住宿",
+    "meals": "餐食",
+    "included": "包含内容",
+    "not_included": "不包含内容",
+    "photo_gallery": "照片画廊",
+    "gallery_subtitle": "您即将到来的冒险的一瞥",
+    "topics": "主题",
+    "cta": {
+      "title": "准备开始这次冒险？",
+      "subtitle": "今天就预订您的位置，准备好探索中国最佳体验的难忘经历。",
+      "book_now": "立即预订",
+      "contact_us": "联系我们"
+    },
+    "related_tours": "您可能还喜欢",
+    "related_subtitle": "您可能感兴趣的其他旅游路线"
   },
   "footer": {
     "company_description": "为国际旅行者量身定制的真实中国旅行体验",

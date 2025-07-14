@@ -55,9 +55,138 @@
     }
   },
   "tours": {
+    "page": {
+      "title": "ツアーを探す",
+      "subtitle": "中国の最も魅力的な目的地を通る完璧な旅を発見しましょう",
+      "search_placeholder": "目的地やキーワードでツアーを検索",
+      "search_button": "検索",
+      "searching": "検索中...",
+      "clear": "クリア",
+      "loading": "ツアーを読み込み中...",
+      "no_tours_found": "ツアーが見つかりません",
+      "no_tours_message": "現在ツアーの提供を更新中です。しばらくしてからまたご確認ください！",
+      "no_search_results": "\"{query}\"に一致するツアーが見つかりませんでした。別の検索語を試してください。",
+      "available_tours": "利用可能なツアー",
+      "available_tours_subtitle": "厳選されたツアーコレクションから完璧な冒険を見つけましょう"
+    },
     "duration": "期間",
     "price": "価格",
-    "from": "から"
+    "from": "から",
+    "book_now": "今すぐ予約",
+    "view_details": "詳細を見る",
+    "days": "日",
+    "nights": "泊",
+    "featured": "おすすめ",
+    "starting_from": "から",
+    "group_size": "グループサイズ",
+    "up_to": "最大",
+    "people": "人"
+  },
+  "about": {
+    "page": {
+      "title": "AiluroWanderについて",
+      "subtitle": "本物のアジア旅行体験へのあなたのゲートウェイ",
+      "hero_cta": "ツアーを探す"
+    },
+    "story": {
+      "title": "私たちの物語",
+      "subtitle": "2010年から忘れられないアジア旅行体験を作り続けています",
+      "paragraph1": "2010年に設立されたAiluroWanderは、小さな地元のツアーオペレーターから、本物のアジア旅行体験に特化した主要な旅行代理店に成長しました。私たちの旅は、旅行者が典型的な観光ルートを超えて本物のアジアを発見するのを助けるというシンプルな使命から始まりました。",
+      "paragraph2": "私たちを際立たせているのは、私たちがサービスを提供する地元の文化やコミュニティとの深いつながりです。私たちの経験豊富なガイドと旅行専門家のチームは、アジアの豊かな遺産、伝統、隠された宝石をゲストと共有することに情熱を持っています。",
+      "paragraph3": "今日、私たちは慎重に選ばれたツアーとパーソナライズされた旅行体験を通じて、何千人もの旅行者が永続的な思い出を作るのを助けたことを誇りに思っています。"
+    },
+    "mission": {
+      "title": "私たちの使命",
+      "subtitle": "旅行者と本物のアジア体験を結びつける",
+      "intro": "AiluroWanderでは、旅行は単に場所を訪れること以上のものだと信じています – それは異なる文化やコミュニティとの意味のあるつながりを作ることです。私たちの使命は：",
+      "points": {
+        "authentic": "典型的な観光スポットを超えた本物で没入型の旅行体験を提供する",
+        "sustainable": "地元コミュニティをサポートし、持続可能な観光慣行を促進する",
+        "knowledge": "アジア文化への深い知識と情熱をゲストと共有する",
+        "memories": "パーソナライズされたサービスと細部への注意を通じて忘れられない思い出を作る"
+      }
+    },
+    "why_choose": {
+      "title": "私たちを選ぶ理由",
+      "subtitle": "AiluroWanderの違いを体験する"
+    },
+    "team": {
+      "title": "私たちのチームに会う",
+      "subtitle": "あなたの旅の背後にいる専門家"
+    },
+    "cta": {
+      "title": "アジアの冒険を始める準備はできましたか？",
+      "subtitle": "アジアの驚異を発見するために私たちに参加してください。私たちの専門チームは、あなたの完璧な旅を計画する準備ができています。",
+      "explore_tours": "ツアーを探す",
+      "contact_us": "お問い合わせ"
+    }
+  },
+  "contact": {
+    "page": {
+      "title": "お問い合わせ",
+      "subtitle": "完璧なアジアの冒険を計画するお手伝いをします"
+    },
+    "form": {
+      "title": "お問い合わせ",
+      "subtitle": "ツアーについてご質問がありますか？お聞かせください。",
+      "name": "お名前",
+      "email": "メールアドレス",
+      "subject": "件名",
+      "message": "メッセージ",
+      "name_placeholder": "お名前",
+      "email_placeholder": "your.email@example.com",
+      "subject_placeholder": "これは何についてですか？",
+      "message_placeholder": "メッセージ...",
+      "send_message": "メッセージを送信",
+      "sending": "送信中...",
+      "success": "メッセージをありがとうございます。すぐにご連絡いたします！",
+      "error": "申し訳ございませんが、メッセージの送信でエラーが発生しました。もう一度お試しください。"
+    },
+    "info": {
+      "title": "連絡先情報",
+      "subtitle": "完璧なアジアの冒険を計画するお手伝いをします。",
+      "phone": "0474 212 611",
+      "hours": "月-金: 午前9:00 - 午後6:00 AEST",
+      "whatsapp": "WhatsAppでチャット"
+    },
+    "why_contact": {
+      "title": "なぜお問い合わせするのですか？",
+      "subtitle": "私たちの旅行専門家チームは以下でお手伝いする準備ができています：",
+      "points": {
+        "customize": "ツアーの行程をカスタマイズ",
+        "questions": "ツアーについての質問に回答",
+        "requests": "特別なリクエストと宿泊",
+        "groups": "グループ予約と企業旅行"
+      }
+    }
+  },
+  "tour_detail": {
+    "book_tour": "このツアーを予約",
+    "starting_from": "から",
+    "duration": "期間",
+    "group_size": "グループサイズ",
+    "request_private": "プライベートツアーをリクエスト",
+    "free_cancellation": "出発30日前まで無料キャンセル",
+    "customer_support": "24時間365日カスタマーサポート",
+    "highlights": "ツアーのハイライト",
+    "itinerary": "ツアーの行程",
+    "itinerary_subtitle": "あなたの旅の日別スケジュール",
+    "day": "日",
+    "accommodation": "宿泊",
+    "meals": "食事",
+    "included": "含まれるもの",
+    "not_included": "含まれないもの",
+    "photo_gallery": "写真ギャラリー",
+    "gallery_subtitle": "あなたの今後の冒険の一瞥",
+    "topics": "トピック",
+    "cta": {
+      "title": "この冒険に乗り出す準備はできましたか？",
+      "subtitle": "今日あなたの場所を予約し、中国の最高の体験を探索する忘れられない体験の準備をしましょう。",
+      "book_now": "今すぐ予約",
+      "contact_us": "お問い合わせ"
+    },
+    "related_tours": "あなたも好きかもしれません",
+    "related_subtitle": "興味を持っていただけるかもしれない類似のツアー"
   },
   "footer": {
     "company_description": "国際的な旅行者のためにカスタマイズされた本物の中国旅行体験",

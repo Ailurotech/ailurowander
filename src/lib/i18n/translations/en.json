@@ -55,9 +55,32 @@
     }
   },
   "tours": {
+    "page": {
+      "title": "Explore Our Tours",
+      "subtitle": "Discover the perfect journey through China's most inspiring destinations",
+      "search_placeholder": "Search tours by destination or keyword",
+      "search_button": "Search",
+      "searching": "Searching...",
+      "clear": "Clear",
+      "loading": "Loading tours...",
+      "no_tours_found": "No tours found",
+      "no_tours_message": "We're currently updating our tour offerings. Please check back soon!",
+      "no_search_results": "We couldn't find any tours matching \"{query}\". Please try a different search term.",
+      "available_tours": "Available Tours",
+      "available_tours_subtitle": "Find your perfect adventure from our carefully curated collection of tours"
+    },
     "duration": "Duration",
     "price": "Price",
-    "from": "from"
+    "from": "from",
+    "book_now": "Book Now",
+    "view_details": "View Details",
+    "days": "days",
+    "nights": "nights",
+    "featured": "Featured",
+    "starting_from": "Starting from",
+    "group_size": "Group Size",
+    "up_to": "Up to",
+    "people": "people"
   },
   "agent": {
     "login": {
@@ -174,6 +197,112 @@
         "delete_modal_cancel": "Cancel"
       }
     }
+  },
+  "about": {
+    "page": {
+      "title": "About AiluroWander",
+      "subtitle": "Your Gateway to Authentic Asian Travel Experiences",
+      "hero_cta": "Explore Our Tours"
+    },
+    "story": {
+      "title": "Our Story",
+      "subtitle": "Crafting Unforgettable Asian Travel Experiences Since 2010",
+      "paragraph1": "Founded in 2010, AiluroWander has grown from a small local tour operator to a leading travel agency specializing in authentic Asian travel experiences. Our journey began with a simple mission: to help travelers discover the real Asia beyond the typical tourist trails.",
+      "paragraph2": "What sets us apart is our deep connection to the local cultures and communities we serve. Our team of experienced guides and travel experts are passionate about sharing the rich heritage, traditions, and hidden gems of Asia with our guests.",
+      "paragraph3": "Today, we're proud to have helped thousands of travelers create lasting memories through our carefully curated tours and personalized travel experiences."
+    },
+    "mission": {
+      "title": "Our Mission",
+      "subtitle": "Connecting Travelers with Authentic Asian Experiences",
+      "intro": "At AiluroWander, we believe that travel is more than just visiting places – it's about creating meaningful connections with different cultures and communities. Our mission is to:",
+      "points": {
+        "authentic": "Provide authentic and immersive travel experiences that go beyond typical tourist attractions",
+        "sustainable": "Support local communities and promote sustainable tourism practices",
+        "knowledge": "Share our deep knowledge and passion for Asian cultures with our guests",
+        "memories": "Create unforgettable memories through personalized service and attention to detail"
+      }
+    },
+    "why_choose": {
+      "title": "Why Choose Us",
+      "subtitle": "Experience the AiluroWander Difference"
+    },
+    "team": {
+      "title": "Meet Our Team",
+      "subtitle": "The Experts Behind Your Journey"
+    },
+    "cta": {
+      "title": "Ready to Start Your Asian Adventure?",
+      "subtitle": "Join us in discovering the wonders of Asia. Our expert team is ready to help you plan your perfect journey.",
+      "explore_tours": "Explore Tours",
+      "contact_us": "Contact Us"
+    }
+  },
+  "contact": {
+    "page": {
+      "title": "Contact Us",
+      "subtitle": "We're here to help plan your perfect Asian adventure"
+    },
+    "form": {
+      "title": "Get in Touch",
+      "subtitle": "Have questions about our tours? We'd love to hear from you.",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "name_placeholder": "Your name",
+      "email_placeholder": "your.email@example.com",
+      "subject_placeholder": "What is this regarding?",
+      "message_placeholder": "Your message...",
+      "send_message": "Send Message",
+      "sending": "Sending...",
+      "success": "Thank you for your message. We will get back to you soon!",
+      "error": "Sorry, there was an error sending your message. Please try again."
+    },
+    "info": {
+      "title": "Contact Information",
+      "subtitle": "We're here to help you plan your perfect Asian adventure.",
+      "phone": "0474 212 611",
+      "hours": "Mon-Fri: 9:00 AM - 6:00 PM AEST",
+      "whatsapp": "Chat on WhatsApp"
+    },
+    "why_contact": {
+      "title": "Why Contact Us?",
+      "subtitle": "Our team of travel experts is ready to help you with:",
+      "points": {
+        "customize": "Customizing your tour itinerary",
+        "questions": "Answering questions about our tours",
+        "requests": "Special requests and accommodations",
+        "groups": "Group bookings and corporate travel"
+      }
+    }
+  },
+  "tour_detail": {
+    "book_tour": "Book This Tour",
+    "starting_from": "Starting from",
+    "duration": "Duration",
+    "group_size": "Group Size",
+    "request_private": "Request Private Tour",
+    "free_cancellation": "Free cancellation up to 30 days before",
+    "customer_support": "24/7 customer support",
+    "highlights": "Tour Highlights",
+    "itinerary": "Tour Itinerary",
+    "itinerary_subtitle": "Day-by-day schedule of your journey",
+    "day": "Day",
+    "accommodation": "Accommodation",
+    "meals": "Meals",
+    "included": "What's Included",
+    "not_included": "What's Not Included",
+    "photo_gallery": "Photo Gallery",
+    "gallery_subtitle": "Glimpses of your upcoming adventure",
+    "topics": "Topics",
+    "cta": {
+      "title": "Ready to Embark on This Adventure?",
+      "subtitle": "Book your spot today and get ready for an unforgettable experience exploring the best of China.",
+      "book_now": "Book Now",
+      "contact_us": "Contact Us"
+    },
+    "related_tours": "You Might Also Like",
+    "related_subtitle": "Similar tours you might be interested in"
   },
   "footer": {
     "company_description": "Authentic China travel experiences tailored for international travelers",

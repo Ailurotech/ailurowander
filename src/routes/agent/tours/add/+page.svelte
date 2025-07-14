@@ -4,6 +4,7 @@
   import Button from '../../../../components/atoms/Button.svelte';
   import Divider from '../../../../components/atoms/Divider.svelte';
   import ChineseIcon from '../../../../components/atoms/ChineseIcon.svelte';
+  import TranslateButton from '../../../../components/atoms/TranslateButton.svelte';
   import { onMount } from 'svelte';
   
   // Form state
@@ -155,6 +156,9 @@
   let isSubmitting = false;
   let submitSuccess = false;
   let submitError = '';
+  
+  // Translation suggestion state
+  let translationSuggestions: Record<string, string> = {};
   
   // Add these variables at the top of the script section
   let mainImageFile: File | null = null;
@@ -447,6 +451,29 @@
     </div>
   {/if}
   
+  <!-- Translation Help -->
+  <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+    <div class="flex items-start">
+      <div class="flex-shrink-0">
+        <svg class="h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <div class="ml-3">
+        <h3 class="text-sm font-medium text-blue-800">Chinese Input Support</h3>
+        <div class="mt-2 text-sm text-blue-700">
+          <p>You can input content in Chinese and it will automatically translate to English when you leave the field. This feature supports:</p>
+          <ul class="mt-1 list-disc list-inside">
+            <li>Tour titles and descriptions</li>
+            <li>Destination names</li>
+            <li>Itinerary day titles and descriptions</li>
+            <li>Common travel terms and phrases</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <form on:submit|preventDefault={handleSubmit} class="space-y-8">
     <!-- Basic Information -->
     <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
@@ -455,28 +482,48 @@
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="form-group">
           <label for="title" class="form-label">{$t('agent.tours.title_label')}*</label>
-          <input 
-            type="text" 
-            id="title" 
-            bind:value={tourData.title} 
-            required
-            class="input w-full" 
-            placeholder={$t('agent.tours.title_placeholder')}
-          />
+          <div class="relative">
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="title" 
+                bind:value={tourData.title} 
+                required
+                class="input flex-1" 
+                placeholder={$t('agent.tours.title_placeholder')}
+              />
+              <TranslateButton 
+                text={tourData.title}
+                context="tour_title"
+                category="tours"
+                size="sm"
+                on:apply={(e) => tourData.title = e.detail.translation}
+              />
+            </div>
+          </div>
         </div>
         
         <div class="form-group">
           <label for="destination" class="form-label">{$t('agent.tours.destination_label')}*</label>
           <div class="relative">
-            <input 
-              type="text" 
-              id="destination" 
-              bind:value={tourData.destination}
-              on:focus={() => showDestinationDropdown = true}
-              required
-              class="input w-full" 
-              placeholder={$t('agent.tours.destination_placeholder')}
-            />
+            <div class="flex gap-2">
+              <input 
+                type="text" 
+                id="destination" 
+                bind:value={tourData.destination}
+                on:focus={() => showDestinationDropdown = true}
+                required
+                class="input flex-1" 
+                placeholder={$t('agent.tours.destination_placeholder')}
+              />
+              <TranslateButton 
+                text={tourData.destination}
+                context="tour_destination"
+                category="destinations"
+                size="sm"
+                on:apply={(e) => tourData.destination = e.detail.translation}
+              />
+            </div>
             {#if showDestinationDropdown && previousDestinations.length > 0}
               <div class="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg border border-neutral-200 max-h-60 overflow-y-auto">
                 {#if isLoadingDestinations}
@@ -636,15 +683,26 @@
       
       <div class="form-group">
         <label for="shortDescription" class="form-label">{$t('agent.tours.short_description_label')}*</label>
-        <input 
-          type="text" 
-          id="shortDescription" 
-          bind:value={tourData.shortDescription} 
-          required
-          class="input w-full" 
-          placeholder={$t('agent.tours.short_description_placeholder')}
-          maxlength="150"
-        />
+        <div class="relative">
+          <div class="flex gap-2">
+            <input 
+              type="text" 
+              id="shortDescription" 
+              bind:value={tourData.shortDescription} 
+              required
+              class="input flex-1" 
+              placeholder={$t('agent.tours.short_description_placeholder')}
+              maxlength="150"
+            />
+            <TranslateButton 
+              text={tourData.shortDescription}
+              context="tour_short_description"
+              category="tours"
+              size="sm"
+              on:apply={(e) => tourData.shortDescription = e.detail.translation}
+            />
+          </div>
+        </div>
         <div class="text-xs text-neutral-500 mt-1">
           {tourData.shortDescription.length}/150 characters
         </div>
@@ -652,13 +710,24 @@
       
       <div class="form-group mt-4">
         <label for="description" class="form-label">{$t('agent.tours.description_label')}*</label>
-        <textarea 
-          id="description" 
-          bind:value={tourData.description} 
-          required
-          class="input w-full h-32" 
-          placeholder={$t('agent.tours.description_placeholder')}
-        ></textarea>
+        <div class="relative">
+          <div class="flex gap-2">
+            <textarea 
+              id="description" 
+              bind:value={tourData.description} 
+              required
+              class="input flex-1 h-32" 
+              placeholder={$t('agent.tours.description_placeholder')}
+            ></textarea>
+            <TranslateButton 
+              text={tourData.description}
+              context="tour_description"
+              category="tours"
+              size="sm"
+              on:apply={(e) => tourData.description = e.detail.translation}
+            />
+          </div>
+        </div>
       </div>
     </div>
     
@@ -695,23 +764,45 @@
           
           <div class="form-group mb-3">
             <label class="form-label">{$t('agent.tours.day_title')}*</label>
-            <input 
-              type="text" 
-              bind:value={day.title} 
-              required
-              class="input w-full" 
-              placeholder="e.g. Forbidden City & Temple of Heaven"
-            />
+            <div class="relative">
+              <div class="flex gap-2">
+                <input 
+                  type="text" 
+                  bind:value={day.title} 
+                  required
+                  class="input flex-1" 
+                  placeholder="e.g. Forbidden City & Temple of Heaven"
+                />
+                <TranslateButton 
+                  text={day.title}
+                  context="itinerary_day_title"
+                  category="tours"
+                  size="sm"
+                  on:apply={(e) => day.title = e.detail.translation}
+                />
+              </div>
+            </div>
           </div>
           
           <div class="form-group">
             <label class="form-label">{$t('agent.tours.day_description')}*</label>
-            <textarea 
-              bind:value={day.description} 
-              required
-              class="input w-full h-24" 
-              placeholder="Details about activities, meals, accommodations, etc."
-            ></textarea>
+            <div class="relative">
+              <div class="flex gap-2">
+                <textarea 
+                  bind:value={day.description} 
+                  required
+                  class="input flex-1 h-24" 
+                  placeholder="Details about activities, meals, accommodations, etc."
+                ></textarea>
+                <TranslateButton 
+                  text={day.description}
+                  context="itinerary_day_description"
+                  category="tours"
+                  size="sm"
+                  on:apply={(e) => day.description = e.detail.translation}
+                />
+              </div>
+            </div>
           </div>
         </div>
       {/each}
@@ -738,16 +829,23 @@
           </div>
           
           {#each tourData.inclusions as item, index}
-            <div class="flex items-center mb-2">
+            <div class="flex items-center mb-2 gap-2">
               <input 
                 type="text" 
                 bind:value={tourData.inclusions[index]} 
-                class="input w-full" 
+                class="input flex-1" 
                 placeholder={$t('agent.tours.inclusions_placeholder')}
+              />
+              <TranslateButton 
+                text={tourData.inclusions[index]}
+                context="tour_inclusion"
+                category="tours"
+                size="sm"
+                on:apply={(e) => tourData.inclusions[index] = e.detail.translation}
               />
               <button 
                 type="button" 
-                class="ml-2 text-red-500 hover:text-red-700"
+                class="text-red-500 hover:text-red-700"
                 on:click={() => removeIncludedItem(index)}
                 disabled={tourData.inclusions.length <= 1}
               >
@@ -775,16 +873,23 @@
           </div>
           
           {#each tourData.exclusions as item, index}
-            <div class="flex items-center mb-2">
+            <div class="flex items-center mb-2 gap-2">
               <input 
                 type="text" 
                 bind:value={tourData.exclusions[index]} 
-                class="input w-full" 
+                class="input flex-1" 
                 placeholder={$t('agent.tours.exclusions_placeholder')}
+              />
+              <TranslateButton 
+                text={tourData.exclusions[index]}
+                context="tour_exclusion"
+                category="tours"
+                size="sm"
+                on:apply={(e) => tourData.exclusions[index] = e.detail.translation}
               />
               <button 
                 type="button" 
-                class="ml-2 text-red-500 hover:text-red-700"
+                class="text-red-500 hover:text-red-700"
                 on:click={() => removeNotIncludedItem(index)}
                 disabled={tourData.exclusions.length <= 1}
               >

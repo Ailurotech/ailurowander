@@ -47,7 +47,7 @@
   <!-- Parallax background image -->
   <div 
     class="absolute inset-0 bg-cover bg-center bg-no-repeat w-full h-full transform"
-    style="background-image: url({image}); transform: translateY({scrollY * 0.3}px);"
+    style="background-image: url({image}); background-size: cover; background-position: center; background-repeat: no-repeat; transform: translateY({scrollY * 0.3}px);"
   ></div>
   
   <!-- Overlay for better text readability -->

@@ -8,6 +8,15 @@
     font-size: 16px;
   }
   
+  * {
+    cursor: default !important;
+  }
+  
+  /* Interactive elements should show pointer on hover */
+  a, button, .btn, [role="button"], [tabindex]:not([tabindex="-1"]):hover {
+    cursor: pointer !important;
+  }
+  
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-bold tracking-tight;
   }
@@ -31,6 +40,13 @@
     --spacing-4: 2rem;   /* 32px */
     --spacing-5: 2.5rem; /* 40px */
     --spacing-6: 3rem;   /* 48px */
+  }
+  
+  /* Hero background image fixes */
+  .hero {
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
   }
 }
 
