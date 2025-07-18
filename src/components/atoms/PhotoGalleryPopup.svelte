@@ -8,28 +8,30 @@
   
   const dispatch = createEventDispatcher();
   
-  let currentIndex = initialIndex;
+  let currentIndex = 0;
+  let initialized = false;
   
-  // Update current index when initial index changes
-  $: if (isOpen && initialIndex !== currentIndex) {
-    currentIndex = initialIndex;
-  }
+  // Touch/Swipe state
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchEndX = 0;
+  let touchEndY = 0;
+  let isSwiping = false;
   
-  // Ensure we have valid images array and current index
-  $: if (images && images.length > 0) {
-    if (currentIndex >= images.length) {
+  // Swipe thresholds
+  const SWIPE_THRESHOLD = 50; // Minimum distance for a swipe
+  const SWIPE_VELOCITY_THRESHOLD = 0.3; // Minimum velocity
+  
+  // Initialize current index when gallery opens for the first time
+  $: if (isOpen && !initialized) {
+    if (images && images.length > 0) {
+      currentIndex = Math.max(0, Math.min(initialIndex, images.length - 1));
+    } else {
       currentIndex = 0;
     }
-    if (currentIndex < 0) {
-      currentIndex = 0;
-    }
-  } else {
-    currentIndex = 0;
-  }
-  
-  // Debug logging
-  $: if (isOpen) {
-    console.log('Gallery opened with images:', images, 'Current index:', currentIndex, 'Images length:', images?.length);
+    initialized = true;
+  } else if (!isOpen) {
+    initialized = false;
   }
   
   // Handle keyboard navigation
@@ -61,35 +63,73 @@
   }
   
   function previous() {
-    console.log('Previous clicked');
-    if (!images || images.length === 0) {
-      console.log('No images available');
-      return;
-    }
-    const newIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
-    console.log('Previous: currentIndex:', currentIndex, 'newIndex:', newIndex, 'total images:', images.length);
-    currentIndex = newIndex;
+    if (!images || images.length === 0) return;
+    currentIndex = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
   }
   
   function next() {
-    console.log('Next clicked');
-    if (!images || images.length === 0) {
-      console.log('No images available');
-      return;
-    }
-    const newIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
-    console.log('Next: currentIndex:', currentIndex, 'newIndex:', newIndex, 'total images:', images.length);
-    currentIndex = newIndex;
+    if (!images || images.length === 0) return;
+    currentIndex = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
   }
   
   function goToImage(index: number) {
-    console.log('Go to image clicked, index:', index);
     if (!images || images.length === 0) return;
     if (index < 0 || index >= images.length) return;
-    if (index === currentIndex) return;
-    
     currentIndex = index;
-    console.log('Go to image: new index:', currentIndex, 'Total images:', images.length);
+  }
+
+  // Touch/Swipe handlers
+  function handleTouchStart(event: TouchEvent) {
+    if (!isOpen || images.length <= 1) return;
+    
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    isSwiping = true;
+  }
+
+  function handleTouchMove(event: TouchEvent) {
+    if (!isSwiping || !isOpen) return;
+    
+    const touch = event.touches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    // Only prevent default if this is a horizontal swipe (to preserve vertical scrolling)
+    if (absDeltaX > absDeltaY && absDeltaX > 10) {
+      event.preventDefault();
+    }
+  }
+
+  function handleTouchEnd(event: TouchEvent) {
+    if (!isSwiping || !isOpen || images.length <= 1) {
+      isSwiping = false;
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    touchEndX = touch.clientX;
+    touchEndY = touch.clientY;
+    
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    
+    // Only trigger swipe if horizontal movement is greater than vertical (to avoid conflicts with scrolling)
+    if (absDeltaX > absDeltaY && absDeltaX > SWIPE_THRESHOLD) {
+      if (deltaX > 0) {
+        // Swipe right - go to previous image
+        previous();
+      } else {
+        // Swipe left - go to next image
+        next();
+      }
+    }
+    
+    isSwiping = false;
   }
   
   onMount(() => {
@@ -114,18 +154,10 @@
       <!-- Header -->
       <div class="flex justify-between items-center text-white mb-4">
         <div class="text-lg font-medium">
-          Image {currentIndex + 1} of {images.length}
-          <div class="text-sm text-gray-300">Debug: Index {currentIndex}, Total {images.length}</div>
-          <button 
-            type="button" 
-            on:click={() => { 
-              console.log('Test button clicked'); 
-              currentIndex = (currentIndex + 1) % images.length; 
-            }}
-            class="text-xs bg-blue-500 text-white px-2 py-1 rounded"
-          >
-            Test Next
-          </button>
+          <div>Image {currentIndex + 1} of {images.length}</div>
+          {#if images.length > 1}
+            <div class="text-sm text-gray-300 md:hidden">Swipe left/right to navigate</div>
+          {/if}
         </div>
         <button
           type="button"
@@ -145,10 +177,7 @@
         {#if images.length > 1}
           <button
             type="button"
-            on:click={() => { 
-              console.log('Previous button clicked');
-              previous(); 
-            }}
+            on:click={previous}
             class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-opacity-90 transition-all z-10 cursor-pointer"
             aria-label="Previous image"
           >
@@ -159,14 +188,18 @@
         {/if}
         
         <!-- Current Image -->
-        <div class="relative w-full h-full flex items-center justify-center">
+        <div 
+          class="relative w-full h-full flex items-center justify-center touch-pan-y"
+          on:touchstart={handleTouchStart}
+          on:touchmove={handleTouchMove}
+          on:touchend={handleTouchEnd}
+        >
           {#if images[currentIndex]}
             <img
               src={images[currentIndex]}
               alt={`Gallery image ${currentIndex + 1}`}
-              class="max-w-full max-h-full object-contain rounded-lg shadow-lg"
+              class="max-w-full max-h-full object-contain rounded-lg shadow-lg select-none"
               on:error={(e) => {
-                console.error('Image failed to load:', images[currentIndex]);
                 const target = e.target as HTMLImageElement;
                 if (target) {
                   target.style.display = 'none';
@@ -176,7 +209,6 @@
           {:else}
             <div class="text-white text-center">
               <p>No image available</p>
-              <p class="text-sm">Index: {currentIndex}, Total: {images.length}</p>
             </div>
           {/if}
         </div>
@@ -185,10 +217,7 @@
         {#if images.length > 1}
           <button
             type="button"
-            on:click={() => { 
-              console.log('Next button clicked');
-              next(); 
-            }}
+            on:click={next}
             class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-3 rounded-full hover:bg-opacity-90 transition-all z-10 cursor-pointer"
             aria-label="Next image"
           >
@@ -205,10 +234,7 @@
           {#each images as image, index}
             <button
               type="button"
-              on:click={() => { 
-                console.log('Thumbnail clicked, index:', index);
-                goToImage(index); 
-              }}
+              on:click={() => goToImage(index)}
               class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all {currentIndex === index ? 'border-white' : 'border-transparent hover:border-gray-300'}"
               aria-label={`Go to image ${index + 1}`}
             >
@@ -217,7 +243,6 @@
                 alt={`Thumbnail ${index + 1}`}
                 class="w-full h-full object-cover"
                 on:error={(e) => {
-                  console.error('Thumbnail failed to load:', image);
                   const target = e.target as HTMLImageElement;
                   if (target) {
                     target.style.display = 'none';

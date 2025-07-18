@@ -186,12 +186,231 @@ export async function updateTourImages(tourId: string, imageUrls: { main: string
   const db = await getDB();
   const toursCollection = db.collection('tours');
 
+  // Get current tour to preserve existing images
+  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const existingImages = currentTour?.images || { main: '', gallery: [] };
+
+  // Prepare update object - only update fields that have new values
+  const updateObject: any = {};
+  
+  if (imageUrls.main && imageUrls.main.trim() !== '') {
+    updateObject['images.main'] = imageUrls.main;
+  }
+  
+  if (imageUrls.gallery && imageUrls.gallery.length > 0) {
+    // Replace gallery images with new ones
+    updateObject['images.gallery'] = imageUrls.gallery;
+  }
+
+  // Only update if there are new images to set
+  if (Object.keys(updateObject).length > 0) {
+    await toursCollection.updateOne(
+      { _id: new ObjectId(tourId) },
+      { $set: updateObject }
+    );
+  }
+}
+
+/**
+ * Upload itinerary images to S3
+ * @param itineraryImages Array of image files for each day
+ * @param tourId The ID of the tour
+ * @returns Array of image URLs corresponding to each day
+ */
+export async function uploadItineraryImages(itineraryImages: (File | null)[], tourId: string): Promise<(string | undefined)[]> {
+  try {
+    const imageUrls = await Promise.all(
+      itineraryImages.map(async (image, index) => {
+        if (!image) return undefined;
+        
+        const key = generateS3Key(image.name, `tours/${tourId}/itinerary/day-${index + 1}/`);
+        return uploadToS3(
+          await image.arrayBuffer(),
+          key,
+          image.type
+        );
+      })
+    );
+
+    return imageUrls;
+  } catch (error) {
+    console.error('Error uploading itinerary images:', error);
+    throw new Error('Failed to upload itinerary images');
+  }
+}
+
+/**
+ * Update tour itinerary with image URLs
+ * @param tourId The ID of the tour
+ * @param itinerary The itinerary array
+ * @param imageUrls Array of image URLs for each day
+ */
+export async function updateTourItineraryImages(tourId: string, itinerary: any[], imageUrls: (string | undefined)[]): Promise<void> {
+  const db = await getDB();
+  const toursCollection = db.collection('tours');
+
+  // Get the current tour to preserve existing images
+  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const existingItinerary = currentTour?.itinerary || [];
+
+  // Update each itinerary day with its corresponding image URL, preserving existing images
+  const updatedItinerary = itinerary.map((day, index) => ({
+    ...day,
+    // Only update image if a new one is provided, otherwise keep existing image
+    image: imageUrls[index] !== undefined ? imageUrls[index] : existingItinerary[index]?.image
+  }));
+
   await toursCollection.updateOne(
     { _id: new ObjectId(tourId) },
     {
       $set: {
-        'images.main': imageUrls.main,
-        'images.gallery': imageUrls.gallery
+        itinerary: updatedItinerary
+      }
+    }
+  );
+}
+
+/**
+ * Upload accommodation images to S3
+ * @param accommodationImages Array of file arrays for each day
+ * @param tourId The ID of the tour
+ * @returns Array of image URL arrays corresponding to each day
+ */
+export async function uploadAccommodationImages(accommodationImages: (File[])[], tourId: string): Promise<(string[])[]> {
+  try {
+    const imageUrls: (string[])[] = [];
+
+    for (let dayIndex = 0; dayIndex < accommodationImages.length; dayIndex++) {
+      const dayImages = accommodationImages[dayIndex];
+      if (dayImages && dayImages.length > 0) {
+        const dayImageUrls = await Promise.all(
+          dayImages.map(async (image, imgIndex) => {
+            const key = generateS3Key(image.name, `tours/${tourId}/accommodation/day-${dayIndex + 1}/`);
+            return uploadToS3(
+              await image.arrayBuffer(),
+              key,
+              image.type
+            );
+          })
+        );
+        imageUrls[dayIndex] = dayImageUrls;
+      } else {
+        imageUrls[dayIndex] = [];
+      }
+    }
+
+    return imageUrls;
+  } catch (error) {
+    console.error('Error uploading accommodation images:', error);
+    throw new Error('Failed to upload accommodation images');
+  }
+}
+
+/**
+ * Upload meals images to S3
+ * @param mealsImages Array of meal image arrays for each day
+ * @param tourId The ID of the tour
+ * @returns Array of meal image URL arrays corresponding to each day
+ */
+export async function uploadMealsImages(mealsImages: (File[][])[], tourId: string): Promise<(string[][])[]> {
+  try {
+    const imageUrls: (string[][])[] = [];
+
+    for (let dayIndex = 0; dayIndex < mealsImages.length; dayIndex++) {
+      const dayMeals = mealsImages[dayIndex];
+      if (dayMeals && dayMeals.length > 0) {
+        const dayMealUrls: string[][] = [];
+        
+        for (let mealIndex = 0; mealIndex < dayMeals.length; mealIndex++) {
+          const mealImages = dayMeals[mealIndex];
+          if (mealImages && mealImages.length > 0) {
+            const mealImageUrls = await Promise.all(
+              mealImages.map(async (image, imgIndex) => {
+                const key = generateS3Key(image.name, `tours/${tourId}/meals/day-${dayIndex + 1}/meal-${mealIndex + 1}/`);
+                return uploadToS3(
+                  await image.arrayBuffer(),
+                  key,
+                  image.type
+                );
+              })
+            );
+            dayMealUrls[mealIndex] = mealImageUrls;
+          } else {
+            dayMealUrls[mealIndex] = [];
+          }
+        }
+        imageUrls[dayIndex] = dayMealUrls;
+      } else {
+        imageUrls[dayIndex] = [];
+      }
+    }
+
+    return imageUrls;
+  } catch (error) {
+    console.error('Error uploading meals images:', error);
+    throw new Error('Failed to upload meals images');
+  }
+}
+
+/**
+ * Update tour itinerary with accommodation and meals images
+ * @param tourId The ID of the tour
+ * @param itinerary The itinerary array
+ * @param accommodationImageUrls Array of accommodation image URLs for each day
+ * @param mealsImageUrls Array of meals image URLs for each day
+ */
+export async function updateTourAccommodationAndMealsImages(
+  tourId: string, 
+  itinerary: any[], 
+  accommodationImageUrls: (string[])[], 
+  mealsImageUrls: (string[][])[]
+): Promise<void> {
+  const db = await getDB();
+  const toursCollection = db.collection('tours');
+
+  // Get the current tour to preserve existing images
+  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const existingItinerary = currentTour?.itinerary || [];
+
+  // Update each itinerary day with accommodation and meals images
+  const updatedItinerary = itinerary.map((day, index) => {
+    const existingDay = existingItinerary[index] || {};
+    const updatedDay = { ...day };
+
+    // Update accommodation images
+    if (accommodationImageUrls[index] && accommodationImageUrls[index].length > 0) {
+      updatedDay.accommodation = {
+        ...updatedDay.accommodation,
+        images: accommodationImageUrls[index]
+      };
+    } else if (existingDay.accommodation?.images) {
+      updatedDay.accommodation = {
+        ...updatedDay.accommodation,
+        images: existingDay.accommodation.images
+      };
+    }
+
+    // Update meals images
+    if (mealsImageUrls[index] && mealsImageUrls[index].length > 0) {
+      updatedDay.meals = updatedDay.meals?.map((meal: any, mealIndex: number) => ({
+        ...meal,
+        images: mealsImageUrls[index][mealIndex] || meal.images || []
+      })) || [];
+    } else if (existingDay.meals) {
+      updatedDay.meals = updatedDay.meals?.map((meal: any, mealIndex: number) => ({
+        ...meal,
+        images: existingDay.meals?.[mealIndex]?.images || meal.images || []
+      })) || [];
+    }
+
+    return updatedDay;
+  });
+
+  await toursCollection.updateOne(
+    { _id: new ObjectId(tourId) },
+    {
+      $set: {
+        itinerary: updatedItinerary
       }
     }
   );

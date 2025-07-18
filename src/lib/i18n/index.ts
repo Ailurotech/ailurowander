@@ -77,6 +77,19 @@ export const loadTranslations = async (newLocale: string = defaultLanguage) => {
   return checkedLocale;
 };
 
+// Function to set locale with persistence
+export const setLocale = (newLocale: string) => {
+  const checkedLocale = checkLocale(newLocale);
+  
+  if (browser) {
+    localStorage.setItem('preferred-language', checkedLocale);
+  }
+  
+  locale.set(checkedLocale);
+  
+  return checkedLocale;
+};
+
 // Get the locale from URL path
 export const getLocaleFromPath = (path: string): string | null => {
   const pathSegments = path.split('/').filter(Boolean);

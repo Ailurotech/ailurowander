@@ -1,10 +1,10 @@
 <script lang="ts">
   import { t } from '$lib/i18n';
-  import Card from '../../components/molecules/Card.svelte';
-  import Badge from '../../components/atoms/Badge.svelte';
-  import Divider from '../../components/atoms/Divider.svelte';
-  import ChineseIcon from '../../components/atoms/ChineseIcon.svelte';
-  import LoadingSkeleton from '../../components/atoms/LoadingSkeleton.svelte';
+  import Card from '../molecules/Card.svelte';
+  import Badge from '../atoms/Badge.svelte';
+  import Divider from '../atoms/Divider.svelte';
+  import ChineseIcon from '../atoms/ChineseIcon.svelte';
+  import LoadingSkeleton from '../atoms/LoadingSkeleton.svelte';
   import { slugify } from '$lib/utils/slugify';
   
   export let tour: {

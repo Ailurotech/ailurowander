@@ -23,8 +23,17 @@ export interface Tour {
     day: number;
     title: string;
     description: string;
-    accommodation: string;
-    meals: string[];
+    accommodation?: {
+      name: string;
+      description?: string;
+      images?: string[];
+    };
+    meals?: {
+      name: string;
+      description?: string;
+      images?: string[];
+    }[];
+    image?: string;
   }[];
   inclusions: string[];
   exclusions: string[];
@@ -49,4 +58,46 @@ export interface TourSummary {
   price: number;
   destination: string;
   featured: boolean;
+}
+
+export interface TourFormData {
+  _id?: string;
+  title: string;
+  description: string;
+  duration: {
+    days: number;
+    nights: number;
+  };
+  price: {
+    amount: number;
+    currency: string;
+  };
+  destination: string;
+  maxGroupSize: number;
+  highlights: string[];
+  inclusions: string[];
+  exclusions: string[];
+  itinerary: {
+    day: number;
+    title: string;
+    description: string;
+    accommodation?: {
+      name: string;
+      description?: string;
+      images?: string[];
+    };
+    meals?: {
+      name: string;
+      description?: string;
+      images?: string[];
+    }[];
+    image?: string;
+  }[];
+  images: {
+    main: string;
+    gallery: string[];
+  };
+  featured: boolean;
+  discount: number;
+  tags: string[];
 } 

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { locale, supportedLanguages } from '$lib/i18n';
+  import { locale, supportedLanguages, setLocale } from '$lib/i18n';
   
   let isMenuOpen = false;
   let isLanguageMenuOpen = false;
@@ -14,7 +14,7 @@
   }
   
   function setLanguage(langCode: string) {
-    $locale = langCode;
+    setLocale(langCode);
     isLanguageMenuOpen = false;
   }
   
