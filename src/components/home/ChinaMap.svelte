@@ -61,14 +61,20 @@
     },
     Chengdu: {
       province: 'Sichuan',
-      images: ['https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/chengdu1.jpg'],
+      images: [
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Chengdu/chengdu1.jpg',
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Chengdu/chengdu2.jpg'
+      ],
       hotSpots: ['Panda Base', 'Jinli Street'],
       days: '3 days',
       views: 700,
     },
     Leshan: {
       province: 'Sichuan',
-      images: ['https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/leshan.jpg'],
+      images: [
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Leshan/leshan1.jpg',
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Leshan/leshan2.jpg'
+      ],
       hotSpots: ['Leshan Giant Buddha'],
       days: '1 day',
       views: 400,
