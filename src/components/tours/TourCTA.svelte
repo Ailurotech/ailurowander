@@ -11,4 +11,4 @@
     <Button variant="accent" size="lg">{$t('tour_detail.cta.book_now')}</Button>
     <Button variant="outline" size="lg">{$t('tour_detail.cta.contact_us')}</Button>
   </div>
-</div> 
+</div>

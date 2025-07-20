@@ -9,24 +9,24 @@
   export let icon: string | null = null;
   export let iconPosition: 'left' | 'right' = 'left';
   export let ariaLabel: string | null = null;
-  
+
   // Dynamic class construction
   const getClasses = () => {
     const baseClasses = 'btn';
     const variantClass = `btn--${variant}`;
-    const sizeClass = size === 'sm' ? 'text-sm px-4 py-2' : 
-                     size === 'lg' ? 'text-lg px-8 py-4' : '';
+    const sizeClass =
+      size === 'sm' ? 'text-sm px-4 py-2' : size === 'lg' ? 'text-lg px-8 py-4' : '';
     const widthClass = fullWidth ? 'w-full' : '';
     const disabledClass = disabled ? 'opacity-50 cursor-not-allowed' : '';
-    
+
     return `${baseClasses} ${variantClass} ${sizeClass} ${widthClass} ${disabledClass}`;
   };
 </script>
 
 {#if href}
-  <a 
+  <a
     {href}
-    class={getClasses()} 
+    class={getClasses()}
     aria-label={ariaLabel}
     aria-disabled={disabled}
     tabindex={disabled ? -1 : 0}
@@ -40,13 +40,7 @@
     {/if}
   </a>
 {:else}
-  <button 
-    {type}
-    {disabled}
-    class={getClasses()} 
-    aria-label={ariaLabel}
-    on:click
-  >
+  <button {type} {disabled} class={getClasses()} aria-label={ariaLabel} on:click>
     {#if icon && iconPosition === 'left'}
       <span class="mr-2">{@html icon}</span>
     {/if}
@@ -55,4 +49,4 @@
       <span class="ml-2">{@html icon}</span>
     {/if}
   </button>
-{/if} 
+{/if}

@@ -100,4 +100,4 @@ export interface TourFormData {
   featured: boolean;
   discount: number;
   tags: string[];
-} 
+}

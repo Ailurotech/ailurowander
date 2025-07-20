@@ -7,8 +7,8 @@ const s3Client = new S3Client({
   region: env.S3_REGION || 'us-east-1',
   credentials: {
     accessKeyId: env.S3_ACCESS_KEY_ID || '',
-    secretAccessKey: env.S3_SECRET_ACCESS_KEY || ''
-  }
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY || '',
+  },
 });
 
 const BUCKET_NAME = env.S3_BUCKET_NAME || '';
@@ -20,12 +20,16 @@ const BUCKET_NAME = env.S3_BUCKET_NAME || '';
  * @param contentType The MIME type of the file
  * @returns The URL of the uploaded file
  */
-export async function uploadToS3(file: Buffer | ReadableStream | ArrayBuffer, key: string, contentType: string): Promise<string> {
+export async function uploadToS3(
+  file: Buffer | ReadableStream | ArrayBuffer,
+  key: string,
+  contentType: string
+): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
     Body: file instanceof ArrayBuffer ? Buffer.from(file) : file,
-    ContentType: contentType
+    ContentType: contentType,
   });
 
   await s3Client.send(command);
@@ -41,7 +45,7 @@ export async function uploadToS3(file: Buffer | ReadableStream | ArrayBuffer, ke
 export async function getSignedS3Url(key: string, expiresIn = 3600): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: BUCKET_NAME,
-    Key: key
+    Key: key,
   });
 
   return getSignedUrl(s3Client, command, { expiresIn });
@@ -58,4 +62,4 @@ export function generateS3Key(filename: string, prefix = ''): string {
   const randomString = Math.random().toString(36).substring(2, 15);
   const extension = filename.split('.').pop();
   return `${prefix}${timestamp}-${randomString}.${extension}`;
-} 
+}

@@ -25,4 +25,4 @@ export function deslugify(slug: string): string {
   return slug
     .replace(/-/g, ' ') // Replace hyphens with spaces
     .replace(/\b\w/g, c => c.toUpperCase()); // Capitalize first letter of each word
-} 
+}

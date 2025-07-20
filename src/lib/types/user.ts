@@ -21,4 +21,4 @@ export interface UserSummary {
   role: string;
   isActive: boolean;
   lastLogin: Date | null;
-} 
+}

@@ -13,19 +13,22 @@ export const GET: RequestHandler = async () => {
       s3_bucket_exists: !!env.S3_BUCKET_NAME,
       sns_access_key_exists: !!env.SNS_ACCESS_KEY_ID,
       sns_secret_exists: !!env.SNS_SECRET_ACCESS_KEY,
-      sns_topic_exists: !!env.SNS_TOPIC_ARN
+      sns_topic_exists: !!env.SNS_TOPIC_ARN,
     };
 
     return json({
       status: 'ok',
       environment: envCheck,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    return json({
-      status: 'error',
-      error: error instanceof Error ? error.message : 'Unknown error',
-      timestamp: new Date().toISOString()
-    }, { status: 500 });
+    return json(
+      {
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Unknown error',
+        timestamp: new Date().toISOString(),
+      },
+      { status: 500 }
+    );
   }
-}; 
+};

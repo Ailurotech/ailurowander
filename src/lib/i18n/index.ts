@@ -7,7 +7,7 @@ export const supportedLanguages = [
   { code: 'zh', name: '中文' },
   { code: 'de', name: 'Deutsch' },
   { code: 'ja', name: '日本語' },
-  { code: 'es', name: 'Español' }
+  { code: 'es', name: 'Español' },
 ];
 
 // Define default language (Chinese)
@@ -22,10 +22,10 @@ const checkLocale = (locale: string) => {
 // Get browser language or use default
 const getInitialLocale = () => {
   if (!browser) return defaultLanguage;
-  
+
   const savedLocale = localStorage.getItem('preferred-language');
   if (savedLocale) return checkLocale(savedLocale);
-  
+
   const browserLang = window.navigator.language.split('-')[0];
   return checkLocale(browserLang);
 };
@@ -46,47 +46,44 @@ const translations: Record<string, any> = {
   zh,
   de,
   ja,
-  es
+  es,
 };
 
 // Derived store for current translation
-export const t = derived(
-  locale,
-  ($locale) => {
-    // Get the translations for the locale or use default
-    const translation = translations[$locale] || translations[defaultLanguage];
-    
-    // Return a function that can be used to get a specific key
-    return (key: string) => {
-      // Split the key by dots to access nested properties
-      return key.split('.').reduce((obj, part) => obj && obj[part], translation as any) || key;
-    };
-  }
-);
+export const t = derived(locale, $locale => {
+  // Get the translations for the locale or use default
+  const translation = translations[$locale] || translations[defaultLanguage];
+
+  // Return a function that can be used to get a specific key
+  return (key: string) => {
+    // Split the key by dots to access nested properties
+    return key.split('.').reduce((obj, part) => obj && obj[part], translation as any) || key;
+  };
+});
 
 // Function to load translations for the current locale
 export const loadTranslations = async (newLocale: string = defaultLanguage) => {
   const checkedLocale = checkLocale(newLocale);
-  
+
   if (browser) {
     localStorage.setItem('preferred-language', checkedLocale);
   }
-  
+
   locale.set(checkedLocale);
-  
+
   return checkedLocale;
 };
 
 // Function to set locale with persistence
 export const setLocale = (newLocale: string) => {
   const checkedLocale = checkLocale(newLocale);
-  
+
   if (browser) {
     localStorage.setItem('preferred-language', checkedLocale);
   }
-  
+
   locale.set(checkedLocale);
-  
+
   return checkedLocale;
 };
 
@@ -94,22 +91,22 @@ export const setLocale = (newLocale: string) => {
 export const getLocaleFromPath = (path: string): string | null => {
   const pathSegments = path.split('/').filter(Boolean);
   const firstSegment = pathSegments[0];
-  
+
   if (firstSegment && supportedLanguages.some(lang => lang.code === firstSegment)) {
     return firstSegment;
   }
-  
+
   return null;
 };
 
 // Get the path with locale
 export const getPathWithLocale = (path: string, newLocale: string): string => {
   const currentLocale = getLocaleFromPath(path);
-  
+
   if (currentLocale) {
     return path.replace(`/${currentLocale}`, `/${newLocale}`);
   }
-  
+
   const pathWithoutLeadingSlash = path.startsWith('/') ? path.substring(1) : path;
   return `/${newLocale}/${pathWithoutLeadingSlash}`;
-}; 
+};

@@ -1,46 +1,45 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  
+
   // Province data structure
   interface Province {
     id: string;
     name: string;
     description: string;
   }
-  
-  
+
   let hoveredProvince: Province | null = null;
   let svgContent = '';
-  
+
   async function loadSvg() {
     try {
       const response = await fetch('/chinaHigh.svg');
       svgContent = await response.text();
-      
+
       // Create a temporary div to parse the SVG
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = svgContent;
-      
+
       // Get the SVG element
       const svg = tempDiv.querySelector('svg');
       console.log('SVG element found:', !!svg);
-      
+
       if (svg) {
         // Set viewBox to show the entire map
         svg.setAttribute('viewBox', '0 0 1000 800');
         svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
         svg.setAttribute('class', 'china-map');
       }
-      
+
       // Add hover effects to all paths
       const paths = tempDiv.querySelectorAll('path');
       console.log('Number of paths found:', paths.length);
-      
+
       paths.forEach((path, index) => {
         console.log(`Processing path ${index}:`, {
           id: path.id,
           hasTitle: !!path.querySelector('title'),
-          titleAttribute: path.getAttribute('title')
+          titleAttribute: path.getAttribute('title'),
         });
         path.setAttribute('class', 'province-path');
         path.setAttribute('fill', '#e5e7eb');
@@ -49,26 +48,28 @@
 
         // Get the title from the path's title element
         const titleElement = path.querySelector('title');
-        const title = titleElement ? titleElement.textContent : path.getAttribute('title') || 'Unknown Province';
-        
+        const title = titleElement
+          ? titleElement.textContent
+          : path.getAttribute('title') || 'Unknown Province';
+
         // Debug log
         console.log('Path found:', {
           id: path.id,
           title: title,
           hasTitleElement: !!titleElement,
-          titleAttribute: path.getAttribute('title')
+          titleAttribute: path.getAttribute('title'),
         });
 
         path.addEventListener('mouseenter', () => {
           console.log('Mouse entered path:', {
             title,
             pathId: path.id,
-            currentHoveredProvince: hoveredProvince
+            currentHoveredProvince: hoveredProvince,
           });
           hoveredProvince = {
             id: path.id || (title as string).toLowerCase().replace(/\s+/g, '-'),
             name: title as string,
-            description: `Explore tours and attractions in ${title}`
+            description: `Explore tours and attractions in ${title}`,
           };
           console.log('Updated hoveredProvince:', hoveredProvince);
         });
@@ -77,20 +78,20 @@
           console.log('Mouse left path:', {
             title,
             pathId: path.id,
-            currentHoveredProvince: hoveredProvince
+            currentHoveredProvince: hoveredProvince,
           });
           hoveredProvince = null;
           console.log('Cleared hoveredProvince');
         });
       });
-      
+
       // Update the SVG content
       svgContent = tempDiv.innerHTML;
     } catch (error) {
       console.error('Error loading SVG:', error);
     }
   }
-  
+
   onMount(() => {
     loadSvg();
   });
@@ -100,17 +101,17 @@
   <div class="w-full h-full flex items-center justify-center">
     {@html svgContent}
   </div>
-  
+
   <!-- Province Description Panel -->
   {#if hoveredProvince}
-    <div 
+    <div
       class="absolute top-4 right-4 w-80 bg-white rounded-lg shadow-xl p-4 transform transition-all duration-300"
       style="max-height: calc(100% - 2rem); overflow-y: auto;"
     >
       <h3 class="text-xl font-bold mb-2">{hoveredProvince.name}</h3>
       <p class="text-neutral-600">{hoveredProvince.description}</p>
-      <a 
-        href="/tours/{hoveredProvince.id}" 
+      <a
+        href="/tours/{hoveredProvince.id}"
         class="mt-4 inline-block text-red-600 hover:text-red-700 font-medium"
       >
         View Tours →
@@ -126,14 +127,14 @@
     min-width: 800px;
     min-height: 600px;
   }
-  
+
   :global(.province-path) {
     cursor: pointer;
     transition: all 0.2s ease;
   }
-  
+
   :global(.province-path:hover) {
     fill: #dc2626 !important;
     stroke: #dc2626 !important;
   }
-</style> 
+</style>

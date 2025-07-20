@@ -1,6 +1,7 @@
 # AWS Translate Setup Guide
 
-This guide will help you set up AWS Translate for real-time translation in your application.
+This guide will help you set up AWS Translate for real-time translation in your
+application.
 
 ## 🚀 Quick Start
 
@@ -24,7 +25,8 @@ This guide will help you set up AWS Translate for real-time translation in your 
 
 ### 2. Configure Environment Variables
 
-Since you're already using AWS S3, you can use the same AWS credentials for AWS Translate. Add these environment variables to your `.env` file:
+Since you're already using AWS S3, you can use the same AWS credentials for AWS
+Translate. Add these environment variables to your `.env` file:
 
 ```env
 # AWS Translate Configuration (uses same credentials as S3)
@@ -35,7 +37,9 @@ USE_AWS_TRANSLATE=true
 # S3_SECRET_ACCESS_KEY=your_secret_access_key
 ```
 
-**Note:** If you already have S3 configured, you can reuse the same AWS credentials. Just make sure to add `USE_AWS_TRANSLATE=true` to enable AWS Translate.
+**Note:** If you already have S3 configured, you can reuse the same AWS
+credentials. Just make sure to add `USE_AWS_TRANSLATE=true` to enable AWS
+Translate.
 
 ### 3. Test the Integration
 
@@ -79,15 +83,14 @@ Choose the region closest to your users:
 ### Security Best Practices
 
 1. **Restrict IAM Permissions**
+
    ```json
    {
      "Version": "2012-10-17",
      "Statement": [
        {
          "Effect": "Allow",
-         "Action": [
-           "translate:TranslateText"
-         ],
+         "Action": ["translate:TranslateText"],
          "Resource": "*"
        }
      ]
@@ -126,15 +129,15 @@ AWS Translate pricing (as of 2024):
 
 ## 🎯 AWS Translate Features
 
-| Feature | AWS Translate |
-|---------|---------------|
-| **Pricing** | $15/M characters |
-| **Accuracy** | High |
-| **Languages** | 75+ |
-| **Custom Models** | ✅ |
-| **Real-time** | ✅ |
-| **Setup** | Medium |
-| **Integration** | Direct AWS API |
+| Feature           | AWS Translate    |
+| ----------------- | ---------------- |
+| **Pricing**       | $15/M characters |
+| **Accuracy**      | High             |
+| **Languages**     | 75+              |
+| **Custom Models** | ✅               |
+| **Real-time**     | ✅               |
+| **Setup**         | Medium           |
+| **Integration**   | Direct AWS API   |
 
 ## 📝 Usage Examples
 
@@ -159,7 +162,7 @@ Translation is integrated into the tour forms:
 ```typescript
 // In add/edit tour forms:
 // - Title field with translate button
-// - Destination field with translate button  
+// - Destination field with translate button
 // - Description fields with translate buttons
 // - Itinerary day titles and descriptions
 // - Inclusions and exclusions lists
@@ -219,6 +222,7 @@ DEBUG=aws:*
 ### Testing Without AWS
 
 For development, the system falls back to:
+
 1. **Google Translate** (if configured)
 2. **LibreTranslate** (if configured)
 3. **Mock translations** (predefined mappings)
@@ -243,18 +247,21 @@ console.log('Monthly usage:', monthlyUsage);
 ## 💡 Best Practices
 
 ### Performance
+
 - **Use appropriate regions** for lower latency
 - **Implement caching** for repeated translations
 - **Batch requests** when possible
 - **Monitor response times**
 
 ### Cost Management
+
 - **Set up billing alerts**
 - **Monitor usage regularly**
 - **Use free tier** for development
 - **Implement smart caching**
 
 ### Security
+
 - **Use IAM roles** instead of access keys in production
 - **Restrict permissions** to minimum required
 - **Rotate credentials** regularly
@@ -268,16 +275,16 @@ AWS Translate supports 75+ languages. Common codes:
 
 ```typescript
 const supportedLanguages = {
-  'en': 'English',
-  'de': 'German', 
-  'ja': 'Japanese',
-  'es': 'Spanish',
-  'th': 'Thai',
-  'zh': 'Chinese',
-  'ko': 'Korean',
-  'fr': 'French',
-  'it': 'Italian',
-  'pt': 'Portuguese'
+  en: 'English',
+  de: 'German',
+  ja: 'Japanese',
+  es: 'Spanish',
+  th: 'Thai',
+  zh: 'Chinese',
+  ko: 'Korean',
+  fr: 'French',
+  it: 'Italian',
+  pt: 'Portuguese',
 };
 ```
 
@@ -328,12 +335,17 @@ USE_AWS_TRANSLATE=true
 ## 📞 Support
 
 ### AWS Support
-- **Documentation**: [AWS Translate Docs](https://docs.aws.amazon.com/translate/)
-- **Console**: [AWS Translate Console](https://console.aws.amazon.com/translate/)
+
+- **Documentation**:
+  [AWS Translate Docs](https://docs.aws.amazon.com/translate/)
+- **Console**:
+  [AWS Translate Console](https://console.aws.amazon.com/translate/)
 - **Support**: AWS Support plans available
 
 ### Application Support
+
 If you encounter issues:
+
 1. Check AWS CloudWatch logs
 2. Verify IAM permissions
 3. Test with the demo page at `/agent/real-time-translate`
@@ -349,4 +361,4 @@ If you encounter issues:
 
 ---
 
-**Happy translating with AWS! 🚀** 
+**Happy translating with AWS! 🚀**

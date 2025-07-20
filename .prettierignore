@@ -1,0 +1,49 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+yarn.lock
+package-lock.json
+
+# Build outputs
+.svelte-kit/
+build/
+dist/
+.output/
+.vercel/
+.netlify/
+
+# Generated files
+.DS_Store
+*.log
+*.log.*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+.tmp/
+.temp/
+
+# Static assets (usually shouldn't be formatted)
+static/
+public/
+
+# Config files that have specific formatting
+*.config.js
+*.config.ts
+vite.config.*
+svelte.config.*
+tailwind.config.*
+postcss.config.*
+
+# Documentation that might have specific formatting
+CHANGELOG.md
+LICENSE 

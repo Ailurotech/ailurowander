@@ -1,14 +1,19 @@
 # Translation System Setup
 
-This document explains how to set up and use the translation system that can translate Chinese text to all supported languages and store the results in the database.
+This document explains how to set up and use the translation system that can
+translate Chinese text to all supported languages and store the results in the
+database.
 
 ## Features
 
-- **Multi-language Translation**: Translate Chinese text to English, German, Japanese, Spanish, and Thai
-- **Database Storage**: All translations are stored in MongoDB with usage tracking
+- **Multi-language Translation**: Translate Chinese text to English, German,
+  Japanese, Spanish, and Thai
+- **Database Storage**: All translations are stored in MongoDB with usage
+  tracking
 - **Translation History**: View and search through previous translations
 - **Context & Categories**: Organize translations with context and category tags
-- **API Integration**: Supports multiple translation APIs (Google Translate, LibreTranslate, or mock for development)
+- **API Integration**: Supports multiple translation APIs (Google Translate,
+  LibreTranslate, or mock for development)
 
 ## Setup Instructions
 
@@ -28,23 +33,27 @@ TRANSLATION_API_URL=https://translation.googleapis.com/language/translate/v2
 ### 2. Translation API Options
 
 #### Option A: Google Translate API (Recommended for production)
+
 - Requires API key from Google Cloud Console
 - High accuracy and reliability
 - Paid service with usage limits
 
 #### Option B: LibreTranslate (Free alternative)
+
 - Self-hosted or use public instance
 - No API key required
 - Good for development and testing
 
 #### Option C: Mock Translation (Development only)
+
 - No API key required
 - Uses predefined translations for testing
 - Automatically falls back to this if no API is configured
 
 ### 3. Database Setup
 
-The translation system automatically creates a `translations` collection in your MongoDB database. No additional setup required.
+The translation system automatically creates a `translations` collection in your
+MongoDB database. No additional setup required.
 
 ## Usage
 
@@ -59,17 +68,18 @@ The translation system automatically creates a `translations` collection in your
 ### API Usage
 
 #### Translate Text
+
 ```javascript
 const response = await fetch('/api/translations', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
     chineseText: '你好世界',
     context: 'greeting',
-    category: 'ui'
-  })
+    category: 'ui',
+  }),
 });
 
 const result = await response.json();
@@ -77,12 +87,14 @@ console.log(result.data.translations);
 ```
 
 #### Search Translations
+
 ```javascript
 const response = await fetch('/api/translations?q=hello');
 const result = await response.json();
 ```
 
 #### Get Translation History
+
 ```javascript
 const response = await fetch('/api/translations?limit=20');
 const result = await response.json();
@@ -98,7 +110,7 @@ The `translations` collection stores documents with this structure:
   original: "你好世界",           // Chinese source text
   translations: {
     en: "Hello world",
-    de: "Hallo Welt", 
+    de: "Hallo Welt",
     ja: "こんにちは世界",
     es: "Hola mundo",
     th: "สวัสดีโลก"
@@ -115,7 +127,7 @@ The `translations` collection stores documents with this structure:
 
 - **zh** (Chinese) - Source language
 - **en** (English)
-- **de** (German) 
+- **de** (German)
 - **ja** (Japanese)
 - **es** (Spanish)
 - **th** (Thai)
@@ -123,6 +135,7 @@ The `translations` collection stores documents with this structure:
 ## Categories
 
 Predefined categories for organizing translations:
+
 - `tours` - Tour-related content
 - `destinations` - Destination descriptions
 - `ui` - User interface text
@@ -133,6 +146,7 @@ Predefined categories for organizing translations:
 ## Error Handling
 
 The system includes comprehensive error handling:
+
 - Invalid input validation
 - API connection failures
 - Database operation errors
@@ -140,7 +154,8 @@ The system includes comprehensive error handling:
 
 ## Performance Considerations
 
-- **Caching**: Existing translations are retrieved from database instead of re-translating
+- **Caching**: Existing translations are retrieved from database instead of
+  re-translating
 - **Usage Tracking**: Popular translations are prioritized
 - **Batch Operations**: Multiple translations are processed in parallel
 - **Search Optimization**: Full-text search across all languages
@@ -174,8 +189,9 @@ The system includes comprehensive error handling:
 ### Debug Mode
 
 Enable debug logging by setting:
+
 ```env
 DEBUG=translation:*
 ```
 
-This will log all translation operations and API calls for troubleshooting. 
+This will log all translation operations and API calls for troubleshooting.

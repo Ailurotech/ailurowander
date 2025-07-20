@@ -4,14 +4,14 @@
   export let spacing: 'sm' | 'md' | 'lg' = 'md';
   export let containerWidth: boolean = true;
   export let className: string = '';
-  
+
   // Dynamic class construction
   const getSectionClasses = () => {
     const baseClasses = 'section';
     const variantClass = `section--${variant}`;
-    const spacingClass = spacing === 'sm' ? 'py-8 md:py-12' :
-                         spacing === 'lg' ? 'py-16 md:py-24 lg:py-32' : '';
-    
+    const spacingClass =
+      spacing === 'sm' ? 'py-8 md:py-12' : spacing === 'lg' ? 'py-16 md:py-24 lg:py-32' : '';
+
     return `${baseClasses} ${variantClass} ${spacingClass} ${className}`;
   };
 
@@ -29,4 +29,4 @@
     <slot name="header"></slot>
     <slot></slot>
   </div>
-</section> 
+</section>

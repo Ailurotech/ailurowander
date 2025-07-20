@@ -9,7 +9,13 @@
   <div class="card-body">
     <div class="rating rating-sm mb-4">
       {#each Array(5) as _, i}
-        <input type="radio" name="rating-{name}" class="mask mask-star-2 bg-yellow-400" checked={i < rating} disabled />
+        <input
+          type="radio"
+          name="rating-{name}"
+          class="mask mask-star-2 bg-yellow-400"
+          checked={i < rating}
+          disabled
+        />
       {/each}
     </div>
     <p class="text-gray-600 mb-4">"{quote}"</p>
@@ -20,4 +26,4 @@
       </div>
     </div>
   </div>
-</div> 
+</div>

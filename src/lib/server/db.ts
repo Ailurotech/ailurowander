@@ -19,10 +19,10 @@ export async function connectDB() {
     console.log('Attempting to connect to MongoDB...');
     console.log('MongoDB URI length:', MONGODB_URI.length);
     console.log('MongoDB URI starts with mongodb:', MONGODB_URI.startsWith('mongodb'));
-    
+
     await client.connect();
     console.log('Connected to MongoDB successfully');
-    
+
     // Get database name from connection string or default to ailuroWander
     // Handle MongoDB Atlas connection strings with query parameters
     let dbName = 'ailuroWander'; // default
@@ -40,30 +40,36 @@ export async function connectDB() {
       }
     }
     console.log(`Using database: ${dbName}`);
-    
+
     const db = client.db(dbName);
-    
+
     // Test the connection by listing collections
     const collections = await db.listCollections().toArray();
-    console.log('Available collections:', collections.map(c => c.name));
-    
+    console.log(
+      'Available collections:',
+      collections.map(c => c.name)
+    );
+
     // List all databases on the MongoDB server
     const adminDb = client.db('admin');
     const dbs = await adminDb.admin().listDatabases();
-    console.log('All databases on MongoDB server:', dbs.databases.map(db => db.name));
-    
+    console.log(
+      'All databases on MongoDB server:',
+      dbs.databases.map(db => db.name)
+    );
+
     // If tours collection exists, show count
     if (collections.some(c => c.name === 'tours')) {
       const toursCount = await db.collection('tours').countDocuments();
       console.log(`Found ${toursCount} documents in tours collection`);
-      
+
       // Show first 3 tours for debugging
       if (toursCount > 0) {
         const sampleTours = await db.collection('tours').find().limit(3).toArray();
         console.log('Sample tours:', sampleTours);
       }
     }
-    
+
     return db;
   } catch (error) {
     console.error('Failed to connect to MongoDB:', error);
@@ -99,4 +105,4 @@ export async function getUsers() {
   const db = await getDB();
   console.log('Accessing users collection');
   return db.collection('users');
-} 
+}

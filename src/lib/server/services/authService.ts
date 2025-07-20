@@ -38,17 +38,20 @@ function generateToken(): string {
 }
 
 // Create a new agent
-export async function createAgent(agentData: Omit<Agent, '_id' | 'passwordHash' | 'createdAt' | 'updatedAt'>, password: string): Promise<Agent> {
+export async function createAgent(
+  agentData: Omit<Agent, '_id' | 'passwordHash' | 'createdAt' | 'updatedAt'>,
+  password: string
+): Promise<Agent> {
   const db = await getDB();
   const agentsCollection = db.collection('agents');
-  
+
   const agent: Agent = {
     ...agentData,
     passwordHash: hashPassword(password),
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
-  
+
   const result = await agentsCollection.insertOne(agent as any);
   return { ...agent, _id: result.insertedId };
 }
@@ -57,22 +60,22 @@ export async function createAgent(agentData: Omit<Agent, '_id' | 'passwordHash' 
 export async function authenticateAgent(username: string, password: string): Promise<Agent | null> {
   const db = await getDB();
   const agentsCollection = db.collection('agents');
-  
-  const agent = await agentsCollection.findOne({ 
-    username, 
-    isActive: true 
-  }) as Agent | null;
-  
+
+  const agent = (await agentsCollection.findOne({
+    username,
+    isActive: true,
+  })) as Agent | null;
+
   if (!agent || !verifyPassword(password, agent.passwordHash)) {
     return null;
   }
-  
+
   // Update last login
   await agentsCollection.updateOne(
     { _id: agent._id },
     { $set: { lastLogin: new Date(), updatedAt: new Date() } }
   );
-  
+
   return agent;
 }
 
@@ -80,17 +83,17 @@ export async function authenticateAgent(username: string, password: string): Pro
 export async function createSession(agentId: ObjectId): Promise<Session> {
   const db = await getDB();
   const sessionsCollection = db.collection('sessions');
-  
+
   // Clean up expired sessions
   await sessionsCollection.deleteMany({ expiresAt: { $lt: new Date() } });
-  
+
   const session: Session = {
     agentId,
     token: generateToken(),
     expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
-    createdAt: new Date()
+    createdAt: new Date(),
   };
-  
+
   const result = await sessionsCollection.insertOne(session as any);
   return { ...session, _id: result.insertedId };
 }
@@ -100,21 +103,21 @@ export async function validateSession(token: string): Promise<Agent | null> {
   const db = await getDB();
   const sessionsCollection = db.collection('sessions');
   const agentsCollection = db.collection('agents');
-  
-  const session = await sessionsCollection.findOne({ 
-    token, 
-    expiresAt: { $gt: new Date() } 
-  }) as Session | null;
-  
+
+  const session = (await sessionsCollection.findOne({
+    token,
+    expiresAt: { $gt: new Date() },
+  })) as Session | null;
+
   if (!session) {
     return null;
   }
-  
-  const agent = await agentsCollection.findOne({ 
-    _id: session.agentId, 
-    isActive: true 
-  }) as Agent | null;
-  
+
+  const agent = (await agentsCollection.findOne({
+    _id: session.agentId,
+    isActive: true,
+  })) as Agent | null;
+
   return agent;
 }
 
@@ -122,7 +125,7 @@ export async function validateSession(token: string): Promise<Agent | null> {
 export async function deleteSession(token: string): Promise<boolean> {
   const db = await getDB();
   const sessionsCollection = db.collection('sessions');
-  
+
   const result = await sessionsCollection.deleteOne({ token });
   return result.deletedCount === 1;
 }
@@ -132,9 +135,9 @@ export async function getAgentById(id: string): Promise<Agent | null> {
   if (!ObjectId.isValid(id)) {
     return null;
   }
-  
+
   const db = await getDB();
   const agentsCollection = db.collection('agents');
-  
-  return await agentsCollection.findOne({ _id: new ObjectId(id) }) as Agent | null;
-} 
+
+  return (await agentsCollection.findOne({ _id: new ObjectId(id) })) as Agent | null;
+}

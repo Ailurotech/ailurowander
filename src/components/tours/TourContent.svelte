@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Tour } from '$lib/types/tour';
-  
+
   export let tour: Tour;
 </script>
 
@@ -13,4 +13,4 @@
   <div class="prose prose-lg max-w-none mb-12">
     <p>{tour.description}</p>
   </div>
-{/if} 
+{/if}

@@ -5,27 +5,27 @@
   import Card from '../../components/molecules/Card.svelte';
   import Divider from '../../components/atoms/Divider.svelte';
   import ChineseIcon from '../../components/atoms/ChineseIcon.svelte';
-  
+
   // Team members data
   const teamMembers = [
     {
       name: 'Sarah Chen',
       role: 'Founder & CEO',
       bio: 'With over 15 years of experience in Asian tourism, Sarah founded AiluroWander to share her passion for authentic travel experiences.',
-      image: '/images/team/sarah.jpg'
+      image: '/images/team/sarah.jpg',
     },
     {
       name: 'Michael Wong',
       role: 'Head of Operations',
       bio: 'Michael ensures every tour runs smoothly, bringing his expertise in logistics and customer service to create seamless travel experiences.',
-      image: '/images/team/michael.jpg'
+      image: '/images/team/michael.jpg',
     },
     {
       name: 'Li Wei',
       role: 'Senior Tour Guide',
       bio: 'A certified tour guide with deep knowledge of Chinese history and culture, Li brings destinations to life with engaging storytelling.',
-      image: '/images/team/li.jpg'
-    }
+      image: '/images/team/li.jpg',
+    },
   ];
 
   // Why choose us points
@@ -33,44 +33,47 @@
     {
       icon: 'temple',
       title: 'Local Expertise',
-      description: 'Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special.'
+      description:
+        'Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special.',
     },
     {
       icon: 'dragon',
       title: 'Cultural Immersion',
-      description: 'We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions.'
+      description:
+        'We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions.',
     },
     {
       icon: 'panda',
       title: 'Personalized Service',
-      description: 'Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests.'
+      description:
+        'Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests.',
     },
     {
       icon: 'lantern',
       title: 'Quality Assurance',
-      description: 'We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety.'
-    }
+      description:
+        'We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety.',
+    },
   ];
 </script>
 
 <svelte:head>
   <title>About Us | {$t('site.title')}</title>
-  <meta name="description" content="Learn about AiluroWander, your trusted partner for authentic Asian travel experiences." />
+  <meta
+    name="description"
+    content="Learn about AiluroWander, your trusted partner for authentic Asian travel experiences."
+  />
 </svelte:head>
 
-<Hero 
+<Hero
   title={$t('about.page.title')}
   subtitle={$t('about.page.subtitle')}
   backgroundImage="/images/about-hero.png"
-  primaryCta={{ text: $t('about.page.hero_cta'), href: "/tours" }}
+  primaryCta={{ text: $t('about.page.hero_cta'), href: '/tours' }}
 />
 
 <!-- Our Story -->
-<Section 
-  title={$t('about.story.title')}
-  subtitle={$t('about.story.subtitle')}
-  background="white"
->
+<Section title={$t('about.story.title')} subtitle={$t('about.story.subtitle')} background="white">
   <div class="max-w-3xl mx-auto text-lg text-neutral-700">
     <p class="mb-6">
       {$t('about.story.paragraph1')}
@@ -85,7 +88,7 @@
 </Section>
 
 <!-- Our Mission -->
-<Section 
+<Section
   title={$t('about.mission.title')}
   subtitle={$t('about.mission.subtitle')}
   background="gray"
@@ -115,9 +118,9 @@
       </ul>
     </div>
     <div class="relative">
-      <img 
-        src="/images/about-mission.png" 
-        alt="Our mission in action" 
+      <img
+        src="/images/about-mission.png"
+        alt="Our mission in action"
         class="rounded-lg shadow-lg"
       />
       <div class="absolute -bottom-6 -right-6 w-32 h-32 bg-primary/10 rounded-full -z-10"></div>
@@ -126,7 +129,7 @@
 </Section>
 
 <!-- Why Choose Us -->
-<Section 
+<Section
   title={$t('about.why_choose.title')}
   subtitle={$t('about.why_choose.subtitle')}
   background="white"
@@ -136,7 +139,20 @@
       <Card
         title={item.title}
         description={item.description}
-        icon={{ name: item.icon as 'great-wall' | 'terracotta' | 'forbidden-city' | 'mountains' | 'panda' | 'temple' | 'pagoda' | 'dragon' | 'lantern' | 'bamboo', color: '#B91C1C' }}
+        icon={{
+          name: item.icon as
+            | 'great-wall'
+            | 'terracotta'
+            | 'forbidden-city'
+            | 'mountains'
+            | 'panda'
+            | 'temple'
+            | 'pagoda'
+            | 'dragon'
+            | 'lantern'
+            | 'bamboo',
+          color: '#B91C1C',
+        }}
         elevated={true}
       />
     {/each}
@@ -144,19 +160,10 @@
 </Section>
 
 <!-- Our Team -->
-<Section 
-  title={$t('about.team.title')}
-  subtitle={$t('about.team.subtitle')}
-  background="gray"
->
+<Section title={$t('about.team.title')} subtitle={$t('about.team.subtitle')} background="gray">
   <div class="grid md:grid-cols-3 gap-8">
     {#each teamMembers as member}
-      <Card
-        title={member.name}
-        description={member.bio}
-        image={member.image}
-        elevated={true}
-      >
+      <Card title={member.name} description={member.bio} image={member.image} elevated={true}>
         <div class="mt-4 text-primary font-medium">{member.role}</div>
       </Card>
     {/each}
@@ -177,4 +184,4 @@
       </div>
     </div>
   </div>
-</section> 
+</section>

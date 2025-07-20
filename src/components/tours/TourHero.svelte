@@ -1,40 +1,42 @@
 <script lang="ts">
   import type { Tour } from '$lib/types/tour';
   import ChineseIcon from '../atoms/ChineseIcon.svelte';
-  
+
   export let tour: Tour;
   export let onImageClick: () => void;
-  
+
   // Determine which icon to use based on tour name/location
   const getIconForTour = (title: string) => {
-    if (title.toLowerCase().includes('beijing') || title.toLowerCase().includes('great wall')) 
+    if (title.toLowerCase().includes('beijing') || title.toLowerCase().includes('great wall'))
       return { icon: 'great-wall' as const, color: '#B91C1C' };
-    if (title.toLowerCase().includes('xian') || title.toLowerCase().includes('terracotta')) 
+    if (title.toLowerCase().includes('xian') || title.toLowerCase().includes('terracotta'))
       return { icon: 'terracotta' as const, color: '#B45309' };
-    if (title.toLowerCase().includes('shanghai')) 
+    if (title.toLowerCase().includes('shanghai'))
       return { icon: 'forbidden-city' as const, color: '#0F766E' };
-    if (title.toLowerCase().includes('yangtze')) 
+    if (title.toLowerCase().includes('yangtze'))
       return { icon: 'mountains' as const, color: '#0F766E' };
-    if (title.toLowerCase().includes('chengdu') || title.toLowerCase().includes('panda')) 
+    if (title.toLowerCase().includes('chengdu') || title.toLowerCase().includes('panda'))
       return { icon: 'panda' as const, color: '#B45309' };
-      
+
     // Default icon
     return { icon: 'temple' as const, color: '#B91C1C' };
   };
-  
+
   const iconData = getIconForTour(tour.title);
 </script>
 
 <!-- Hero Section with Main Image -->
 <div class="relative min-h-[60vh]">
   <div class="absolute inset-0 bg-black/30 z-10"></div>
-  <img 
-    src={tour.images.main} 
-    alt={tour.title} 
+  <img
+    src={tour.images.main}
+    alt={tour.title}
     class="absolute inset-0 w-full h-full object-cover cursor-pointer hover:opacity-90 transition-opacity"
     on:click={onImageClick}
   />
-  <div class="relative z-20 container mx-auto px-4 flex flex-col justify-center items-center h-[60vh] text-white text-center">
+  <div
+    class="relative z-20 container mx-auto px-4 flex flex-col justify-center items-center h-[60vh] text-white text-center"
+  >
     <div class="inline-flex items-center mb-4">
       <ChineseIcon icon={iconData.icon} color="white" size="lg" />
       <span class="ml-2 text-lg font-medium">{tour.destination}</span>
@@ -54,4 +56,4 @@
       {/if}
     </div>
   </div>
-</div> 
+</div>
