@@ -42,7 +42,11 @@
     Shanghai: {
       province: 'Shanghai',
       slug: 'shanghai-highlights-tour',
-      images: ['https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/shanghai1.jpg'],
+      images: [
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai1.jpg',
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai2.jpg',
+        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai3.jpg'
+      ],
       hotSpots: ['The Bund', 'Yu Garden'],
       days: '4 days',
       views: 900,
@@ -282,15 +286,17 @@
   </div>
 
   {#if hoveredProvince}
-    <div 
-      class="absolute z-[9999] bg-white border border-gray-300 rounded-xl shadow-2xl w-[420px] max-h-[520px] overflow-y-auto transition-all duration-300"
-      style="top: {popupY}px; left: {popupX}px;"
-      on:mouseenter={() => popupHovering = true}
-      on:mouseleave={() => {
-        popupHovering = false;
-        hidePopupWithDelay();
-      }}
-    >
+      <div 
+        id="tour-drawer"
+        class="absolute z-[9999] bg-white border border-gray-300 rounded-xl shadow-2xl w-[420px] max-h-[520px] overflow-y-auto transition-all duration-300"
+        style="top: {popupY}px; left: {popupX}px;"
+        on:mouseenter={() => popupHovering = true}
+        on:mouseleave={() => {
+          popupHovering = false;
+          hidePopupWithDelay();
+        }}
+        on:wheel|stopPropagation
+      >
       <div class="p-5 space-y-5">
         <div class="text-2xl font-bold text-gray-800 border-b pb-2">
           {hoveredProvince.name} - Tours

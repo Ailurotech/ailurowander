@@ -47,7 +47,7 @@
       
       <!-- Desktop Navigation -->
       <nav class="hidden md:flex items-center space-x-6">
-        <a href="/" class="hover:text-secondary {$page.url.pathname === '/' ? 'font-bold border-b-2 border-secondary' : ''}">Home</a>
+        <a href="/" class="hover:text-secondary {($page.url.pathname === '/') ? 'font-bold border-b-2 border-secondary' : ''}">Home</a>
         <a href="/tours" class="hover:text-secondary {$page.url.pathname.startsWith('/tours') ? 'font-bold border-b-2 border-secondary' : ''}">Tours</a>
         <a href="/about" class="hover:text-secondary {$page.url.pathname === '/about' ? 'font-bold border-b-2 border-secondary' : ''}">About</a>
         <a href="/contact" class="hover:text-secondary {$page.url.pathname === '/contact' ? 'font-bold border-b-2 border-secondary' : ''}">Contact</a>
