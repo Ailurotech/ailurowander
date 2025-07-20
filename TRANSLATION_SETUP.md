@@ -28,16 +28,19 @@ TRANSLATION_API_URL=https://translation.googleapis.com/language/translate/v2
 ### 2. Translation API Options
 
 #### Option A: Google Translate API (Recommended for production)
+
 - Requires API key from Google Cloud Console
 - High accuracy and reliability
 - Paid service with usage limits
 
 #### Option B: LibreTranslate (Free alternative)
+
 - Self-hosted or use public instance
 - No API key required
 - Good for development and testing
 
 #### Option C: Mock Translation (Development only)
+
 - No API key required
 - Uses predefined translations for testing
 - Automatically falls back to this if no API is configured
@@ -59,17 +62,18 @@ The translation system automatically creates a `translations` collection in your
 ### API Usage
 
 #### Translate Text
+
 ```javascript
-const response = await fetch('/api/translations', {
-  method: 'POST',
+const response = await fetch("/api/translations", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json'
+    "Content-Type": "application/json",
   },
   body: JSON.stringify({
-    chineseText: '你好世界',
-    context: 'greeting',
-    category: 'ui'
-  })
+    chineseText: "你好世界",
+    context: "greeting",
+    category: "ui",
+  }),
 });
 
 const result = await response.json();
@@ -77,14 +81,16 @@ console.log(result.data.translations);
 ```
 
 #### Search Translations
+
 ```javascript
-const response = await fetch('/api/translations?q=hello');
+const response = await fetch("/api/translations?q=hello");
 const result = await response.json();
 ```
 
 #### Get Translation History
+
 ```javascript
-const response = await fetch('/api/translations?limit=20');
+const response = await fetch("/api/translations?limit=20");
 const result = await response.json();
 ```
 
@@ -98,7 +104,7 @@ The `translations` collection stores documents with this structure:
   original: "你好世界",           // Chinese source text
   translations: {
     en: "Hello world",
-    de: "Hallo Welt", 
+    de: "Hallo Welt",
     ja: "こんにちは世界",
     es: "Hola mundo",
     th: "สวัสดีโลก"
@@ -115,7 +121,7 @@ The `translations` collection stores documents with this structure:
 
 - **zh** (Chinese) - Source language
 - **en** (English)
-- **de** (German) 
+- **de** (German)
 - **ja** (Japanese)
 - **es** (Spanish)
 - **th** (Thai)
@@ -123,6 +129,7 @@ The `translations` collection stores documents with this structure:
 ## Categories
 
 Predefined categories for organizing translations:
+
 - `tours` - Tour-related content
 - `destinations` - Destination descriptions
 - `ui` - User interface text
@@ -133,6 +140,7 @@ Predefined categories for organizing translations:
 ## Error Handling
 
 The system includes comprehensive error handling:
+
 - Invalid input validation
 - API connection failures
 - Database operation errors
@@ -174,8 +182,9 @@ The system includes comprehensive error handling:
 ### Debug Mode
 
 Enable debug logging by setting:
+
 ```env
 DEBUG=translation:*
 ```
 
-This will log all translation operations and API calls for troubleshooting. 
+This will log all translation operations and API calls for troubleshooting.

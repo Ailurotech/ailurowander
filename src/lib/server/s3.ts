@@ -1,17 +1,21 @@
-import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { env } from '$env/dynamic/private';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+} from "@aws-sdk/client-s3";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { env } from "$env/dynamic/private";
 
 // Initialize S3 client
 const s3Client = new S3Client({
-  region: env.S3_REGION || 'us-east-1',
+  region: env.S3_REGION || "us-east-1",
   credentials: {
-    accessKeyId: env.S3_ACCESS_KEY_ID || '',
-    secretAccessKey: env.S3_SECRET_ACCESS_KEY || ''
-  }
+    accessKeyId: env.S3_ACCESS_KEY_ID || "",
+    secretAccessKey: env.S3_SECRET_ACCESS_KEY || "",
+  },
 });
 
-const BUCKET_NAME = env.S3_BUCKET_NAME || '';
+const BUCKET_NAME = env.S3_BUCKET_NAME || "";
 
 /**
  * Upload a file to S3
@@ -20,12 +24,16 @@ const BUCKET_NAME = env.S3_BUCKET_NAME || '';
  * @param contentType The MIME type of the file
  * @returns The URL of the uploaded file
  */
-export async function uploadToS3(file: Buffer | ReadableStream | ArrayBuffer, key: string, contentType: string): Promise<string> {
+export async function uploadToS3(
+  file: Buffer | ReadableStream | ArrayBuffer,
+  key: string,
+  contentType: string,
+): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
     Body: file instanceof ArrayBuffer ? Buffer.from(file) : file,
-    ContentType: contentType
+    ContentType: contentType,
   });
 
   await s3Client.send(command);
@@ -38,10 +46,13 @@ export async function uploadToS3(file: Buffer | ReadableStream | ArrayBuffer, ke
  * @param expiresIn Time in seconds until the URL expires (default: 3600 = 1 hour)
  * @returns A signed URL that can be used to access the object
  */
-export async function getSignedS3Url(key: string, expiresIn = 3600): Promise<string> {
+export async function getSignedS3Url(
+  key: string,
+  expiresIn = 3600,
+): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: BUCKET_NAME,
-    Key: key
+    Key: key,
   });
 
   return getSignedUrl(s3Client, command, { expiresIn });
@@ -53,9 +64,9 @@ export async function getSignedS3Url(key: string, expiresIn = 3600): Promise<str
  * @param prefix Optional prefix for the key (e.g., 'tours/', 'users/')
  * @returns A unique key for the S3 object
  */
-export function generateS3Key(filename: string, prefix = ''): string {
+export function generateS3Key(filename: string, prefix = ""): string {
   const timestamp = Date.now();
   const randomString = Math.random().toString(36).substring(2, 15);
-  const extension = filename.split('.').pop();
+  const extension = filename.split(".").pop();
   return `${prefix}${timestamp}-${randomString}.${extension}`;
-} 
+}

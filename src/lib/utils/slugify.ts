@@ -6,14 +6,14 @@
 export function slugify(text: string): string {
   return text
     .toString()
-    .normalize('NFKD') // Split accented characters into their base characters and diacritical marks
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+    .normalize("NFKD") // Split accented characters into their base characters and diacritical marks
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
     .toLowerCase()
     .trim()
-    .replace(/\s+/g, '-') // Replace spaces with hyphens
-    .replace(/[^\w-]+/g, '') // Remove non-word characters (except hyphens)
-    .replace(/--+/g, '-') // Replace multiple hyphens with a single hyphen
-    .replace(/^-+|-+$/g, ''); // Remove leading and trailing hyphens
+    .replace(/\s+/g, "-") // Replace spaces with hyphens
+    .replace(/[^\w-]+/g, "") // Remove non-word characters (except hyphens)
+    .replace(/--+/g, "-") // Replace multiple hyphens with a single hyphen
+    .replace(/^-+|-+$/g, ""); // Remove leading and trailing hyphens
 }
 
 /**
@@ -23,6 +23,6 @@ export function slugify(text: string): string {
  */
 export function deslugify(slug: string): string {
   return slug
-    .replace(/-/g, ' ') // Replace hyphens with spaces
-    .replace(/\b\w/g, c => c.toUpperCase()); // Capitalize first letter of each word
-} 
+    .replace(/-/g, " ") // Replace hyphens with spaces
+    .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letter of each word
+}

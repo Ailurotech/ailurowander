@@ -1,4 +1,4 @@
-import { ObjectId } from 'mongodb';
+import { ObjectId } from "mongodb";
 
 export interface Tour {
   _id?: ObjectId;
@@ -100,4 +100,4 @@ export interface TourFormData {
   featured: boolean;
   discount: number;
   tags: string[];
-} 
+}

@@ -79,15 +79,14 @@ Choose the region closest to your users:
 ### Security Best Practices
 
 1. **Restrict IAM Permissions**
+
    ```json
    {
      "Version": "2012-10-17",
      "Statement": [
        {
          "Effect": "Allow",
-         "Action": [
-           "translate:TranslateText"
-         ],
+         "Action": ["translate:TranslateText"],
          "Resource": "*"
        }
      ]
@@ -126,15 +125,15 @@ AWS Translate pricing (as of 2024):
 
 ## 🎯 AWS Translate Features
 
-| Feature | AWS Translate |
-|---------|---------------|
-| **Pricing** | $15/M characters |
-| **Accuracy** | High |
-| **Languages** | 75+ |
-| **Custom Models** | ✅ |
-| **Real-time** | ✅ |
-| **Setup** | Medium |
-| **Integration** | Direct AWS API |
+| Feature           | AWS Translate    |
+| ----------------- | ---------------- |
+| **Pricing**       | $15/M characters |
+| **Accuracy**      | High             |
+| **Languages**     | 75+              |
+| **Custom Models** | ✅               |
+| **Real-time**     | ✅               |
+| **Setup**         | Medium           |
+| **Integration**   | Direct AWS API   |
 
 ## 📝 Usage Examples
 
@@ -159,7 +158,7 @@ Translation is integrated into the tour forms:
 ```typescript
 // In add/edit tour forms:
 // - Title field with translate button
-// - Destination field with translate button  
+// - Destination field with translate button
 // - Description fields with translate buttons
 // - Itinerary day titles and descriptions
 // - Inclusions and exclusions lists
@@ -219,6 +218,7 @@ DEBUG=aws:*
 ### Testing Without AWS
 
 For development, the system falls back to:
+
 1. **Google Translate** (if configured)
 2. **LibreTranslate** (if configured)
 3. **Mock translations** (predefined mappings)
@@ -235,26 +235,29 @@ For development, the system falls back to:
 
 ```typescript
 // Monitor translation success rates
-console.log('Translation success:', successRate);
-console.log('Average response time:', avgResponseTime);
-console.log('Monthly usage:', monthlyUsage);
+console.log("Translation success:", successRate);
+console.log("Average response time:", avgResponseTime);
+console.log("Monthly usage:", monthlyUsage);
 ```
 
 ## 💡 Best Practices
 
 ### Performance
+
 - **Use appropriate regions** for lower latency
 - **Implement caching** for repeated translations
 - **Batch requests** when possible
 - **Monitor response times**
 
 ### Cost Management
+
 - **Set up billing alerts**
 - **Monitor usage regularly**
 - **Use free tier** for development
 - **Implement smart caching**
 
 ### Security
+
 - **Use IAM roles** instead of access keys in production
 - **Restrict permissions** to minimum required
 - **Rotate credentials** regularly
@@ -268,16 +271,16 @@ AWS Translate supports 75+ languages. Common codes:
 
 ```typescript
 const supportedLanguages = {
-  'en': 'English',
-  'de': 'German', 
-  'ja': 'Japanese',
-  'es': 'Spanish',
-  'th': 'Thai',
-  'zh': 'Chinese',
-  'ko': 'Korean',
-  'fr': 'French',
-  'it': 'Italian',
-  'pt': 'Portuguese'
+  en: "English",
+  de: "German",
+  ja: "Japanese",
+  es: "Spanish",
+  th: "Thai",
+  zh: "Chinese",
+  ko: "Korean",
+  fr: "French",
+  it: "Italian",
+  pt: "Portuguese",
 };
 ```
 
@@ -328,12 +331,15 @@ USE_AWS_TRANSLATE=true
 ## 📞 Support
 
 ### AWS Support
+
 - **Documentation**: [AWS Translate Docs](https://docs.aws.amazon.com/translate/)
 - **Console**: [AWS Translate Console](https://console.aws.amazon.com/translate/)
 - **Support**: AWS Support plans available
 
 ### Application Support
+
 If you encounter issues:
+
 1. Check AWS CloudWatch logs
 2. Verify IAM permissions
 3. Test with the demo page at `/agent/real-time-translate`
@@ -349,4 +355,4 @@ If you encounter issues:
 
 ---
 
-**Happy translating with AWS! 🚀** 
+**Happy translating with AWS! 🚀**

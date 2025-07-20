@@ -10,7 +10,7 @@ declare namespace App {
 }
 
 // Ensure CSS modules can be imported
-declare module '*.css' {
+declare module "*.css" {
   const content: string;
   export default content;
-} 
+}
