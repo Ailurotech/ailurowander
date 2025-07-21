@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import { getImageUrl } from '../../utils/imageUrl';
+  import cityToProvinceMap from './cityToProvinceMap.json';
 
   interface Province {
     id: string;
@@ -11,7 +12,7 @@
   let hoveredProvince: Province | null = null;
   let currentProvinceTours = [];
   let svgContent = '';
-  let viewBox = { x: 0, y: 0, width: 1000, height: 800 };
+  let viewBox = { x: -100, y: -100, width: 1000, height: 800 };
 
   let isDragging = false;
   let startX = 0;
@@ -26,62 +27,20 @@
   let closeTimeout: ReturnType<typeof setTimeout> | null = null;
   let imageIndexes: Record<string, number> = {};
 
-  const tourData = {
-    Beijing: {
-      province: 'Beijing',
-      slug: 'classic-beijing-tour',
-      images: [
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Beijing/Beijing/beijing1.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Beijing/Beijing/beijing2.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Beijing/Beijing/beijing3.jpg'
-      ],
-      hotSpots: ['Great Wall', 'Forbidden City', 'Temple of Heaven'],
-      days: '5 days',
-      views: 1200,
-    },
-    Shanghai: {
-      province: 'Shanghai',
-      slug: 'shanghai-highlights-tour',
-      images: [
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai1.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai2.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Shanghai/Shanghai/shanghai3.jpg'
-      ],
-      hotSpots: ['The Bund', 'Yu Garden'],
-      days: '4 days',
-      views: 900,
-    },
-    Xian: {
-      province: 'Shaanxi',
-      slug: 'xian-terracotta-warriors',
-      images: ['https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/681f08e84fc6c82c8274c00b/1746864360745-169lzaqzkrs.jpg'],
-      hotSpots: ['Terracotta Army', 'Ancient City Wall'],
-      days: '3 days',
-      views: 800,
-    },
-    Chengdu: {
-      province: 'Sichuan',
-      images: [
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Chengdu/chengdu1.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Chengdu/chengdu2.jpg'
-      ],
-      hotSpots: ['Panda Base', 'Jinli Street'],
-      days: '3 days',
-      views: 700,
-    },
-    Leshan: {
-      province: 'Sichuan',
-      images: [
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Leshan/leshan1.jpg',
-        'https://ailurowander-images.s3.ap-southeast-2.amazonaws.com/tours/Sichuan/Leshan/leshan2.jpg'
-      ],
-      hotSpots: ['Leshan Giant Buddha'],
-      days: '1 day',
-      views: 400,
-    }
-  };
+  let allTours = [];
 
-  let totalViews = Object.values(tourData).reduce((acc, t) => acc + t.views, 0);
+  onMount(async () => {
+    try {
+      const res = await fetch('/api/tours');
+      allTours = await res.json();
+      console.log('Fetched tours:', allTours);
+    } catch (error) {
+      console.error('Failed to fetch tours:', error);
+    }
+  });
+
+
+  let totalViews = Object.values(allTours).reduce((acc, t) => acc + t.views, 0);
 
   function handleGlobalMouseMove(e: MouseEvent) {
       mouseX = e.clientX;
@@ -94,7 +53,7 @@
     const totalFrames = Math.round((duration / 1000) * frameRate);
 
     const start = { ...viewBox };
-    const end = { x: 0, y: 0, width: 1000, height: 800 };
+    const end = { x: -100, y: -100, width: 1000, height: 800 };
 
     let frame = 0;
 
@@ -119,8 +78,15 @@
     requestAnimationFrame(animate);
   }
 
-  function showPopupForProvince(name: string, id = '', description = '') {
-    hoveredProvince = { id, name, description };
+  const normalizedCityToProvinceMap = Object.fromEntries(
+    Object.entries(cityToProvinceMap).map(([city, province]) => [city.toLowerCase(), province])
+  );
+  function getProvinceFromTour(tour) {
+    const city = (tour.location || tour.destination || '').toLowerCase();
+    return normalizedCityToProvinceMap[city] || city;
+  }
+
+  function showPopupForProvince(name: string) {
     const popupWidth = 420;
     const popupHeight = 500;
 
@@ -143,11 +109,20 @@
     popupX = Math.max(10, Math.min(desiredX, (container?.clientWidth ?? window.innerWidth) - popupWidth - 10));
     popupY = Math.max(10, Math.min(desiredY, (container?.clientHeight ?? window.innerHeight) - popupHeight - 10));
 
-    currentProvinceTours = Object.entries(tourData)
-      .filter(([_, t]) => t.province === name)
-      .map(([city, data]) => {
-        imageIndexes[city] = 0;
-        return { city, ...data };
+    currentProvinceTours = allTours
+      .filter(tour => getProvinceFromTour(tour) === name)
+      .map(tour => {
+        const image = tour.image || "/images/placeholder.jpg";
+        return {
+          city: tour.location, // 改为 location 字段
+          province: tour.location,
+          slug: tour.slug ?? '',
+          images: [image],
+          duration: tour.duration ?? 'N/A',
+          price: tour.price ?? 'N/A',
+          description: tour.description ?? '',
+          title: tour.title ?? tour.location,
+        };
       });
 
     if (closeTimeout) clearTimeout(closeTimeout);
@@ -222,7 +197,7 @@
     isDragging = false;
   }
 
-  function handleWheel(event: WheelEvent) {
+function handleWheel(event: WheelEvent) {
     event.preventDefault();
     const zoomFactor = 0.1;
     const delta = event.deltaY > 0 ? 1 : -1;
@@ -250,11 +225,6 @@
     }
   }
 
-  function resetViewBox() {
-    viewBox = { x: 0, y: 0, width: 1000, height: 800 };
-    updateViewBox();
-  }
-
   onMount(async () => {
     svgContent = await loadSvg();
     requestAnimationFrame(() => {
@@ -262,7 +232,8 @@
       paths.forEach((path) => {
         const title = path.getAttribute('title') || 'Unknown Province';
         path.addEventListener('mouseenter', () => {
-          showPopupForProvince(title, path.id || '', `Explore tours in ${title}`);
+          hoveredProvince = { id: path.id || '', name: title, description: `Explore tours in ${title}` };
+          showPopupForProvince(title);
         });
         path.addEventListener('mouseleave', hidePopupWithDelay);
       });
@@ -333,13 +304,13 @@
                 </div>
 
                 <div class="p-4 space-y-2">
-                  <div class="text-lg font-bold text-gray-800">{tour.city}</div>
+                  <div class="text-lg font-bold text-gray-800">{tour.title}</div>
                   <div class="text-sm text-gray-500 flex items-center gap-2">
-                    <span>📅 {tour.days}</span>
-                    <span>🔥 {(tour.views / totalViews * 10).toFixed(1)}</span>
+                    <span>📅 {tour.duration}</span>
+                    <span>💰 ${tour.price}</span>
                   </div>
                   <div class="text-sm text-gray-600">
-                    <span class="font-medium">Hot Spots:</span> {tour.hotSpots.join(', ')}
+                    {tour.description}
                   </div>
                   <a 
                     href={`/tours/${tour.slug}`}

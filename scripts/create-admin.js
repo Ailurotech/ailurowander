@@ -31,7 +31,7 @@ async function createAdmin() {
     const adminAgent = {
       username: 'admin',
       email: 'admin@ailurotech.com.au',
-      passwordHash: hashPassword('password'),
+      passwordHash: hashPassword('1234'),
       role: 'admin',
       isActive: true,
       createdAt: new Date(),
