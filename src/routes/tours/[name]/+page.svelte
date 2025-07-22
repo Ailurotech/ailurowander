@@ -12,26 +12,26 @@
   import TourTags from '../../../components/tours/TourTags.svelte';
   import TourCTA from '../../../components/tours/TourCTA.svelte';
   import RelatedTours from '../../../components/tours/RelatedTours.svelte';
-  
+
   // Data loaded from +page.ts
   export let data: {
     tour: Tour;
   };
-  
+
   const { tour } = data;
-  
+
   // Photo gallery popup state
   let isGalleryOpen = false;
   let galleryImages: string[] = [];
   let currentGalleryIndex = 0;
-  
+
   // Open gallery popup
   function openGallery(index: number) {
     currentGalleryIndex = index;
     galleryImages = [tour.images.main, ...(tour.images.gallery || [])];
     isGalleryOpen = true;
   }
-  
+
   // Close gallery popup
   function closeGallery() {
     isGalleryOpen = false;
@@ -53,22 +53,22 @@
       <TourContent {tour} />
       <TourHighlights {tour} />
     </div>
-    
+
     <TourBookingCard {tour} />
   </div>
-  
+
   <TourItinerary {tour} />
-  
+
   <TourInclusionsExclusions {tour} />
-  
+
   <TourPhotoGallery {tour} onImageClick={openGallery} />
-  
+
   <TourTags {tour} />
-  
+
   <TourCTA />
-  
+
   <RelatedTours />
-  
+
   <!-- Photo Gallery Popup -->
   <PhotoGalleryPopup
     images={galleryImages}
@@ -76,4 +76,4 @@
     isOpen={isGalleryOpen}
     on:close={closeGallery}
   />
-</div> 
+</div>

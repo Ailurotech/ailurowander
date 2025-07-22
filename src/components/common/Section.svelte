@@ -15,7 +15,7 @@
         {/if}
       </div>
     {/if}
-    
+
     <slot />
   </div>
-</section> 
+</section>

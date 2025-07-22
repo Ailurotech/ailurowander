@@ -5,30 +5,30 @@
   import Divider from '../../components/atoms/Divider.svelte';
   import ChineseIcon from '../../components/atoms/ChineseIcon.svelte';
   import { goto } from '$app/navigation';
-  
+
   // Login form state
   let username = '';
   let password = '';
   let rememberMe = false;
   let isLoading = false;
   let errorMessage = '';
-  
+
   // Handle login submission
   async function handleLogin() {
     isLoading = true;
     errorMessage = '';
-    
+
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password }),
       });
-      
+
       const data = await response.json();
-      
+
       if (response.ok) {
         // Login successful, redirect to tours management page
         goto('/agent/tours');
@@ -70,8 +70,17 @@
         <div class="mb-4 bg-red-50 border-l-4 border-red-500 p-4">
           <div class="flex">
             <div class="flex-shrink-0">
-              <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+              <svg
+                class="h-5 w-5 text-red-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                  clip-rule="evenodd"
+                />
               </svg>
             </div>
             <div class="ml-3">
@@ -82,7 +91,7 @@
           </div>
         </div>
       {/if}
-    
+
       <form class="space-y-6" on:submit|preventDefault={handleLogin}>
         <div>
           <label for="username" class="form-label">
@@ -142,12 +151,7 @@
         </div>
 
         <div>
-          <Button 
-            type="submit" 
-            variant="primary" 
-            fullWidth={true} 
-            disabled={isLoading}
-          >
+          <Button type="submit" variant="primary" fullWidth={true} disabled={isLoading}>
             {isLoading ? $t('agent.login.signing_in') : $t('agent.login.sign_in')}
           </Button>
         </div>
@@ -178,9 +182,9 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Footer -->
   <div class="mt-12 text-center text-xs text-neutral-500">
     <p>© {new Date().getFullYear()} {$t('site.title')}. {$t('footer.rights')}</p>
   </div>
-</div> 
+</div>

@@ -11,7 +11,7 @@ export async function getAllUsers(): Promise<UserSummary[]> {
 
   console.log(`getAllUsers: Found ${users.length} users`);
 
-  return users.map((user) => ({
+  return users.map(user => ({
     _id: user._id,
     username: user.username,
     name: user.name,
@@ -61,9 +61,7 @@ export async function createUser(userData: {
   role: string;
   isActive: boolean;
 }): Promise<UserSummary> {
-  console.log(
-    `createUser: Creating new user with username ${userData.username}`,
-  );
+  console.log(`createUser: Creating new user with username ${userData.username}`);
 
   const usersCollection = await getUsers();
 
@@ -95,7 +93,7 @@ export async function createUser(userData: {
     updatedAt: new Date(),
   };
 
-  console.log("createUser: Inserting new user into database");
+  console.log('createUser: Inserting new user into database');
   const result = await usersCollection.insertOne(newUser);
   console.log(`createUser: User created with ID ${result.insertedId}`);
 
@@ -120,7 +118,7 @@ export async function updateUser(
     password?: string;
     role?: string;
     isActive?: boolean;
-  },
+  }
 ): Promise<UserSummary | null> {
   console.log(`updateUser: Updating user with ID ${id}`);
 
@@ -133,9 +131,7 @@ export async function updateUser(
 
   // Check if username already exists (if changing username)
   if (userData.username) {
-    console.log(
-      `updateUser: Checking if username ${userData.username} already exists`,
-    );
+    console.log(`updateUser: Checking if username ${userData.username} already exists`);
     const existingUser = await usersCollection.findOne({
       username: userData.username,
       _id: { $ne: new ObjectId(id) },
@@ -159,7 +155,7 @@ export async function updateUser(
     delete updateData.password;
   }
 
-  console.log("updateUser: Updating user in database");
+  console.log('updateUser: Updating user in database');
   const result = await usersCollection.findOneAndUpdate(
     { _id: new ObjectId(id) },
     { $set: updateData },
@@ -198,7 +194,7 @@ export async function deleteUser(id: string): Promise<boolean> {
 
   const success = result.deletedCount === 1;
   console.log(
-    `deleteUser: Deletion ${success ? "successful" : "failed"}, deleted count: ${result.deletedCount}`,
+    `deleteUser: Deletion ${success ? 'successful' : 'failed'}, deleted count: ${result.deletedCount}`
   );
 
   return success;
@@ -207,7 +203,7 @@ export async function deleteUser(id: string): Promise<boolean> {
 // Authenticate a user
 export async function authenticateUser(
   username: string,
-  password: string,
+  password: string
 ): Promise<UserSummary | null> {
   console.log(`authenticateUser: Authenticating user ${username}`);
 
@@ -219,7 +215,7 @@ export async function authenticateUser(
     return null;
   }
 
-  console.log("authenticateUser: Comparing passwords");
+  console.log('authenticateUser: Comparing passwords');
   const passwordMatches = await bcrypt.compare(password, user.passwordHash);
 
   if (!passwordMatches) {
@@ -227,9 +223,7 @@ export async function authenticateUser(
     return null;
   }
 
-  console.log(
-    `authenticateUser: User ${username} authenticated successfully, updating last login`,
-  );
+  console.log(`authenticateUser: User ${username} authenticated successfully, updating last login`);
   // Update last login timestamp
   await usersCollection.updateOne(
     { _id: user._id },

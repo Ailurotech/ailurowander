@@ -12,7 +12,7 @@ export async function GET({ params }: { params: { slug: string } }) {
     const { slug } = params;
 
     const db = await getDB();
-    const toursCollection = db.collection("tours");
+    const toursCollection = db.collection('tours');
 
     // Get all tours
     const tours = await toursCollection.find({}).toArray();
@@ -31,7 +31,7 @@ export async function GET({ params }: { params: { slug: string } }) {
       return new Response(JSON.stringify({ error: "Tour not found" }), {
         status: 404,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
       });
     }
@@ -42,7 +42,7 @@ export async function GET({ params }: { params: { slug: string } }) {
     return new Response(JSON.stringify({ error: "Failed to fetch tour" }), {
       status: 500,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
   }

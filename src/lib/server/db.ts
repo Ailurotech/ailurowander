@@ -16,15 +16,12 @@ const client = new MongoClient(MONGODB_URI);
 
 export async function connectDB() {
   try {
-    console.log("Attempting to connect to MongoDB...");
-    console.log("MongoDB URI length:", MONGODB_URI.length);
-    console.log(
-      "MongoDB URI starts with mongodb:",
-      MONGODB_URI.startsWith("mongodb"),
-    );
+    console.log('Attempting to connect to MongoDB...');
+    console.log('MongoDB URI length:', MONGODB_URI.length);
+    console.log('MongoDB URI starts with mongodb:', MONGODB_URI.startsWith('mongodb'));
 
     await client.connect();
-    console.log("Connected to MongoDB successfully");
+    console.log('Connected to MongoDB successfully');
 
     // Get database name from connection string or default to ailuroWander
     // Handle MongoDB Atlas connection strings with query parameters
@@ -52,16 +49,16 @@ export async function connectDB() {
     // Test the connection by listing collections
     const collections = await db.listCollections().toArray();
     console.log(
-      "Available collections:",
-      collections.map((c) => c.name),
+      'Available collections:',
+      collections.map(c => c.name)
     );
 
     // List all databases on the MongoDB server
     const adminDb = client.db("admin");
     const dbs = await adminDb.admin().listDatabases();
     console.log(
-      "All databases on MongoDB server:",
-      dbs.databases.map((db) => db.name),
+      'All databases on MongoDB server:',
+      dbs.databases.map(db => db.name)
     );
 
     // If tours collection exists, show count
@@ -113,6 +110,6 @@ export async function getTours() {
 
 export async function getUsers() {
   const db = await getDB();
-  console.log("Accessing users collection");
-  return db.collection("users");
+  console.log('Accessing users collection');
+  return db.collection('users');
 }

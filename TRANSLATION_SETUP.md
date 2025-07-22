@@ -1,14 +1,19 @@
 # Translation System Setup
 
-This document explains how to set up and use the translation system that can translate Chinese text to all supported languages and store the results in the database.
+This document explains how to set up and use the translation system that can
+translate Chinese text to all supported languages and store the results in the
+database.
 
 ## Features
 
-- **Multi-language Translation**: Translate Chinese text to English, German, Japanese, Spanish, and Thai
-- **Database Storage**: All translations are stored in MongoDB with usage tracking
+- **Multi-language Translation**: Translate Chinese text to English, German,
+  Japanese, Spanish, and Thai
+- **Database Storage**: All translations are stored in MongoDB with usage
+  tracking
 - **Translation History**: View and search through previous translations
 - **Context & Categories**: Organize translations with context and category tags
-- **API Integration**: Supports multiple translation APIs (Google Translate, LibreTranslate, or mock for development)
+- **API Integration**: Supports multiple translation APIs (Google Translate,
+  LibreTranslate, or mock for development)
 
 ## Setup Instructions
 
@@ -47,7 +52,8 @@ TRANSLATION_API_URL=https://translation.googleapis.com/language/translate/v2
 
 ### 3. Database Setup
 
-The translation system automatically creates a `translations` collection in your MongoDB database. No additional setup required.
+The translation system automatically creates a `translations` collection in your
+MongoDB database. No additional setup required.
 
 ## Usage
 
@@ -67,12 +73,12 @@ The translation system automatically creates a `translations` collection in your
 const response = await fetch("/api/translations", {
   method: "POST",
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify({
-    chineseText: "你好世界",
-    context: "greeting",
-    category: "ui",
+    chineseText: '你好世界',
+    context: 'greeting',
+    category: 'ui',
   }),
 });
 
@@ -148,7 +154,8 @@ The system includes comprehensive error handling:
 
 ## Performance Considerations
 
-- **Caching**: Existing translations are retrieved from database instead of re-translating
+- **Caching**: Existing translations are retrieved from database instead of
+  re-translating
 - **Usage Tracking**: Popular translations are prioritized
 - **Batch Operations**: Multiple translations are processed in parallel
 - **Search Optimization**: Full-text search across all languages

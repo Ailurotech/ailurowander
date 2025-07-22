@@ -7,12 +7,10 @@ export async function GET({}: RequestEvent) {
     const toursCollection = await getTours();
 
     // Get all unique destinations from tours
-    const destinations = await toursCollection.distinct("destination");
+    const destinations = await toursCollection.distinct('destination');
 
     // Filter out any null or empty destinations
-    const validDestinations = destinations.filter(
-      (dest) => dest && dest.trim() !== "",
-    );
+    const validDestinations = destinations.filter(dest => dest && dest.trim() !== '');
 
     return json(validDestinations);
   } catch (error) {

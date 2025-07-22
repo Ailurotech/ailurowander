@@ -5,12 +5,8 @@ import { getDB } from "$lib/server/db";
 import { uploadToS3, generateS3Key } from "$lib/server/s3";
 
 // Get all tours or featured tours
-export async function getAllTours(
-  featuredOnly = false,
-): Promise<TourSummary[]> {
-  console.log(
-    `getAllTours: Fetching ${featuredOnly ? "featured" : "all"} tours from database`,
-  );
+export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> {
+  console.log(`getAllTours: Fetching ${featuredOnly ? 'featured' : 'all'} tours from database`);
 
   const toursCollection = await getTours();
   const query = featuredOnly ? { featured: true } : {};
@@ -26,14 +22,14 @@ export async function getAllTours(
     console.log(`getAllTours: No tours found in database`);
   }
 
-  return tours.map((tour) => ({
+  return tours.map(tour => ({
     _id: tour._id,
     title: tour.title,
     description: tour.description,
     image: tour.images?.main || "/images/placeholder.jpg",
     duration: tour.duration ? `${tour.duration.days} days` : "N/A",
     price: tour.price?.amount || 0,
-    destination: tour.destination || "",
+    destination: tour.destination || '',
     featured: tour.featured || false,
   }));
 }
@@ -48,9 +44,7 @@ export async function getTourById(id: string): Promise<Tour | null> {
   }
 
   const toursCollection = await getTours();
-  const tour = (await toursCollection.findOne({
-    _id: new ObjectId(id),
-  })) as Tour | null;
+  const tour = (await toursCollection.findOne({ _id: new ObjectId(id) })) as Tour | null;
 
   if (tour) {
     console.log(`getTourById: Found tour "${tour.title}"`);
@@ -63,7 +57,7 @@ export async function getTourById(id: string): Promise<Tour | null> {
 
 // Create a new tour
 export async function createTour(
-  tour: Omit<Tour, "_id" | "createdAt" | "updatedAt">,
+  tour: Omit<Tour, '_id' | 'createdAt' | 'updatedAt'>
 ): Promise<Tour> {
   console.log(`createTour: Creating new tour "${tour.title}"`);
 
@@ -105,10 +99,7 @@ export async function updateTour(
 
   delete updateData._id; // Remove _id if present in the update data
 
-  await toursCollection.updateOne(
-    { _id: new ObjectId(id) },
-    { $set: updateData },
-  );
+  await toursCollection.updateOne({ _id: new ObjectId(id) }, { $set: updateData });
 
   return await getTourById(id);
 }
@@ -132,15 +123,15 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
   const tours = await toursCollection
     .find({
       $or: [
-        { title: { $regex: query, $options: "i" } },
-        { description: { $regex: query, $options: "i" } },
-        { destination: { $regex: query, $options: "i" } },
-        { tags: { $regex: query, $options: "i" } },
+        { title: { $regex: query, $options: 'i' } },
+        { description: { $regex: query, $options: 'i' } },
+        { destination: { $regex: query, $options: 'i' } },
+        { tags: { $regex: query, $options: 'i' } },
       ],
     })
     .toArray();
 
-  return tours.map((tour) => ({
+  return tours.map(tour => ({
     _id: tour._id,
     title: tour.title,
     description: tour.description,
@@ -160,7 +151,7 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
  */
 export async function uploadTourImages(
   images: { main: File; gallery: File[] },
-  tourId: string,
+  tourId: string
 ): Promise<{ main: string; gallery: string[] }> {
   try {
     // Upload main image
@@ -173,10 +164,10 @@ export async function uploadTourImages(
 
     // Upload gallery images
     const galleryUrls = await Promise.all(
-      images.gallery.map(async (image) => {
+      images.gallery.map(async image => {
         const key = generateS3Key(image.name, `tours/${tourId}/gallery/`);
         return uploadToS3(await image.arrayBuffer(), key, image.type);
-      }),
+      })
     );
 
     return {
@@ -196,7 +187,7 @@ export async function uploadTourImages(
  */
 export async function updateTourImages(
   tourId: string,
-  imageUrls: { main: string; gallery: string[] },
+  imageUrls: { main: string; gallery: string[] }
 ): Promise<void> {
   const db = await getDB();
   const toursCollection = db.collection("tours");
@@ -210,8 +201,8 @@ export async function updateTourImages(
   // Prepare update object - only update fields that have new values
   const updateObject: any = {};
 
-  if (imageUrls.main && imageUrls.main.trim() !== "") {
-    updateObject["images.main"] = imageUrls.main;
+  if (imageUrls.main && imageUrls.main.trim() !== '') {
+    updateObject['images.main'] = imageUrls.main;
   }
 
   if (imageUrls.gallery && imageUrls.gallery.length > 0) {
@@ -221,10 +212,7 @@ export async function updateTourImages(
 
   // Only update if there are new images to set
   if (Object.keys(updateObject).length > 0) {
-    await toursCollection.updateOne(
-      { _id: new ObjectId(tourId) },
-      { $set: updateObject },
-    );
+    await toursCollection.updateOne({ _id: new ObjectId(tourId) }, { $set: updateObject });
   }
 }
 
@@ -236,19 +224,16 @@ export async function updateTourImages(
  */
 export async function uploadItineraryImages(
   itineraryImages: (File | null)[],
-  tourId: string,
+  tourId: string
 ): Promise<(string | undefined)[]> {
   try {
     const imageUrls = await Promise.all(
       itineraryImages.map(async (image, index) => {
         if (!image) return undefined;
 
-        const key = generateS3Key(
-          image.name,
-          `tours/${tourId}/itinerary/day-${index + 1}/`,
-        );
+        const key = generateS3Key(image.name, `tours/${tourId}/itinerary/day-${index + 1}/`);
         return uploadToS3(await image.arrayBuffer(), key, image.type);
-      }),
+      })
     );
 
     return imageUrls;
@@ -267,7 +252,7 @@ export async function uploadItineraryImages(
 export async function updateTourItineraryImages(
   tourId: string,
   itinerary: any[],
-  imageUrls: (string | undefined)[],
+  imageUrls: (string | undefined)[]
 ): Promise<void> {
   const db = await getDB();
   const toursCollection = db.collection("tours");
@@ -282,10 +267,7 @@ export async function updateTourItineraryImages(
   const updatedItinerary = itinerary.map((day, index) => ({
     ...day,
     // Only update image if a new one is provided, otherwise keep existing image
-    image:
-      imageUrls[index] !== undefined
-        ? imageUrls[index]
-        : existingItinerary[index]?.image,
+    image: imageUrls[index] !== undefined ? imageUrls[index] : existingItinerary[index]?.image,
   }));
 
   await toursCollection.updateOne(
@@ -294,7 +276,7 @@ export async function updateTourItineraryImages(
       $set: {
         itinerary: updatedItinerary,
       },
-    },
+    }
   );
 }
 
@@ -306,7 +288,7 @@ export async function updateTourItineraryImages(
  */
 export async function uploadAccommodationImages(
   accommodationImages: File[][],
-  tourId: string,
+  tourId: string
 ): Promise<string[][]> {
   try {
     const imageUrls: string[][] = [];
@@ -318,10 +300,10 @@ export async function uploadAccommodationImages(
           dayImages.map(async (image, imgIndex) => {
             const key = generateS3Key(
               image.name,
-              `tours/${tourId}/accommodation/day-${dayIndex + 1}/`,
+              `tours/${tourId}/accommodation/day-${dayIndex + 1}/`
             );
             return uploadToS3(await image.arrayBuffer(), key, image.type);
-          }),
+          })
         );
         imageUrls[dayIndex] = dayImageUrls;
       } else {
@@ -344,7 +326,7 @@ export async function uploadAccommodationImages(
  */
 export async function uploadMealsImages(
   mealsImages: File[][][],
-  tourId: string,
+  tourId: string
 ): Promise<string[][][]> {
   try {
     const imageUrls: string[][][] = [];
@@ -361,10 +343,10 @@ export async function uploadMealsImages(
               mealImages.map(async (image, imgIndex) => {
                 const key = generateS3Key(
                   image.name,
-                  `tours/${tourId}/meals/day-${dayIndex + 1}/meal-${mealIndex + 1}/`,
+                  `tours/${tourId}/meals/day-${dayIndex + 1}/meal-${mealIndex + 1}/`
                 );
                 return uploadToS3(await image.arrayBuffer(), key, image.type);
-              }),
+              })
             );
             dayMealUrls[mealIndex] = mealImageUrls;
           } else {
@@ -395,7 +377,7 @@ export async function updateTourAccommodationAndMealsImages(
   tourId: string,
   itinerary: any[],
   accommodationImageUrls: string[][],
-  mealsImageUrls: string[][][],
+  mealsImageUrls: string[][][]
 ): Promise<void> {
   const db = await getDB();
   const toursCollection = db.collection("tours");
@@ -451,6 +433,6 @@ export async function updateTourAccommodationAndMealsImages(
       $set: {
         itinerary: updatedItinerary,
       },
-    },
+    }
   );
 }

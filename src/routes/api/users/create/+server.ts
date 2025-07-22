@@ -4,13 +4,13 @@ import type { RequestEvent } from "@sveltejs/kit";
 
 // In a real application, this endpoint would be protected by authentication
 export const POST = async ({ request }: RequestEvent) => {
-  console.log("API: POST /api/users/create - Creating new user");
+  console.log('API: POST /api/users/create - Creating new user');
 
   try {
     const userData = await request.json();
     console.log("API: POST /api/users/create - Received user data:", {
       ...userData,
-      password: userData.password ? "********" : undefined, // Log everything except the actual password
+      password: userData.password ? '********' : undefined, // Log everything except the actual password
     });
 
     // Basic validation
@@ -21,8 +21,8 @@ export const POST = async ({ request }: RequestEvent) => {
       !userData.password ||
       !userData.role
     ) {
-      console.log("API: POST /api/users/create - Missing required fields");
-      return json({ error: "Missing required fields" }, { status: 400 });
+      console.log('API: POST /api/users/create - Missing required fields');
+      return json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const newUser = await createUser({
@@ -34,20 +34,14 @@ export const POST = async ({ request }: RequestEvent) => {
       isActive: userData.isActive !== undefined ? userData.isActive : true,
     });
 
-    console.log(
-      `API: POST /api/users/create - User created successfully with ID ${newUser._id}`,
-    );
+    console.log(`API: POST /api/users/create - User created successfully with ID ${newUser._id}`);
     return json(newUser, { status: 201 });
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    const errorStack = error instanceof Error ? error.stack : "";
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
 
-    console.error(
-      "API: POST /api/users/create - Error creating user:",
-      errorMessage,
-    );
-    console.error("Error stack:", errorStack);
+    console.error('API: POST /api/users/create - Error creating user:', errorMessage);
+    console.error('Error stack:', errorStack);
 
     // Handle specific errors
     if (error instanceof Error && error.message === "Username already exists") {
@@ -57,9 +51,6 @@ export const POST = async ({ request }: RequestEvent) => {
       );
     }
 
-    return json(
-      { error: "Failed to create user", details: errorMessage },
-      { status: 500 },
-    );
+    return json({ error: 'Failed to create user', details: errorMessage }, { status: 500 });
   }
 };

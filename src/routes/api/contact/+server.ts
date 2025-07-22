@@ -6,8 +6,8 @@ import { env } from "$env/dynamic/private";
 const snsClient = new SNSClient({
   region: "ap-southeast-2", // Sydney region
   credentials: {
-    accessKeyId: env.SNS_ACCESS_KEY_ID || "",
-    secretAccessKey: env.SNS_SECRET_ACCESS_KEY || "",
+    accessKeyId: env.SNS_ACCESS_KEY_ID || '',
+    secretAccessKey: env.SNS_SECRET_ACCESS_KEY || '',
   },
 });
 
@@ -17,13 +17,13 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Validate required fields
     if (!name || !email || !subject || !message) {
-      return json({ error: "All fields are required" }, { status: 400 });
+      return json({ error: 'All fields are required' }, { status: 400 });
     }
 
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return json({ error: "Invalid email format" }, { status: 400 });
+      return json({ error: 'Invalid email format' }, { status: 400 });
     }
 
     // Format the email message
@@ -47,8 +47,8 @@ This message was sent from the AiluroWander contact form.
       Message: emailMessage,
       MessageAttributes: {
         email: {
-          DataType: "String",
-          StringValue: "contact@ailurotech.com.au",
+          DataType: 'String',
+          StringValue: 'contact@ailurotech.com.au',
         },
       },
     });
@@ -57,7 +57,7 @@ This message was sent from the AiluroWander contact form.
 
     return json({ success: true });
   } catch (error) {
-    console.error("Error sending contact form:", error);
-    return json({ error: "Failed to send message" }, { status: 500 });
+    console.error('Error sending contact form:', error);
+    return json({ error: 'Failed to send message' }, { status: 500 });
   }
 };

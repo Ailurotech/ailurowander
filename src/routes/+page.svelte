@@ -12,7 +12,7 @@
   import Newsletter from '../components/common/Newsletter.svelte';
   import { onMount } from 'svelte';
   import ChinaMap from '../components/home/ChinaMap.svelte';
-  
+
   // Declare tours state
   let featuredTours: Array<{
     id: string | number;
@@ -27,55 +27,56 @@
     isPopular?: boolean;
     isLoading?: boolean;
   }> = [];
-  
+
   let isLoadingTours = true;
   let tourLoadError = '';
-  
+
   // Load tours from API
   async function loadFeaturedTours() {
     isLoadingTours = true;
-    
+
     try {
       // Fetch featured tours from API
       const response = await fetch('/api/tours?featured=true');
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch tours: ${response.status}`);
       }
-      
+
       const apiTours = await response.json();
       console.log('API Tours:', apiTours); // Debug log
-      
+
       // Transform API tours to match our component's expected format
-      featuredTours = apiTours.map((tour: { 
-        _id: string;
-        title: string;
-        description: string;
-        image: string;
-        duration: string;
-        price: number;
-        destination: string;
-        featured: boolean;
-      }) => {
-        console.log('Processing tour:', tour); // Debug log
-        return {
-          id: tour._id?.toString() || '',
-          title: tour.title,
-          description: tour.description,
-          image: tour.image || '/images/placeholder.jpg',
-          duration: tour.duration,
-          price: tour.price || 0,
-          location: tour.destination,
-          isPopular: tour.featured
-        };
-      });
-      
+      featuredTours = apiTours.map(
+        (tour: {
+          _id: string;
+          title: string;
+          description: string;
+          image: string;
+          duration: string;
+          price: number;
+          destination: string;
+          featured: boolean;
+        }) => {
+          console.log('Processing tour:', tour); // Debug log
+          return {
+            id: tour._id?.toString() || '',
+            title: tour.title,
+            description: tour.description,
+            image: tour.image || '/images/placeholder.jpg',
+            duration: tour.duration,
+            price: tour.price || 0,
+            location: tour.destination,
+            isPopular: tour.featured,
+          };
+        }
+      );
+
       console.log('Transformed tours:', featuredTours); // Debug log
-      
     } catch (error) {
       console.error('Error loading tours:', error);
       tourLoadError = error instanceof Error ? error.message : 'Failed to load tours';
-      
+
       // Use placeholder loading skeletons if error occurs
       featuredTours = Array(4).fill({
         id: 0,
@@ -84,13 +85,13 @@
         image: '',
         duration: '',
         price: 0,
-        isLoading: true
+        isLoading: true,
       });
     } finally {
       isLoadingTours = false;
     }
   }
-  
+
   // Load featured tours on component mount
   onMount(() => {
     loadFeaturedTours();
@@ -105,27 +106,30 @@
     { name: 'Chengdu', image: '/images/chengdu-dest.jpg' },
     { name: 'Hong Kong', image: '/images/hongkong-dest.jpg' },
   ];
-  
+
   // Testimonial data
   const testimonials = [
     {
-      quote: "Our tour of Beijing and the Great Wall exceeded all expectations. Our guide's knowledge made the history come alive, and the accommodations were fantastic.",
-      name: "Sarah Johnson",
-      location: "United States",
-      rating: 5
+      quote:
+        "Our tour of Beijing and the Great Wall exceeded all expectations. Our guide's knowledge made the history come alive, and the accommodations were fantastic.",
+      name: 'Sarah Johnson',
+      location: 'United States',
+      rating: 5,
     },
     {
-      quote: "The Yangtze River cruise was the highlight of our trip. The scenery was breathtaking, and the entire experience was perfectly organized. We'll definitely be back!",
-      name: "Thomas Müller",
-      location: "Germany",
-      rating: 5
+      quote:
+        "The Yangtze River cruise was the highlight of our trip. The scenery was breathtaking, and the entire experience was perfectly organized. We'll definitely be back!",
+      name: 'Thomas Müller',
+      location: 'Germany',
+      rating: 5,
     },
     {
-      quote: "As a solo traveler, I was nervous about visiting China, but AiluroWander made it so easy. From the food to the sights, every moment was special.",
-      name: "Yuki Tanaka",
-      location: "Japan",
-      rating: 5
-    }
+      quote:
+        'As a solo traveler, I was nervous about visiting China, but AiluroWander made it so easy. From the food to the sights, every moment was special.',
+      name: 'Yuki Tanaka',
+      location: 'Japan',
+      rating: 5,
+    },
   ];
 </script>
 
@@ -135,7 +139,7 @@
 </svelte:head>
 
 <!-- Hero Section with Parallax Effect -->
-<ParallaxHero 
+<ParallaxHero
   title={$t('home.hero.title')}
   subtitle={$t('home.hero.subtitle')}
   image="/images/china.png"
@@ -145,11 +149,7 @@
 />
 
 <!-- Featured Tours with Grid Showcase -->
-<Section 
-  variant="light" 
-  spacing="lg"
-  id="featured-tours"
->
+<Section variant="light" spacing="lg" id="featured-tours">
   <svelte:fragment slot="header">
     <div class="text-center mb-12">
       <h2 class="mb-3">{$t('home.featured.title')}</h2>
@@ -157,19 +157,21 @@
       <Divider type="symbol" symbol="✦" className="mt-6" />
     </div>
   </svelte:fragment>
-  
+
   {#if isLoadingTours}
     <div class="grid-showcase">
       {#each Array(4) as _, i}
-        <TourCard tour={{
-          id: i,
-          title: '',
-          description: '',
-          image: '',
-          duration: '',
-          price: 0,
-          isLoading: true
-        }} />
+        <TourCard
+          tour={{
+            id: i,
+            title: '',
+            description: '',
+            image: '',
+            duration: '',
+            price: 0,
+            isLoading: true,
+          }}
+        />
       {/each}
     </div>
   {:else if tourLoadError}
@@ -177,10 +179,7 @@
       <p class="text-red-700">
         {tourLoadError}
       </p>
-      <button 
-        class="mt-2 text-primary font-medium" 
-        on:click={loadFeaturedTours}
-      >
+      <button class="mt-2 text-primary font-medium" on:click={loadFeaturedTours}>
         Try Again
       </button>
     </div>
@@ -195,34 +194,29 @@
       {/each}
     </div>
   {/if}
-  
+
   <div class="text-center mt-12">
     <Button href="/tours" variant="primary" size="lg">{$t('home.featured.view_all')}</Button>
   </div>
 </Section>
 
 <!-- Replace the Popular Destinations section with the Interactive Map -->
-<Section 
-  variant="light" 
-  spacing="lg"
->
+<Section variant="light" spacing="lg">
   <svelte:fragment slot="header">
     <div class="text-center mb-12">
       <h2 class="mb-3">Explore China by Region</h2>
       <p class="text-lg text-neutral-700 max-w-2xl mx-auto">
-        Discover our tours across different provinces of China. Hover over a region to see available tours and learn more about each area.
+        Discover our tours across different provinces of China. Hover over a region to see available
+        tours and learn more about each area.
       </p>
     </div>
   </svelte:fragment>
-  
+
   <ChinaMap />
 </Section>
 
 <!-- Testimonials -->
-<Section 
-  variant="light" 
-  spacing="lg"
->
+<Section variant="light" spacing="lg">
   <svelte:fragment slot="header">
     <div class="text-center mb-12">
       <h2 class="mb-3">{$t('home.testimonials.title')}</h2>
@@ -231,7 +225,7 @@
   </svelte:fragment>
   <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
     {#each testimonials as testimonial}
-      <TestimonialCard 
+      <TestimonialCard
         quote={testimonial.quote}
         name={testimonial.name}
         location={testimonial.location}

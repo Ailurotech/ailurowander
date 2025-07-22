@@ -39,11 +39,11 @@ function generateToken(): string {
 
 // Create a new agent
 export async function createAgent(
-  agentData: Omit<Agent, "_id" | "passwordHash" | "createdAt" | "updatedAt">,
-  password: string,
+  agentData: Omit<Agent, '_id' | 'passwordHash' | 'createdAt' | 'updatedAt'>,
+  password: string
 ): Promise<Agent> {
   const db = await getDB();
-  const agentsCollection = db.collection("agents");
+  const agentsCollection = db.collection('agents');
 
   const agent: Agent = {
     ...agentData,
@@ -62,7 +62,7 @@ export async function authenticateAgent(
   password: string,
 ): Promise<Agent | null> {
   const db = await getDB();
-  const agentsCollection = db.collection("agents");
+  const agentsCollection = db.collection('agents');
 
   const agent = (await agentsCollection.findOne({
     username,
@@ -85,7 +85,7 @@ export async function authenticateAgent(
 // Create session
 export async function createSession(agentId: ObjectId): Promise<Session> {
   const db = await getDB();
-  const sessionsCollection = db.collection("sessions");
+  const sessionsCollection = db.collection('sessions');
 
   // Clean up expired sessions
   await sessionsCollection.deleteMany({ expiresAt: { $lt: new Date() } });
@@ -104,8 +104,8 @@ export async function createSession(agentId: ObjectId): Promise<Session> {
 // Validate session
 export async function validateSession(token: string): Promise<Agent | null> {
   const db = await getDB();
-  const sessionsCollection = db.collection("sessions");
-  const agentsCollection = db.collection("agents");
+  const sessionsCollection = db.collection('sessions');
+  const agentsCollection = db.collection('agents');
 
   const session = (await sessionsCollection.findOne({
     token,
@@ -127,7 +127,7 @@ export async function validateSession(token: string): Promise<Agent | null> {
 // Delete session (logout)
 export async function deleteSession(token: string): Promise<boolean> {
   const db = await getDB();
-  const sessionsCollection = db.collection("sessions");
+  const sessionsCollection = db.collection('sessions');
 
   const result = await sessionsCollection.deleteOne({ token });
   return result.deletedCount === 1;
@@ -140,9 +140,7 @@ export async function getAgentById(id: string): Promise<Agent | null> {
   }
 
   const db = await getDB();
-  const agentsCollection = db.collection("agents");
+  const agentsCollection = db.collection('agents');
 
-  return (await agentsCollection.findOne({
-    _id: new ObjectId(id),
-  })) as Agent | null;
+  return (await agentsCollection.findOne({ _id: new ObjectId(id) })) as Agent | null;
 }

@@ -27,27 +27,37 @@
     destination: initialData.destination || '',
     maxGroupSize: initialData.maxGroupSize || 10,
     highlights: initialData.highlights || [],
-    inclusions: initialData.inclusions || ['Hotel accommodation', 'English speaking guide', 'Transportation'],
-    exclusions: initialData.exclusions || ['International flights', 'Travel insurance', 'Personal expenses'],
-    itinerary: initialData.itinerary || [{ 
-      day: 1, 
-      title: 'Arrival Day', 
-      description: 'Welcome to China! Transfer to hotel and rest.',
-      accommodation: { name: '', description: '', images: [] },
-      meals: []
-    }],
+    inclusions: initialData.inclusions || [
+      'Hotel accommodation',
+      'English speaking guide',
+      'Transportation',
+    ],
+    exclusions: initialData.exclusions || [
+      'International flights',
+      'Travel insurance',
+      'Personal expenses',
+    ],
+    itinerary: initialData.itinerary || [
+      {
+        day: 1,
+        title: 'Arrival Day',
+        description: 'Welcome to China! Transfer to hotel and rest.',
+        accommodation: { name: '', description: '', images: [] },
+        meals: [],
+      },
+    ],
     images: initialData.images || { main: '', gallery: [] },
     featured: initialData.featured || false,
     discount: initialData.discount || 0,
-    tags: initialData.tags || []
+    tags: initialData.tags || [],
   };
 
   // Image handling state
   let mainImageFile: File | null = null;
   let galleryImageFiles: File[] = [];
   let itineraryImageFiles: (File | null)[] = [];
-  let accommodationImageFiles: (File[])[] = [];
-  let mealsImageFiles: (File[][])[] = [];
+  let accommodationImageFiles: File[][] = [];
+  let mealsImageFiles: File[][][] = [];
 
   // Form validation
   function validateForm(): string | null {
@@ -67,7 +77,7 @@
     }
 
     const formData = new FormData();
-    
+
     // Add tour data
     Object.entries(tourData).forEach(([key, value]) => {
       if (key === 'itinerary' || key === 'images') {
@@ -76,7 +86,10 @@
         value.forEach(item => formData.append(key, item));
       } else if (typeof value === 'object' && value !== null) {
         Object.entries(value).forEach(([subKey, subValue]) => {
-          formData.append(`${key}${subKey.charAt(0).toUpperCase() + subKey.slice(1)}`, String(subValue));
+          formData.append(
+            `${key}${subKey.charAt(0).toUpperCase() + subKey.slice(1)}`,
+            String(subValue)
+          );
         });
       } else if (value !== undefined && value !== null) {
         formData.append(key, String(value));
@@ -86,7 +99,7 @@
     // Add images
     if (mainImageFile) formData.append('mainImage', mainImageFile);
     galleryImageFiles.forEach(file => formData.append('galleryImages', file));
-    
+
     // Add itinerary images
     itineraryImageFiles.forEach((file, index) => {
       if (file) formData.append(`itineraryImage_${index}`, file);
@@ -115,7 +128,7 @@
   $: {
     if (tourData.itinerary) {
       const itineraryLength = tourData.itinerary.length;
-      
+
       // Resize arrays if needed
       if (itineraryImageFiles.length !== itineraryLength) {
         itineraryImageFiles = new Array(itineraryLength).fill(null);
@@ -124,21 +137,16 @@
         accommodationImageFiles = new Array(itineraryLength).fill([]);
       }
       if (mealsImageFiles.length !== itineraryLength) {
-        mealsImageFiles = tourData.itinerary.map(day => 
-          (day.meals || []).map(() => [])
-        );
+        mealsImageFiles = tourData.itinerary.map(day => (day.meals || []).map(() => []));
       }
     }
   }
 </script>
 
 <form on:submit|preventDefault={handleSubmit} class="space-y-8">
-  <BasicInfoSection 
-    bind:tourData
-    {mode}
-  />
+  <BasicInfoSection bind:tourData {mode} />
 
-  <ItinerarySection 
+  <ItinerarySection
     bind:tourData
     bind:itineraryImageFiles
     bind:accommodationImageFiles
@@ -147,12 +155,12 @@
 
   <HighlightsSection bind:highlights={tourData.highlights} />
 
-  <InclusionsExclusionsSection 
+  <InclusionsExclusionsSection
     bind:inclusions={tourData.inclusions}
     bind:exclusions={tourData.exclusions}
   />
 
-  <ImageUploadSection 
+  <ImageUploadSection
     bind:mainImageFile
     bind:galleryImageFiles
     existingMainImage={tourData.images.main}
@@ -165,25 +173,17 @@
   <!-- Form Submit -->
   <div class="bg-white rounded-lg shadow-sm p-6 border border-neutral-200">
     <div class="flex justify-end space-x-4">
-      <Button 
-        href="/agent/tours" 
-        variant="outline" 
-        type="button"
-      >
-        Cancel
-      </Button>
-      
-      <Button 
-        type="submit" 
-        variant="primary" 
-        disabled={isSubmitting}
-      >
+      <Button href="/agent/tours" variant="outline" type="button">Cancel</Button>
+
+      <Button type="submit" variant="primary" disabled={isSubmitting}>
         {#if mode === 'add'}
           {isSubmitting ? $t('agent.tours.updating') : $t('agent.tours.submit')}
         {:else}
-          {isSubmitting ? $t('agent.tours.edit_tour.updating') : $t('agent.tours.edit_tour.update_tour')}
+          {isSubmitting
+            ? $t('agent.tours.edit_tour.updating')
+            : $t('agent.tours.edit_tour.update_tour')}
         {/if}
       </Button>
     </div>
   </div>
-</form> 
+</form>

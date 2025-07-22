@@ -54,7 +54,7 @@ class TranslationService {
 
       // If AWS Translate is not configured, return original text
       console.warn(
-        "AWS Translate not configured. Please set USE_AWS_TRANSLATE=true and AWS credentials.",
+        'AWS Translate not configured. Please set USE_AWS_TRANSLATE=true and AWS credentials.'
       );
       return text;
     } catch (error) {
@@ -98,9 +98,7 @@ class TranslationService {
     }
   }
 
-  public async translateToEnglish(
-    request: TranslationRequest,
-  ): Promise<TranslationResult> {
+  public async translateToEnglish(request: TranslationRequest): Promise<TranslationResult> {
     const { chineseText, context, category } = request;
 
     // Check if translation already exists in database
@@ -141,7 +139,7 @@ class TranslationService {
     chineseText: string,
   ): Promise<StoredTranslation | null> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
     const result = await collection.findOne({ original: chineseText });
     return result as StoredTranslation | null;
@@ -151,7 +149,7 @@ class TranslationService {
     translation: TranslationResult,
   ): Promise<void> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
     const storedTranslation = {
       ...translation,
@@ -164,14 +162,14 @@ class TranslationService {
 
   private async updateTranslationUsage(translationId: ObjectId): Promise<void> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
     await collection.updateOne(
       { _id: translationId },
       {
         $inc: { usage_count: 1 },
         $set: { last_used: new Date() },
-      },
+      }
     );
   }
 
@@ -179,26 +177,22 @@ class TranslationService {
     limit: number = 50,
   ): Promise<StoredTranslation[]> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
-    const results = await collection
-      .find({})
-      .sort({ last_used: -1 })
-      .limit(limit)
-      .toArray();
+    const results = await collection.find({}).sort({ last_used: -1 }).limit(limit).toArray();
 
     return results as StoredTranslation[];
   }
 
   public async searchTranslations(query: string): Promise<StoredTranslation[]> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
     const results = await collection
       .find({
         $or: [
-          { original: { $regex: query, $options: "i" } },
-          { "translations.en": { $regex: query, $options: "i" } },
+          { original: { $regex: query, $options: 'i' } },
+          { 'translations.en': { $regex: query, $options: 'i' } },
         ],
       })
       .sort({ last_used: -1 })
@@ -210,11 +204,9 @@ class TranslationService {
 
   public async deleteTranslation(translationId: string): Promise<boolean> {
     const db = await getDB();
-    const collection = db.collection("translations");
+    const collection = db.collection('translations');
 
-    const result = await collection.deleteOne({
-      _id: new ObjectId(translationId),
-    });
+    const result = await collection.deleteOne({ _id: new ObjectId(translationId) });
     return result.deletedCount > 0;
   }
 }

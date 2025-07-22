@@ -11,17 +11,14 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
 
     // Validate input
     if (!username || !password) {
-      return json(
-        { error: "Username and password are required" },
-        { status: 400 },
-      );
+      return json({ error: 'Username and password are required' }, { status: 400 });
     }
 
     // Authenticate agent
     const agent = await authenticateAgent(username, password);
 
     if (!agent) {
-      return json({ error: "Invalid username or password" }, { status: 401 });
+      return json({ error: 'Invalid username or password' }, { status: 401 });
     }
 
     // Create session
@@ -31,8 +28,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     cookies.set("agent_session", session.token, {
       path: "/",
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
       maxAge: 24 * 60 * 60, // 24 hours
     });
 
@@ -46,7 +43,7 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
       },
     });
   } catch (error) {
-    console.error("Login error:", error);
-    return json({ error: "Internal server error" }, { status: 500 });
+    console.error('Login error:', error);
+    return json({ error: 'Internal server error' }, { status: 500 });
   }
 };

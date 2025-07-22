@@ -1,6 +1,7 @@
 # AWS Translate Setup Guide
 
-This guide will help you set up AWS Translate for real-time translation in your application.
+This guide will help you set up AWS Translate for real-time translation in your
+application.
 
 ## 🚀 Quick Start
 
@@ -24,7 +25,8 @@ This guide will help you set up AWS Translate for real-time translation in your 
 
 ### 2. Configure Environment Variables
 
-Since you're already using AWS S3, you can use the same AWS credentials for AWS Translate. Add these environment variables to your `.env` file:
+Since you're already using AWS S3, you can use the same AWS credentials for AWS
+Translate. Add these environment variables to your `.env` file:
 
 ```env
 # AWS Translate Configuration (uses same credentials as S3)
@@ -35,7 +37,9 @@ USE_AWS_TRANSLATE=true
 # S3_SECRET_ACCESS_KEY=your_secret_access_key
 ```
 
-**Note:** If you already have S3 configured, you can reuse the same AWS credentials. Just make sure to add `USE_AWS_TRANSLATE=true` to enable AWS Translate.
+**Note:** If you already have S3 configured, you can reuse the same AWS
+credentials. Just make sure to add `USE_AWS_TRANSLATE=true` to enable AWS
+Translate.
 
 ### 3. Test the Integration
 
@@ -271,16 +275,16 @@ AWS Translate supports 75+ languages. Common codes:
 
 ```typescript
 const supportedLanguages = {
-  en: "English",
-  de: "German",
-  ja: "Japanese",
-  es: "Spanish",
-  th: "Thai",
-  zh: "Chinese",
-  ko: "Korean",
-  fr: "French",
-  it: "Italian",
-  pt: "Portuguese",
+  en: 'English',
+  de: 'German',
+  ja: 'Japanese',
+  es: 'Spanish',
+  th: 'Thai',
+  zh: 'Chinese',
+  ko: 'Korean',
+  fr: 'French',
+  it: 'Italian',
+  pt: 'Portuguese',
 };
 ```
 
@@ -332,8 +336,10 @@ USE_AWS_TRANSLATE=true
 
 ### AWS Support
 
-- **Documentation**: [AWS Translate Docs](https://docs.aws.amazon.com/translate/)
-- **Console**: [AWS Translate Console](https://console.aws.amazon.com/translate/)
+- **Documentation**:
+  [AWS Translate Docs](https://docs.aws.amazon.com/translate/)
+- **Console**:
+  [AWS Translate Console](https://console.aws.amazon.com/translate/)
 - **Support**: AWS Support plans available
 
 ### Application Support

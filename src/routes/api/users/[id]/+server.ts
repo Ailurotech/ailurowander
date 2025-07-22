@@ -43,14 +43,14 @@ export const PUT = async ({ params, request }: RequestEvent) => {
 
     return json(updatedUser);
   } catch (error) {
-    console.error("Error updating user:", error);
+    console.error('Error updating user:', error);
 
     // Handle specific errors
     if (error instanceof Error && error.message === "Username already exists") {
       return json({ error: "Username already exists" }, { status: 409 });
     }
 
-    return json({ error: "Failed to update user" }, { status: 500 });
+    return json({ error: 'Failed to update user' }, { status: 500 });
   }
 };
 

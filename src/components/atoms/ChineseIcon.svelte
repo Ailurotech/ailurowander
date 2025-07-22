@@ -1,19 +1,27 @@
 <script lang="ts">
   // Icon options
-  export let icon: 'great-wall' | 'forbidden-city' | 'terracotta' | 
-              'temple' | 'pagoda' | 'dragon' | 'panda' | 
-              'lantern' | 'bamboo' | 'mountains' = 'great-wall';
+  export let icon:
+    | 'great-wall'
+    | 'forbidden-city'
+    | 'terracotta'
+    | 'temple'
+    | 'pagoda'
+    | 'dragon'
+    | 'panda'
+    | 'lantern'
+    | 'bamboo'
+    | 'mountains' = 'great-wall';
   export let size: 'sm' | 'md' | 'lg' | 'xl' = 'md';
   export let color: string = 'currentColor';
-  
+
   // Size mapping
   const sizeMap = {
     sm: '16px',
     md: '24px',
     lg: '32px',
-    xl: '48px'
+    xl: '48px',
   };
-  
+
   // Get the actual SVG path based on the icon name
   function getIconPath(iconName: string) {
     switch (iconName) {
@@ -99,4 +107,4 @@
   xmlns="http://www.w3.org/2000/svg"
 >
   {@html getIconPath(icon)}
-</svg> 
+</svg>

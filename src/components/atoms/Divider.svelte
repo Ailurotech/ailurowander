@@ -3,7 +3,7 @@
   export let color: string = 'neutral-300';
   export let symbol: string = '❖';
   export let className: string = '';
-  
+
   // Symbol options could include: '❖', '✦', '✵', '✺', '✼', '❀', '❃', '❇', '❉', '❋'
 </script>
 
@@ -20,4 +20,4 @@
       <span class="bg-white px-4 text-{color} text-xl">{symbol}</span>
     </div>
   </div>
-{/if} 
+{/if}

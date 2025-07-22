@@ -23,6 +23,6 @@ export function slugify(text: string): string {
  */
 export function deslugify(slug: string): string {
   return slug
-    .replace(/-/g, " ") // Replace hyphens with spaces
-    .replace(/\b\w/g, (c) => c.toUpperCase()); // Capitalize first letter of each word
+    .replace(/-/g, ' ') // Replace hyphens with spaces
+    .replace(/\b\w/g, c => c.toUpperCase()); // Capitalize first letter of each word
 }

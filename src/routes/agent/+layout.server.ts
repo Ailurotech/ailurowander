@@ -3,7 +3,7 @@ import type { LayoutServerLoad } from "./$types";
 import { validateSession } from "$lib/server/services/authService";
 
 export const load: LayoutServerLoad = async ({ cookies, url }) => {
-  const sessionToken = cookies.get("agent_session");
+  const sessionToken = cookies.get('agent_session');
 
   // If we're on the login page, don't redirect
   if (url.pathname === "/agent" || url.pathname === "/agent/") {

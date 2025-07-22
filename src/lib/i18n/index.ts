@@ -3,11 +3,11 @@ import { derived, writable } from "svelte/store";
 
 // Define supported languages
 export const supportedLanguages = [
-  { code: "en", name: "English" },
-  { code: "zh", name: "中文" },
-  { code: "de", name: "Deutsch" },
-  { code: "ja", name: "日本語" },
-  { code: "es", name: "Español" },
+  { code: 'en', name: 'English' },
+  { code: 'zh', name: '中文' },
+  { code: 'de', name: 'Deutsch' },
+  { code: 'ja', name: '日本語' },
+  { code: 'es', name: 'Español' },
 ];
 
 // Define default language (Chinese)
@@ -23,10 +23,10 @@ const checkLocale = (locale: string) => {
 const getInitialLocale = () => {
   if (!browser) return defaultLanguage;
 
-  const savedLocale = localStorage.getItem("preferred-language");
+  const savedLocale = localStorage.getItem('preferred-language');
   if (savedLocale) return checkLocale(savedLocale);
 
-  const browserLang = window.navigator.language.split("-")[0];
+  const browserLang = window.navigator.language.split('-')[0];
   return checkLocale(browserLang);
 };
 
@@ -52,18 +52,14 @@ const translations: Record<string, any> = {
 };
 
 // Derived store for current translation
-export const t = derived(locale, ($locale) => {
+export const t = derived(locale, $locale => {
   // Get the translations for the locale or use default
   const translation = translations[$locale] || translations[defaultLanguage];
 
   // Return a function that can be used to get a specific key
   return (key: string) => {
     // Split the key by dots to access nested properties
-    return (
-      key
-        .split(".")
-        .reduce((obj, part) => obj && obj[part], translation as any) || key
-    );
+    return key.split('.').reduce((obj, part) => obj && obj[part], translation as any) || key;
   };
 });
 
@@ -98,10 +94,7 @@ export const getLocaleFromPath = (path: string): string | null => {
   const pathSegments = path.split("/").filter(Boolean);
   const firstSegment = pathSegments[0];
 
-  if (
-    firstSegment &&
-    supportedLanguages.some((lang) => lang.code === firstSegment)
-  ) {
+  if (firstSegment && supportedLanguages.some(lang => lang.code === firstSegment)) {
     return firstSegment;
   }
 
@@ -116,8 +109,6 @@ export const getPathWithLocale = (path: string, newLocale: string): string => {
     return path.replace(`/${currentLocale}`, `/${newLocale}`);
   }
 
-  const pathWithoutLeadingSlash = path.startsWith("/")
-    ? path.substring(1)
-    : path;
+  const pathWithoutLeadingSlash = path.startsWith('/') ? path.substring(1) : path;
   return `/${newLocale}/${pathWithoutLeadingSlash}`;
 };

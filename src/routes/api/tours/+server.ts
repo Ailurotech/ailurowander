@@ -3,15 +3,13 @@ import { getAllTours, searchTours } from "$lib/server/services/tourService";
 import type { RequestEvent } from "@sveltejs/kit";
 
 export const GET = async ({ url }: RequestEvent) => {
-  console.log("API: GET /api/tours - Fetching tours");
+  console.log('API: GET /api/tours - Fetching tours');
 
   try {
-    const query = url.searchParams.get("query");
-    const featuredOnly = url.searchParams.get("featured") === "true";
+    const query = url.searchParams.get('query');
+    const featuredOnly = url.searchParams.get('featured') === 'true';
 
-    console.log(
-      `API: GET /api/tours - Query params: query=${query}, featured=${featuredOnly}`,
-    );
+    console.log(`API: GET /api/tours - Query params: query=${query}, featured=${featuredOnly}`);
 
     let tours;
     if (query) {
@@ -33,16 +31,12 @@ export const GET = async ({ url }: RequestEvent) => {
 
     return json(tours);
   } catch (error) {
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    const errorStack = error instanceof Error ? error.stack : "";
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const errorStack = error instanceof Error ? error.stack : '';
 
-    console.error("API: GET /api/tours - Error fetching tours:", errorMessage);
-    console.error("Error stack:", errorStack);
+    console.error('API: GET /api/tours - Error fetching tours:', errorMessage);
+    console.error('Error stack:', errorStack);
 
-    return json(
-      { error: "Failed to fetch tours", details: errorMessage },
-      { status: 500 },
-    );
+    return json({ error: 'Failed to fetch tours', details: errorMessage }, { status: 500 });
   }
 };

@@ -24,11 +24,11 @@ export const GET: RequestHandler = async () => {
   } catch (error) {
     return json(
       {
-        status: "error",
-        error: error instanceof Error ? error.message : "Unknown error",
+        status: 'error',
+        error: error instanceof Error ? error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 };

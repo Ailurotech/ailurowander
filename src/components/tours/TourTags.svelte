@@ -2,7 +2,7 @@
   import { t } from '$lib/i18n';
   import type { Tour } from '$lib/types/tour';
   import Badge from '../atoms/Badge.svelte';
-  
+
   export let tour: Tour;
 </script>
 
@@ -16,4 +16,4 @@
       {/each}
     </div>
   </div>
-{/if} 
+{/if}

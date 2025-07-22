@@ -1,4 +1,4 @@
-import { json } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
 import {
   getTourById,
   updateTour,
@@ -10,9 +10,9 @@ import {
   uploadAccommodationImages,
   uploadMealsImages,
   updateTourAccommodationAndMealsImages,
-} from "$lib/server/services/tourService";
-import type { RequestEvent } from "@sveltejs/kit";
-import type { Tour } from "$lib/types/tour";
+} from '$lib/server/services/tourService';
+import type { RequestEvent } from '@sveltejs/kit';
+import type { Tour } from '$lib/types/tour';
 
 export const GET = async ({ params }: RequestEvent) => {
   try {
@@ -52,18 +52,18 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       description: formData.get("description") as string,
       destination: formData.get("destination") as string,
       duration: {
-        days: parseInt(formData.get("durationDays") as string),
-        nights: parseInt(formData.get("durationNights") as string),
+        days: parseInt(formData.get('durationDays') as string),
+        nights: parseInt(formData.get('durationNights') as string),
       },
       price: {
-        amount: parseFloat(formData.get("price") as string),
-        currency: "USD",
+        amount: parseFloat(formData.get('price') as string),
+        currency: 'USD',
       },
-      featured: formData.get("featured") === "true",
-      itinerary: JSON.parse((formData.get("itinerary") as string) || "[]"),
-      highlights: formData.getAll("highlights") as string[],
-      inclusions: formData.getAll("included") as string[],
-      exclusions: formData.getAll("notIncluded") as string[],
+      featured: formData.get('featured') === 'true',
+      itinerary: JSON.parse((formData.get('itinerary') as string) || '[]'),
+      highlights: formData.getAll('highlights') as string[],
+      inclusions: formData.getAll('included') as string[],
+      exclusions: formData.getAll('notIncluded') as string[],
     };
 
     // Update the tour first
@@ -74,8 +74,8 @@ export const PUT = async ({ params, request }: RequestEvent) => {
     }
 
     // Handle image uploads if present
-    const mainImage = formData.get("mainImage") as File | null;
-    const galleryImages = formData.getAll("galleryImages") as File[];
+    const mainImage = formData.get('mainImage') as File | null;
+    const galleryImages = formData.getAll('galleryImages') as File[];
 
     // Only attempt to upload if we have valid files
     const hasValidMainImage = mainImage && mainImage.size > 0;
@@ -85,9 +85,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
     if (hasValidMainImage || hasValidGalleryImages) {
       const imageUrls = await uploadTourImages(
         {
-          main: hasValidMainImage
-            ? mainImage!
-            : new File([], "placeholder.jpg"),
+          main: hasValidMainImage ? mainImage! : new File([], 'placeholder.jpg'),
           gallery: validGalleryImages,
         },
         id,
@@ -95,13 +93,13 @@ export const PUT = async ({ params, request }: RequestEvent) => {
 
       // Update tour with image URLs (function now preserves existing images when new ones aren't provided)
       await updateTourImages(id, {
-        main: hasValidMainImage ? imageUrls.main : "",
+        main: hasValidMainImage ? imageUrls.main : '',
         gallery: hasValidGalleryImages ? imageUrls.gallery : [],
       });
     }
 
     // Handle itinerary image uploads
-    const itinerary = JSON.parse((formData.get("itinerary") as string) || "[]");
+    const itinerary = JSON.parse((formData.get('itinerary') as string) || '[]');
     const itineraryImages: (File | null)[] = [];
 
     // Extract itinerary images from form data
@@ -132,7 +130,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       let imgIndex = 0;
       while (true) {
         const accommodationImage = formData.get(
-          `accommodationImage_${dayIndex}_${imgIndex}`,
+          `accommodationImage_${dayIndex}_${imgIndex}`
         ) as File | null;
         if (accommodationImage && accommodationImage.size > 0) {
           dayAccommodationImages.push(accommodationImage);
@@ -155,7 +153,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
         let imgIndex = 0;
         while (true) {
           const mealImage = formData.get(
-            `mealImage_${dayIndex}_${mealIndex}_${imgIndex}`,
+            `mealImage_${dayIndex}_${mealIndex}_${imgIndex}`
           ) as File | null;
           if (mealImage && mealImage.size > 0) {
             mealImages.push(mealImage);
@@ -170,37 +168,33 @@ export const PUT = async ({ params, request }: RequestEvent) => {
     }
 
     // Upload accommodation and meals images if any exist
-    const hasAccommodationImages = accommodationImages.some(
-      (dayImages) => dayImages.length > 0,
-    );
-    const hasMealsImages = mealsImages.some((dayMeals) =>
-      dayMeals.some((mealImages) => mealImages.length > 0),
+    const hasAccommodationImages = accommodationImages.some(dayImages => dayImages.length > 0);
+    const hasMealsImages = mealsImages.some(dayMeals =>
+      dayMeals.some(mealImages => mealImages.length > 0)
     );
 
     if (hasAccommodationImages || hasMealsImages) {
       const accommodationImageUrls = hasAccommodationImages
         ? await uploadAccommodationImages(accommodationImages, id)
         : [];
-      const mealsImageUrls = hasMealsImages
-        ? await uploadMealsImages(mealsImages, id)
-        : [];
+      const mealsImageUrls = hasMealsImages ? await uploadMealsImages(mealsImages, id) : [];
       await updateTourAccommodationAndMealsImages(
         id,
         itinerary,
         accommodationImageUrls,
-        mealsImageUrls,
+        mealsImageUrls
       );
     }
 
     return json(updatedTour);
   } catch (error) {
-    console.error("Error updating tour:", error);
+    console.error('Error updating tour:', error);
     return json(
       {
-        error: "Failed to update tour",
-        details: error instanceof Error ? error.message : "Unknown error",
+        error: 'Failed to update tour',
+        details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 };

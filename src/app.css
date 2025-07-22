@@ -16,8 +16,8 @@
   a,
   button,
   .btn,
-  [role="button"],
-  [tabindex]:not([tabindex="-1"]):hover {
+  [role='button'],
+  [tabindex]:not([tabindex='-1']):hover {
     cursor: pointer !important;
   }
 
@@ -215,7 +215,7 @@
   }
 
   .chinese-divider::before {
-    content: "❖";
+    content: '❖';
     @apply absolute -top-3 left-1/2 -translate-x-1/2 bg-white px-4 text-primary text-xl;
   }
 
