@@ -1,10 +1,10 @@
-import { json } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
-import { SNSClient, PublishCommand } from "@aws-sdk/client-sns";
-import { env } from "$env/dynamic/private";
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
+import { env } from '$env/dynamic/private';
 
 const snsClient = new SNSClient({
-  region: "ap-southeast-2", // Sydney region
+  region: 'ap-southeast-2', // Sydney region
   credentials: {
     accessKeyId: env.SNS_ACCESS_KEY_ID || '',
     secretAccessKey: env.SNS_SECRET_ACCESS_KEY || '',

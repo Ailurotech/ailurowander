@@ -1,11 +1,10 @@
-import { MongoClient } from "mongodb";
-import dotenv from "dotenv";
+import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
 
 // Load environment variables
 dotenv.config();
 
-const MONGODB_URI =
-  process.env.MONGODB_URI || "mongodb://localhost:27017/ailuroWander";
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/ailuroWander';
 
 async function fixTourImages() {
   const client = new MongoClient(MONGODB_URI);
@@ -32,16 +31,16 @@ async function fixTourImages() {
           tour.images.main === '/images/xian.jpg'
         ) {
           // Use the existing beijing.webp image for all tours
-          updateData["images.main"] = "/images/beijing.webp";
+          updateData['images.main'] = '/images/beijing.webp';
           updated = true;
         }
       }
 
       // Check gallery images
       if (tour.images?.gallery && Array.isArray(tour.images.gallery)) {
-        const updatedGallery = tour.images.gallery.map((img) => {
-          if (img === "/images/shanghai.jpg" || img === "/images/xian.jpg") {
-            return "/images/beijing.webp";
+        const updatedGallery = tour.images.gallery.map(img => {
+          if (img === '/images/shanghai.jpg' || img === '/images/xian.jpg') {
+            return '/images/beijing.webp';
           }
           return img;
         });
@@ -60,7 +59,7 @@ async function fixTourImages() {
 
     console.log('Tour images updated successfully');
   } catch (error) {
-    console.error("Error updating tour images:", error);
+    console.error('Error updating tour images:', error);
   } finally {
     await client.close();
   }

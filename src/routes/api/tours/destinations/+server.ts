@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import { getTours } from "$lib/server/db";
-import type { RequestEvent } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { getTours } from '$lib/server/db';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export async function GET({}: RequestEvent) {
   try {
@@ -14,7 +14,7 @@ export async function GET({}: RequestEvent) {
 
     return json(validDestinations);
   } catch (error) {
-    console.error("Error fetching destinations:", error);
-    return json({ error: "Failed to fetch destinations" }, { status: 500 });
+    console.error('Error fetching destinations:', error);
+    return json({ error: 'Failed to fetch destinations' }, { status: 500 });
   }
 }

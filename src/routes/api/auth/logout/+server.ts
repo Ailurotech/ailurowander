@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
-import { deleteSession } from "$lib/server/services/authService";
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { deleteSession } from '$lib/server/services/authService';
 
 export const POST: RequestHandler = async ({ cookies }) => {
   try {

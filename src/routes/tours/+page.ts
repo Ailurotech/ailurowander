@@ -1,4 +1,4 @@
-import type { TourSummary } from "$lib/types/tour";
+import type { TourSummary } from '$lib/types/tour';
 
 export const load = async ({ url }: { url: URL }) => {
   const query = url.searchParams.get('query') || '';

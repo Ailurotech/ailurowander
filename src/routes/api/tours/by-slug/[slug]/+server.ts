@@ -1,8 +1,8 @@
-import { json } from "@sveltejs/kit";
-import { getDB } from "$lib/server/db";
-import { ObjectId } from "mongodb";
-import { slugify } from "$lib/utils/slugify";
-import type { Tour } from "$lib/types/tour";
+import { json } from '@sveltejs/kit';
+import { getDB } from '$lib/server/db';
+import { ObjectId } from 'mongodb';
+import { slugify } from '$lib/utils/slugify';
+import type { Tour } from '$lib/types/tour';
 
 /**
  * API endpoint to fetch a tour by its URL-friendly slug
@@ -28,7 +28,7 @@ export async function GET({ params }: { params: { slug: string } }) {
     }
 
     if (!matchedTour) {
-      return new Response(JSON.stringify({ error: "Tour not found" }), {
+      return new Response(JSON.stringify({ error: 'Tour not found' }), {
         status: 404,
         headers: {
           'Content-Type': 'application/json',
@@ -38,8 +38,8 @@ export async function GET({ params }: { params: { slug: string } }) {
 
     return json(matchedTour);
   } catch (error) {
-    console.error("Error fetching tour:", error);
-    return new Response(JSON.stringify({ error: "Failed to fetch tour" }), {
+    console.error('Error fetching tour:', error);
+    return new Response(JSON.stringify({ error: 'Failed to fetch tour' }), {
       status: 500,
       headers: {
         'Content-Type': 'application/json',

@@ -20,10 +20,10 @@ export async function POST({ request }: RequestEvent) {
     const formData = await request.formData();
 
     // Extract tour data from form
-    const tourData: Omit<Tour, "_id" | "createdAt" | "updatedAt"> = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      destination: formData.get("destination") as string,
+    const tourData: Omit<Tour, '_id' | 'createdAt' | 'updatedAt'> = {
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      destination: formData.get('destination') as string,
       duration: {
         days: parseInt(formData.get('durationDays') as string),
         nights: parseInt(formData.get('durationNights') as string),
@@ -32,7 +32,7 @@ export async function POST({ request }: RequestEvent) {
         amount: parseFloat(formData.get('price') as string),
         currency: 'USD',
       },
-      featured: formData.get("featured") === "true",
+      featured: formData.get('featured') === 'true',
       images: {
         main: '',
         gallery: [],
@@ -48,7 +48,7 @@ export async function POST({ request }: RequestEvent) {
     const tour = await createTour(tourData);
 
     if (!tour._id) {
-      throw new Error("Failed to create tour: No ID returned");
+      throw new Error('Failed to create tour: No ID returned');
     }
 
     // Handle image uploads
@@ -61,7 +61,7 @@ export async function POST({ request }: RequestEvent) {
           main: mainImage,
           gallery: galleryImages,
         },
-        tour._id.toString(),
+        tour._id.toString()
       );
 
       // Update tour with image URLs
@@ -79,17 +79,10 @@ export async function POST({ request }: RequestEvent) {
     }
 
     // Upload itinerary images if any exist
-    const hasItineraryImages = itineraryImages.some((img) => img !== null);
+    const hasItineraryImages = itineraryImages.some(img => img !== null);
     if (hasItineraryImages) {
-      const itineraryImageUrls = await uploadItineraryImages(
-        itineraryImages,
-        tour._id.toString(),
-      );
-      await updateTourItineraryImages(
-        tour._id.toString(),
-        itinerary,
-        itineraryImageUrls,
-      );
+      const itineraryImageUrls = await uploadItineraryImages(itineraryImages, tour._id.toString());
+      await updateTourItineraryImages(tour._id.toString(), itinerary, itineraryImageUrls);
     }
 
     // Extract and upload accommodation images

@@ -1,8 +1,8 @@
-import { ObjectId } from "mongodb";
-import { getTours } from "../db";
-import type { Tour, TourSummary } from "$lib/types/tour";
-import { getDB } from "$lib/server/db";
-import { uploadToS3, generateS3Key } from "$lib/server/s3";
+import { ObjectId } from 'mongodb';
+import { getTours } from '../db';
+import type { Tour, TourSummary } from '$lib/types/tour';
+import { getDB } from '$lib/server/db';
+import { uploadToS3, generateS3Key } from '$lib/server/s3';
 
 // Get all tours or featured tours
 export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> {
@@ -26,8 +26,8 @@ export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> 
     _id: tour._id,
     title: tour.title,
     description: tour.description,
-    image: tour.images?.main || "/images/placeholder.jpg",
-    duration: tour.duration ? `${tour.duration.days} days` : "N/A",
+    image: tour.images?.main || '/images/placeholder.jpg',
+    duration: tour.duration ? `${tour.duration.days} days` : 'N/A',
     price: tour.price?.amount || 0,
     destination: tour.destination || '',
     featured: tour.featured || false,
@@ -82,10 +82,7 @@ export async function createTour(
 }
 
 // Update a tour
-export async function updateTour(
-  id: string,
-  tourData: Partial<Tour>,
-): Promise<Tour | null> {
+export async function updateTour(id: string, tourData: Partial<Tour>): Promise<Tour | null> {
   if (!ObjectId.isValid(id)) {
     return null;
   }
@@ -135,7 +132,7 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
     _id: tour._id,
     title: tour.title,
     description: tour.description,
-    image: tour.images?.main || "/images/placeholder.jpg",
+    image: tour.images?.main || '/images/placeholder.jpg',
     duration: `${tour.duration.days} days`,
     price: tour.price.amount,
     destination: tour.destination,
@@ -159,7 +156,7 @@ export async function uploadTourImages(
     const mainImageUrl = await uploadToS3(
       await images.main.arrayBuffer(),
       mainImageKey,
-      images.main.type,
+      images.main.type
     );
 
     // Upload gallery images
@@ -175,8 +172,8 @@ export async function uploadTourImages(
       gallery: galleryUrls,
     };
   } catch (error) {
-    console.error("Error uploading tour images:", error);
-    throw new Error("Failed to upload tour images");
+    console.error('Error uploading tour images:', error);
+    throw new Error('Failed to upload tour images');
   }
 }
 
@@ -190,13 +187,13 @@ export async function updateTourImages(
   imageUrls: { main: string; gallery: string[] }
 ): Promise<void> {
   const db = await getDB();
-  const toursCollection = db.collection("tours");
+  const toursCollection = db.collection('tours');
 
   // Get current tour to preserve existing images
   const currentTour = await toursCollection.findOne({
     _id: new ObjectId(tourId),
   });
-  const existingImages = currentTour?.images || { main: "", gallery: [] };
+  const existingImages = currentTour?.images || { main: '', gallery: [] };
 
   // Prepare update object - only update fields that have new values
   const updateObject: any = {};
@@ -207,7 +204,7 @@ export async function updateTourImages(
 
   if (imageUrls.gallery && imageUrls.gallery.length > 0) {
     // Replace gallery images with new ones
-    updateObject["images.gallery"] = imageUrls.gallery;
+    updateObject['images.gallery'] = imageUrls.gallery;
   }
 
   // Only update if there are new images to set
@@ -238,8 +235,8 @@ export async function uploadItineraryImages(
 
     return imageUrls;
   } catch (error) {
-    console.error("Error uploading itinerary images:", error);
-    throw new Error("Failed to upload itinerary images");
+    console.error('Error uploading itinerary images:', error);
+    throw new Error('Failed to upload itinerary images');
   }
 }
 
@@ -255,7 +252,7 @@ export async function updateTourItineraryImages(
   imageUrls: (string | undefined)[]
 ): Promise<void> {
   const db = await getDB();
-  const toursCollection = db.collection("tours");
+  const toursCollection = db.collection('tours');
 
   // Get the current tour to preserve existing images
   const currentTour = await toursCollection.findOne({
@@ -313,8 +310,8 @@ export async function uploadAccommodationImages(
 
     return imageUrls;
   } catch (error) {
-    console.error("Error uploading accommodation images:", error);
-    throw new Error("Failed to upload accommodation images");
+    console.error('Error uploading accommodation images:', error);
+    throw new Error('Failed to upload accommodation images');
   }
 }
 
@@ -361,8 +358,8 @@ export async function uploadMealsImages(
 
     return imageUrls;
   } catch (error) {
-    console.error("Error uploading meals images:", error);
-    throw new Error("Failed to upload meals images");
+    console.error('Error uploading meals images:', error);
+    throw new Error('Failed to upload meals images');
   }
 }
 
@@ -380,7 +377,7 @@ export async function updateTourAccommodationAndMealsImages(
   mealsImageUrls: string[][][]
 ): Promise<void> {
   const db = await getDB();
-  const toursCollection = db.collection("tours");
+  const toursCollection = db.collection('tours');
 
   // Get the current tour to preserve existing images
   const currentTour = await toursCollection.findOne({
@@ -394,10 +391,7 @@ export async function updateTourAccommodationAndMealsImages(
     const updatedDay = { ...day };
 
     // Update accommodation images
-    if (
-      accommodationImageUrls[index] &&
-      accommodationImageUrls[index].length > 0
-    ) {
+    if (accommodationImageUrls[index] && accommodationImageUrls[index].length > 0) {
       updatedDay.accommodation = {
         ...updatedDay.accommodation,
         images: accommodationImageUrls[index],

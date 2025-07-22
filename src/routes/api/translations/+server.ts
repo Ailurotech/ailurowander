@@ -68,7 +68,7 @@ export const DELETE: RequestHandler = async ({ url }) => {
     const translationId = url.searchParams.get('id');
 
     if (!translationId) {
-      return json({ error: "Translation ID is required" }, { status: 400 });
+      return json({ error: 'Translation ID is required' }, { status: 400 });
     }
 
     const success = await translationService.deleteTranslation(translationId);
@@ -76,10 +76,10 @@ export const DELETE: RequestHandler = async ({ url }) => {
     if (success) {
       return json({
         success: true,
-        message: "Translation deleted successfully",
+        message: 'Translation deleted successfully',
       });
     } else {
-      return json({ error: "Translation not found" }, { status: 404 });
+      return json({ error: 'Translation not found' }, { status: 404 });
     }
   } catch (error) {
     console.error('Delete translation API error:', error);

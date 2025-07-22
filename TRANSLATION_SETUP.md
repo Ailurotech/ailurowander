@@ -70,8 +70,8 @@ MongoDB database. No additional setup required.
 #### Translate Text
 
 ```javascript
-const response = await fetch("/api/translations", {
-  method: "POST",
+const response = await fetch('/api/translations', {
+  method: 'POST',
   headers: {
     'Content-Type': 'application/json',
   },
@@ -89,14 +89,14 @@ console.log(result.data.translations);
 #### Search Translations
 
 ```javascript
-const response = await fetch("/api/translations?q=hello");
+const response = await fetch('/api/translations?q=hello');
 const result = await response.json();
 ```
 
 #### Get Translation History
 
 ```javascript
-const response = await fetch("/api/translations?limit=20");
+const response = await fetch('/api/translations?limit=20');
 const result = await response.json();
 ```
 

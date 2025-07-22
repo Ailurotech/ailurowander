@@ -1,13 +1,13 @@
-import { getDB } from "../db";
-import { ObjectId } from "mongodb";
-import crypto from "crypto";
+import { getDB } from '../db';
+import { ObjectId } from 'mongodb';
+import crypto from 'crypto';
 
 export interface Agent {
   _id?: ObjectId;
   username: string;
   email: string;
   passwordHash: string;
-  role: "admin" | "agent";
+  role: 'admin' | 'agent';
   isActive: boolean;
   lastLogin?: Date;
   createdAt: Date;
@@ -24,7 +24,7 @@ export interface Session {
 
 // Hash password
 function hashPassword(password: string): string {
-  return crypto.createHash("sha256").update(password).digest("hex");
+  return crypto.createHash('sha256').update(password).digest('hex');
 }
 
 // Verify password
@@ -34,7 +34,7 @@ function verifyPassword(password: string, hash: string): boolean {
 
 // Generate session token
 function generateToken(): string {
-  return crypto.randomBytes(32).toString("hex");
+  return crypto.randomBytes(32).toString('hex');
 }
 
 // Create a new agent
@@ -57,10 +57,7 @@ export async function createAgent(
 }
 
 // Authenticate agent
-export async function authenticateAgent(
-  username: string,
-  password: string,
-): Promise<Agent | null> {
+export async function authenticateAgent(username: string, password: string): Promise<Agent | null> {
   const db = await getDB();
   const agentsCollection = db.collection('agents');
 
@@ -76,7 +73,7 @@ export async function authenticateAgent(
   // Update last login
   await agentsCollection.updateOne(
     { _id: agent._id },
-    { $set: { lastLogin: new Date(), updatedAt: new Date() } },
+    { $set: { lastLogin: new Date(), updatedAt: new Date() } }
   );
 
   return agent;

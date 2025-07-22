@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import { getAllUsers } from "$lib/server/services/userService";
-import type { RequestEvent } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { getAllUsers } from '$lib/server/services/userService';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export const GET = async ({ url }: RequestEvent) => {
   console.log('API: GET /api/users - Fetching all users');

@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import { derived, writable } from "svelte/store";
+import { browser } from '$app/environment';
+import { derived, writable } from 'svelte/store';
 
 // Define supported languages
 export const supportedLanguages = [
@@ -11,11 +11,11 @@ export const supportedLanguages = [
 ];
 
 // Define default language (Chinese)
-export const defaultLanguage = "zh";
+export const defaultLanguage = 'zh';
 
 // Check if the initial locale is supported, if not use default
 const checkLocale = (locale: string) => {
-  const supportedCodes = supportedLanguages.map((lang) => lang.code);
+  const supportedCodes = supportedLanguages.map(lang => lang.code);
   return supportedCodes.includes(locale) ? locale : defaultLanguage;
 };
 
@@ -31,16 +31,14 @@ const getInitialLocale = () => {
 };
 
 // Import translation files
-import en from "./translations/en.json";
-import zh from "./translations/zh.json";
-import de from "./translations/de.json";
-import ja from "./translations/ja.json";
-import es from "./translations/es.json";
+import en from './translations/en.json';
+import zh from './translations/zh.json';
+import de from './translations/de.json';
+import ja from './translations/ja.json';
+import es from './translations/es.json';
 
 // Store current locale
-export const locale = writable<string>(
-  browser ? getInitialLocale() : defaultLanguage,
-);
+export const locale = writable<string>(browser ? getInitialLocale() : defaultLanguage);
 
 // Translation dictionary
 const translations: Record<string, any> = {
@@ -68,7 +66,7 @@ export const loadTranslations = async (newLocale: string = defaultLanguage) => {
   const checkedLocale = checkLocale(newLocale);
 
   if (browser) {
-    localStorage.setItem("preferred-language", checkedLocale);
+    localStorage.setItem('preferred-language', checkedLocale);
   }
 
   locale.set(checkedLocale);
@@ -81,7 +79,7 @@ export const setLocale = (newLocale: string) => {
   const checkedLocale = checkLocale(newLocale);
 
   if (browser) {
-    localStorage.setItem("preferred-language", checkedLocale);
+    localStorage.setItem('preferred-language', checkedLocale);
   }
 
   locale.set(checkedLocale);
@@ -91,7 +89,7 @@ export const setLocale = (newLocale: string) => {
 
 // Get the locale from URL path
 export const getLocaleFromPath = (path: string): string | null => {
-  const pathSegments = path.split("/").filter(Boolean);
+  const pathSegments = path.split('/').filter(Boolean);
   const firstSegment = pathSegments[0];
 
   if (firstSegment && supportedLanguages.some(lang => lang.code === firstSegment)) {

@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import { createUser } from "$lib/server/services/userService";
-import type { RequestEvent } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { createUser } from '$lib/server/services/userService';
+import type { RequestEvent } from '@sveltejs/kit';
 
 // In a real application, this endpoint would be protected by authentication
 export const POST = async ({ request }: RequestEvent) => {
@@ -8,7 +8,7 @@ export const POST = async ({ request }: RequestEvent) => {
 
   try {
     const userData = await request.json();
-    console.log("API: POST /api/users/create - Received user data:", {
+    console.log('API: POST /api/users/create - Received user data:', {
       ...userData,
       password: userData.password ? '********' : undefined, // Log everything except the actual password
     });
@@ -44,11 +44,8 @@ export const POST = async ({ request }: RequestEvent) => {
     console.error('Error stack:', errorStack);
 
     // Handle specific errors
-    if (error instanceof Error && error.message === "Username already exists") {
-      return json(
-        { error: "Username already exists", details: errorMessage },
-        { status: 409 },
-      );
+    if (error instanceof Error && error.message === 'Username already exists') {
+      return json({ error: 'Username already exists', details: errorMessage }, { status: 409 });
     }
 
     return json({ error: 'Failed to create user', details: errorMessage }, { status: 500 });

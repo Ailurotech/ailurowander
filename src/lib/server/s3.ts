@@ -1,22 +1,18 @@
-import {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-} from "@aws-sdk/client-s3";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { env } from "$env/dynamic/private";
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { env } from '$env/dynamic/private';
 
 // Get env values
-const REGION = env.AWS_REGION || "ap-southeast-2";
-const BUCKET_NAME = env.AWS_S3_BUCKET_NAME || "";
+const REGION = env.AWS_REGION || 'ap-southeast-2';
+const BUCKET_NAME = env.AWS_S3_BUCKET_NAME || '';
 
 // ✅ Initialize S3 client with endpoint fix
 const s3Client = new S3Client({
   region: REGION,
   endpoint: `https://s3.${REGION}.amazonaws.com`,
   credentials: {
-    accessKeyId: env.AWS_ACCESS_KEY_ID || "",
-    secretAccessKey: env.AWS_SECRET_ACCESS_KEY || "",
+    accessKeyId: env.AWS_ACCESS_KEY_ID || '',
+    secretAccessKey: env.AWS_SECRET_ACCESS_KEY || '',
   },
 });
 
@@ -26,7 +22,7 @@ const s3Client = new S3Client({
 export async function uploadToS3(
   file: Buffer | ReadableStream | ArrayBuffer,
   key: string,
-  contentType: string,
+  contentType: string
 ): Promise<string> {
   const command = new PutObjectCommand({
     Bucket: BUCKET_NAME,
@@ -42,10 +38,7 @@ export async function uploadToS3(
 /**
  * Get a signed URL for an S3 object
  */
-export async function getSignedS3Url(
-  key: string,
-  expiresIn = 3600,
-): Promise<string> {
+export async function getSignedS3Url(key: string, expiresIn = 3600): Promise<string> {
   const command = new GetObjectCommand({
     Bucket: BUCKET_NAME,
     Key: key,
@@ -57,9 +50,9 @@ export async function getSignedS3Url(
 /**
  * Generate a unique key for an S3 object
  */
-export function generateS3Key(filename: string, prefix = ""): string {
+export function generateS3Key(filename: string, prefix = ''): string {
   const timestamp = Date.now();
   const randomString = Math.random().toString(36).substring(2, 15);
-  const extension = filename.split(".").pop();
+  const extension = filename.split('.').pop();
   return `${prefix}${timestamp}-${randomString}.${extension}`;
 }

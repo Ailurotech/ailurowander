@@ -39,15 +39,14 @@
     }
   });
 
-
   let totalViews = Object.values(allTours).reduce((acc, t) => acc + t.views, 0);
 
   function handleGlobalMouseMove(e: MouseEvent) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    }
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }
 
-    function animateResetView() {
+  function animateResetView() {
     const duration = 300; // ms
     const frameRate = 60;
     const totalFrames = Math.round((duration / 1000) * frameRate);
@@ -65,7 +64,7 @@
         x: start.x + (end.x - start.x) * progress,
         y: start.y + (end.y - start.y) * progress,
         width: start.width + (end.width - start.width) * progress,
-        height: start.height + (end.height - start.height) * progress
+        height: start.height + (end.height - start.height) * progress,
       };
 
       updateViewBox();
@@ -106,13 +105,19 @@
       desiredY = relativeMouseY - popupHeight - 10;
     }
 
-    popupX = Math.max(10, Math.min(desiredX, (container?.clientWidth ?? window.innerWidth) - popupWidth - 10));
-    popupY = Math.max(10, Math.min(desiredY, (container?.clientHeight ?? window.innerHeight) - popupHeight - 10));
+    popupX = Math.max(
+      10,
+      Math.min(desiredX, (container?.clientWidth ?? window.innerWidth) - popupWidth - 10)
+    );
+    popupY = Math.max(
+      10,
+      Math.min(desiredY, (container?.clientHeight ?? window.innerHeight) - popupHeight - 10)
+    );
 
     currentProvinceTours = allTours
       .filter(tour => getProvinceFromTour(tour) === name)
       .map(tour => {
-        const image = tour.image || "/images/placeholder.jpg";
+        const image = tour.image || '/images/placeholder.jpg';
         return {
           city: tour.location, // 改为 location 字段
           province: tour.location,
@@ -128,27 +133,27 @@
     if (closeTimeout) clearTimeout(closeTimeout);
   }
 
-    function hidePopupWithDelay() {
-      if (closeTimeout) clearTimeout(closeTimeout);
-      closeTimeout = setTimeout(() => {
-        if (!popupHovering) {
-          hoveredProvince = null;
-          currentProvinceTours = [];
-        }
-      }, 1500);
-    }
-
-    function changeImageIndex(city: string, direction: 'prev' | 'next') {
-      const max = tourData[city]?.images.length || 0;
-      if (max === 0) return;
-
-      const current = imageIndexes[city] ?? 0;
-      if (direction === 'next') {
-        imageIndexes[city] = (current + 1) % max;
-      } else {
-        imageIndexes[city] = (current - 1 + max) % max;
+  function hidePopupWithDelay() {
+    if (closeTimeout) clearTimeout(closeTimeout);
+    closeTimeout = setTimeout(() => {
+      if (!popupHovering) {
+        hoveredProvince = null;
+        currentProvinceTours = [];
       }
+    }, 1500);
+  }
+
+  function changeImageIndex(city: string, direction: 'prev' | 'next') {
+    const max = tourData[city]?.images.length || 0;
+    if (max === 0) return;
+
+    const current = imageIndexes[city] ?? 0;
+    if (direction === 'next') {
+      imageIndexes[city] = (current + 1) % max;
+    } else {
+      imageIndexes[city] = (current - 1 + max) % max;
     }
+  }
 
   async function loadSvg() {
     const response = await fetch('/chinaHigh.svg');
@@ -164,7 +169,7 @@
       svg.setAttribute('class', 'china-map');
 
       const paths = svg.querySelectorAll('path');
-      paths.forEach((path) => {
+      paths.forEach(path => {
         path.classList.add('province-path');
       });
     }
@@ -187,7 +192,7 @@
     viewBox = {
       ...viewBox,
       x: startViewBox.x - deltaX,
-      y: startViewBox.y - deltaY
+      y: startViewBox.y - deltaY,
     };
 
     updateViewBox();
@@ -197,13 +202,15 @@
     isDragging = false;
   }
 
-function handleWheel(event: WheelEvent) {
+  function handleWheel(event: WheelEvent) {
     event.preventDefault();
     const zoomFactor = 0.1;
     const delta = event.deltaY > 0 ? 1 : -1;
 
-    const zoomCenterX = event.offsetX / event.currentTarget.clientWidth * viewBox.width + viewBox.x;
-    const zoomCenterY = event.offsetY / event.currentTarget.clientHeight * viewBox.height + viewBox.y;
+    const zoomCenterX =
+      (event.offsetX / event.currentTarget.clientWidth) * viewBox.width + viewBox.x;
+    const zoomCenterY =
+      (event.offsetY / event.currentTarget.clientHeight) * viewBox.height + viewBox.y;
 
     const newWidth = viewBox.width * (1 + zoomFactor * delta);
     const newHeight = viewBox.height * (1 + zoomFactor * delta);
@@ -212,7 +219,7 @@ function handleWheel(event: WheelEvent) {
       x: zoomCenterX - (zoomCenterX - viewBox.x) * (newWidth / viewBox.width),
       y: zoomCenterY - (zoomCenterY - viewBox.y) * (newHeight / viewBox.height),
       width: newWidth,
-      height: newHeight
+      height: newHeight,
     };
 
     updateViewBox();
@@ -229,10 +236,14 @@ function handleWheel(event: WheelEvent) {
     svgContent = await loadSvg();
     requestAnimationFrame(() => {
       const paths = document.querySelectorAll('.province-path');
-      paths.forEach((path) => {
+      paths.forEach(path => {
         const title = path.getAttribute('title') || 'Unknown Province';
         path.addEventListener('mouseenter', () => {
-          hoveredProvince = { id: path.id || '', name: title, description: `Explore tours in ${title}` };
+          hoveredProvince = {
+            id: path.id || '',
+            name: title,
+            description: `Explore tours in ${title}`,
+          };
           showPopupForProvince(title);
         });
         path.addEventListener('mouseleave', hidePopupWithDelay);
@@ -243,7 +254,7 @@ function handleWheel(event: WheelEvent) {
 
 <svelte:window on:mousemove={handleGlobalMouseMove} />
 
-<div 
+<div
   class="relative w-full h-[600px] bg-white rounded-lg shadow-lg overflow-hidden"
   on:mousedown={handleMouseDown}
   on:mousemove={handleMouseMove}
@@ -263,17 +274,17 @@ function handleWheel(event: WheelEvent) {
   </div>
 
   {#if hoveredProvince}
-      <div 
-        id="tour-drawer"
-        class="absolute z-[9999] bg-white border border-gray-300 rounded-xl shadow-2xl w-[420px] max-h-[520px] overflow-y-auto transition-all duration-300"
-        style="top: {popupY}px; left: {popupX}px;"
-        on:mouseenter={() => popupHovering = true}
-        on:mouseleave={() => {
-          popupHovering = false;
-          hidePopupWithDelay();
-        }}
-        on:wheel|stopPropagation
-      >
+    <div
+      id="tour-drawer"
+      class="absolute z-[9999] bg-white border border-gray-300 rounded-xl shadow-2xl w-[420px] max-h-[520px] overflow-y-auto transition-all duration-300"
+      style="top: {popupY}px; left: {popupX}px;"
+      on:mouseenter={() => (popupHovering = true)}
+      on:mouseleave={() => {
+        popupHovering = false;
+        hidePopupWithDelay();
+      }}
+      on:wheel|stopPropagation
+    >
       <div class="p-5 space-y-5">
         <div class="text-2xl font-bold text-gray-800 border-b pb-2">
           {hoveredProvince.name} - Tours
@@ -282,24 +293,27 @@ function handleWheel(event: WheelEvent) {
         {#if currentProvinceTours.length > 0}
           <div class="space-y-4">
             {#each currentProvinceTours as tour}
-              <div class="rounded-xl border border-gray-200 overflow-hidden shadow hover:shadow-md transition-all bg-white">
+              <div
+                class="rounded-xl border border-gray-200 overflow-hidden shadow hover:shadow-md transition-all bg-white"
+              >
                 <div class="relative w-full h-36 bg-gray-100 overflow-hidden">
-                  <img 
-                    src={tour.images[imageIndexes[tour.city] ?? 0]} 
-                    alt={tour.city} 
+                  <img
+                    src={tour.images[imageIndexes[tour.city] ?? 0]}
+                    alt={tour.city}
                     class="w-full h-full object-cover transition-opacity duration-300"
-                    on:error={(e) => e.target.src = 'https://placehold.co/400x180?text=No+Image&font=roboto'} 
+                    on:error={e =>
+                      (e.target.src = 'https://placehold.co/400x180?text=No+Image&font=roboto')}
                   />
 
                   {#if tour.images.length > 1}
                     <button
                       class="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
-                      on:click={() => changeImageIndex(tour.city, 'prev')}
-                    >‹</button>
+                      on:click={() => changeImageIndex(tour.city, 'prev')}>‹</button
+                    >
                     <button
                       class="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
-                      on:click={() => changeImageIndex(tour.city, 'next')}
-                    >›</button>
+                      on:click={() => changeImageIndex(tour.city, 'next')}>›</button
+                    >
                   {/if}
                 </div>
 
@@ -312,13 +326,24 @@ function handleWheel(event: WheelEvent) {
                   <div class="text-sm text-gray-600">
                     {tour.description}
                   </div>
-                  <a 
+                  <a
                     href={`/tours/${tour.slug}`}
                     class="inline-flex items-center gap-2 mt-2 px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
                     target="_blank"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
                     </svg>
                     Explore {tour.city}
                   </a>

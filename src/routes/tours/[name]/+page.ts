@@ -1,6 +1,6 @@
-import { error } from "@sveltejs/kit";
-import type { Tour } from "$lib/types/tour";
-import { deslugify } from "$lib/utils/slugify";
+import { error } from '@sveltejs/kit';
+import type { Tour } from '$lib/types/tour';
+import { deslugify } from '$lib/utils/slugify';
 
 export const load = async ({
   params,
@@ -18,9 +18,9 @@ export const load = async ({
 
     if (!response.ok) {
       if (response.status === 404) {
-        throw error(404, "Tour not found");
+        throw error(404, 'Tour not found');
       }
-      throw error(500, "Failed to load tour details");
+      throw error(500, 'Failed to load tour details');
     }
 
     const tour: Tour = await response.json();
@@ -29,14 +29,9 @@ export const load = async ({
       tour,
     };
   } catch (err: unknown) {
-    if (
-      typeof err === "object" &&
-      err !== null &&
-      "status" in err &&
-      "message" in err
-    ) {
+    if (typeof err === 'object' && err !== null && 'status' in err && 'message' in err) {
       throw err as any;
     }
-    throw error(500, "An unexpected error occurred");
+    throw error(500, 'An unexpected error occurred');
   }
 };

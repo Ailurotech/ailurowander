@@ -1,9 +1,6 @@
-import { json } from "@sveltejs/kit";
-import type { RequestHandler } from "./$types";
-import {
-  authenticateAgent,
-  createSession,
-} from "$lib/server/services/authService";
+import { json } from '@sveltejs/kit';
+import type { RequestHandler } from './$types';
+import { authenticateAgent, createSession } from '$lib/server/services/authService';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {
   try {
@@ -25,8 +22,8 @@ export const POST: RequestHandler = async ({ request, cookies }) => {
     const session = await createSession(agent._id!);
 
     // Set session cookie
-    cookies.set("agent_session", session.token, {
-      path: "/",
+    cookies.set('agent_session', session.token, {
+      path: '/',
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',

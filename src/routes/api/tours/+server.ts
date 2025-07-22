@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import { getAllTours, searchTours } from "$lib/server/services/tourService";
-import type { RequestEvent } from "@sveltejs/kit";
+import { json } from '@sveltejs/kit';
+import { getAllTours, searchTours } from '$lib/server/services/tourService';
+import type { RequestEvent } from '@sveltejs/kit';
 
 export const GET = async ({ url }: RequestEvent) => {
   console.log('API: GET /api/tours - Fetching tours');
@@ -16,17 +16,15 @@ export const GET = async ({ url }: RequestEvent) => {
       console.log(`API: GET /api/tours - Searching tours with query: ${query}`);
       tours = await searchTours(query);
     } else {
-      console.log(
-        `API: GET /api/tours - Getting all tours (featuredOnly: ${featuredOnly})`,
-      );
+      console.log(`API: GET /api/tours - Getting all tours (featuredOnly: ${featuredOnly})`);
       tours = await getAllTours(featuredOnly);
     }
 
     console.log(`API: GET /api/tours - Found ${tours.length} tours`);
     if (tours.length > 0) {
-      console.log("API: GET /api/tours - First tour:", tours[0]);
+      console.log('API: GET /api/tours - First tour:', tours[0]);
     } else {
-      console.log("API: GET /api/tours - No tours found");
+      console.log('API: GET /api/tours - No tours found');
     }
 
     return json(tours);

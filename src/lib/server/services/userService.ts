@@ -1,11 +1,11 @@
-import { ObjectId } from "mongodb";
-import { getUsers } from "../db";
-import type { User, UserSummary } from "$lib/types/user";
-import * as bcrypt from "bcrypt";
+import { ObjectId } from 'mongodb';
+import { getUsers } from '../db';
+import type { User, UserSummary } from '$lib/types/user';
+import * as bcrypt from 'bcrypt';
 
 // Get all users
 export async function getAllUsers(): Promise<UserSummary[]> {
-  console.log("getAllUsers: Fetching all users from database");
+  console.log('getAllUsers: Fetching all users from database');
   const usersCollection = await getUsers();
   const users = await usersCollection.find().toArray();
 
@@ -27,7 +27,7 @@ export async function getUserById(id: string): Promise<UserSummary | null> {
   console.log(`getUserById: Fetching user with ID ${id}`);
 
   if (!ObjectId.isValid(id)) {
-    console.log("getUserById: Invalid ObjectId format");
+    console.log('getUserById: Invalid ObjectId format');
     return null;
   }
 
@@ -35,7 +35,7 @@ export async function getUserById(id: string): Promise<UserSummary | null> {
   const user = await usersCollection.findOne({ _id: new ObjectId(id) });
 
   if (!user) {
-    console.log("getUserById: User not found");
+    console.log('getUserById: User not found');
     return null;
   }
 
@@ -66,19 +66,17 @@ export async function createUser(userData: {
   const usersCollection = await getUsers();
 
   // Check if username already exists
-  console.log(
-    `createUser: Checking if username ${userData.username} already exists`,
-  );
+  console.log(`createUser: Checking if username ${userData.username} already exists`);
   const existingUser = await usersCollection.findOne({
     username: userData.username,
   });
   if (existingUser) {
     console.log(`createUser: Username ${userData.username} already exists`);
-    throw new Error("Username already exists");
+    throw new Error('Username already exists');
   }
 
   // Hash the password
-  console.log("createUser: Hashing password");
+  console.log('createUser: Hashing password');
   const passwordHash = await bcrypt.hash(userData.password, 10);
 
   const newUser: User = {
@@ -86,7 +84,7 @@ export async function createUser(userData: {
     name: userData.name,
     email: userData.email,
     passwordHash,
-    role: userData.role as User["role"],
+    role: userData.role as User['role'],
     isActive: userData.isActive,
     lastLogin: null,
     createdAt: new Date(),
@@ -123,7 +121,7 @@ export async function updateUser(
   console.log(`updateUser: Updating user with ID ${id}`);
 
   if (!ObjectId.isValid(id)) {
-    console.log("updateUser: Invalid ObjectId format");
+    console.log('updateUser: Invalid ObjectId format');
     return null;
   }
 
@@ -139,7 +137,7 @@ export async function updateUser(
 
     if (existingUser) {
       console.log(`updateUser: Username ${userData.username} already exists`);
-      throw new Error("Username already exists");
+      throw new Error('Username already exists');
     }
   }
 
@@ -150,7 +148,7 @@ export async function updateUser(
 
   // If password is provided, hash it
   if (userData.password) {
-    console.log("updateUser: Hashing new password");
+    console.log('updateUser: Hashing new password');
     updateData.passwordHash = await bcrypt.hash(userData.password, 10);
     delete updateData.password;
   }
@@ -159,11 +157,11 @@ export async function updateUser(
   const result = await usersCollection.findOneAndUpdate(
     { _id: new ObjectId(id) },
     { $set: updateData },
-    { returnDocument: "after" },
+    { returnDocument: 'after' }
   );
 
   if (!result) {
-    console.log("updateUser: User not found or update failed");
+    console.log('updateUser: User not found or update failed');
     return null;
   }
 
@@ -185,7 +183,7 @@ export async function deleteUser(id: string): Promise<boolean> {
   console.log(`deleteUser: Deleting user with ID ${id}`);
 
   if (!ObjectId.isValid(id)) {
-    console.log("deleteUser: Invalid ObjectId format");
+    console.log('deleteUser: Invalid ObjectId format');
     return false;
   }
 
@@ -219,7 +217,7 @@ export async function authenticateUser(
   const passwordMatches = await bcrypt.compare(password, user.passwordHash);
 
   if (!passwordMatches) {
-    console.log("authenticateUser: Password does not match");
+    console.log('authenticateUser: Password does not match');
     return null;
   }
 
@@ -227,7 +225,7 @@ export async function authenticateUser(
   // Update last login timestamp
   await usersCollection.updateOne(
     { _id: user._id },
-    { $set: { lastLogin: new Date(), updatedAt: new Date() } },
+    { $set: { lastLogin: new Date(), updatedAt: new Date() } }
   );
 
   return {

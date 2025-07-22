@@ -239,9 +239,9 @@ For development, the system falls back to:
 
 ```typescript
 // Monitor translation success rates
-console.log("Translation success:", successRate);
-console.log("Average response time:", avgResponseTime);
-console.log("Monthly usage:", monthlyUsage);
+console.log('Translation success:', successRate);
+console.log('Average response time:', avgResponseTime);
+console.log('Monthly usage:', monthlyUsage);
 ```
 
 ## 💡 Best Practices

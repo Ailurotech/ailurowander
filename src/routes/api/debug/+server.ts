@@ -1,6 +1,6 @@
-import { json } from "@sveltejs/kit";
-import { env } from "$env/dynamic/private";
-import type { RequestHandler } from "./$types";
+import { json } from '@sveltejs/kit';
+import { env } from '$env/dynamic/private';
+import type { RequestHandler } from './$types';
 
 export const GET: RequestHandler = async () => {
   try {
@@ -17,7 +17,7 @@ export const GET: RequestHandler = async () => {
     };
 
     return json({
-      status: "ok",
+      status: 'ok',
       environment: envCheck,
       timestamp: new Date().toISOString(),
     });

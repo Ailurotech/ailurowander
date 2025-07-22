@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb';
 
 export interface User {
   _id?: ObjectId;
@@ -6,7 +6,7 @@ export interface User {
   name: string;
   email: string;
   passwordHash: string;
-  role: "administrator" | "agent" | "guide" | "marketing" | "support";
+  role: 'administrator' | 'agent' | 'guide' | 'marketing' | 'support';
   isActive: boolean;
   lastLogin: Date | null;
   createdAt: Date;

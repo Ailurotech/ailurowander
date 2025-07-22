@@ -18,19 +18,19 @@ export const GET = async ({ params }: RequestEvent) => {
   try {
     const id = params.id;
     if (!id) {
-      return json({ error: "Tour ID is required" }, { status: 400 });
+      return json({ error: 'Tour ID is required' }, { status: 400 });
     }
 
     const tour = await getTourById(id);
 
     if (!tour) {
-      return json({ error: "Tour not found" }, { status: 404 });
+      return json({ error: 'Tour not found' }, { status: 404 });
     }
 
     return json(tour);
   } catch (error) {
-    console.error("Error fetching tour details:", error);
-    return json({ error: "Failed to fetch tour details" }, { status: 500 });
+    console.error('Error fetching tour details:', error);
+    return json({ error: 'Failed to fetch tour details' }, { status: 500 });
   }
 };
 
@@ -41,16 +41,16 @@ export const PUT = async ({ params, request }: RequestEvent) => {
   try {
     const id = params.id;
     if (!id) {
-      return json({ error: "Tour ID is required" }, { status: 400 });
+      return json({ error: 'Tour ID is required' }, { status: 400 });
     }
 
     const formData = await request.formData();
 
     // Extract tour data from form
     const tourData: Partial<Tour> = {
-      title: formData.get("title") as string,
-      description: formData.get("description") as string,
-      destination: formData.get("destination") as string,
+      title: formData.get('title') as string,
+      description: formData.get('description') as string,
+      destination: formData.get('destination') as string,
       duration: {
         days: parseInt(formData.get('durationDays') as string),
         nights: parseInt(formData.get('durationNights') as string),
@@ -70,7 +70,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
     const updatedTour = await updateTour(id, tourData);
 
     if (!updatedTour) {
-      return json({ error: "Tour not found" }, { status: 404 });
+      return json({ error: 'Tour not found' }, { status: 404 });
     }
 
     // Handle image uploads if present
@@ -79,7 +79,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
 
     // Only attempt to upload if we have valid files
     const hasValidMainImage = mainImage && mainImage.size > 0;
-    const validGalleryImages = galleryImages.filter((img) => img.size > 0);
+    const validGalleryImages = galleryImages.filter(img => img.size > 0);
     const hasValidGalleryImages = validGalleryImages.length > 0;
 
     if (hasValidMainImage || hasValidGalleryImages) {
@@ -88,7 +88,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
           main: hasValidMainImage ? mainImage! : new File([], 'placeholder.jpg'),
           gallery: validGalleryImages,
         },
-        id,
+        id
       );
 
       // Update tour with image URLs (function now preserves existing images when new ones aren't provided)
@@ -105,18 +105,13 @@ export const PUT = async ({ params, request }: RequestEvent) => {
     // Extract itinerary images from form data
     for (let i = 0; i < itinerary.length; i++) {
       const itineraryImage = formData.get(`itineraryImage_${i}`) as File | null;
-      itineraryImages.push(
-        itineraryImage && itineraryImage.size > 0 ? itineraryImage : null,
-      );
+      itineraryImages.push(itineraryImage && itineraryImage.size > 0 ? itineraryImage : null);
     }
 
     // Always update itinerary (preserves existing images when no new ones are provided)
-    if (itineraryImages.some((img) => img !== null)) {
+    if (itineraryImages.some(img => img !== null)) {
       // Upload new itinerary images if any exist
-      const itineraryImageUrls = await uploadItineraryImages(
-        itineraryImages,
-        id,
-      );
+      const itineraryImageUrls = await uploadItineraryImages(itineraryImages, id);
       await updateTourItineraryImages(id, itinerary, itineraryImageUrls);
     } else {
       // No new images, but still need to update itinerary content (preserving existing images)
@@ -203,21 +198,18 @@ export const DELETE = async ({ params }: RequestEvent) => {
   try {
     const id = params.id;
     if (!id) {
-      return json({ error: "Tour ID is required" }, { status: 400 });
+      return json({ error: 'Tour ID is required' }, { status: 400 });
     }
 
     const success = await deleteTour(id);
 
     if (!success) {
-      return json(
-        { error: "Tour not found or could not be deleted" },
-        { status: 404 },
-      );
+      return json({ error: 'Tour not found or could not be deleted' }, { status: 404 });
     }
 
     return json({ success: true });
   } catch (error) {
-    console.error("Error deleting tour:", error);
-    return json({ error: "Failed to delete tour" }, { status: 500 });
+    console.error('Error deleting tour:', error);
+    return json({ error: 'Failed to delete tour' }, { status: 500 });
   }
 };
