@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount } from 'svelte';
-  import { getImageUrl } from '../../utils/imageUrl';
   import cityToProvinceMap from './cityToProvinceMap.json';
 
   interface Province {
