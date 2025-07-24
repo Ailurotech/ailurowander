@@ -30,13 +30,13 @@
       }
 
       const result = await response.json();
-      
+
       // Success - the API returns the created tour object
-      submitMessage = $t('agent.tours.success');
-      // Redirect to tours page after a short delay
-      setTimeout(() => {
-        goto('/agent/tours');
-      }, 2000);
+        submitMessage = $t('agent.tours.success');
+        // Redirect to tours page after a short delay
+        setTimeout(() => {
+          goto('/agent/tours');
+        }, 2000);
     } catch (error) {
       console.error('Submit error:', error);
       submitError = $t('agent.tours.error');

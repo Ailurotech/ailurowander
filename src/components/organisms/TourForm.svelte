@@ -134,7 +134,7 @@
         itineraryImageFiles = new Array(itineraryLength).fill(null);
       }
       if (accommodationImageFiles.length !== itineraryLength) {
-        accommodationImageFiles = new Array(itineraryLength).fill([]);
+        accommodationImageFiles = Array.from({ length: itineraryLength }, () => []);
       }
       if (mealsImageFiles.length !== itineraryLength) {
         mealsImageFiles = tourData.itinerary.map(day => (day.meals || []).map(() => []));

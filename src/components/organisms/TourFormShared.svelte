@@ -91,9 +91,18 @@
       if (itineraryImageFiles.length !== itineraryLength) {
         itineraryImageFiles = new Array(itineraryLength).fill(null);
         itineraryImagePreviews = new Array(itineraryLength).fill(null);
-        accommodationImageFiles = new Array(itineraryLength).fill([]);
-        accommodationImagePreviews = new Array(itineraryLength).fill([]);
       }
+      
+      // Always update accommodation arrays to match current itinerary structure
+      accommodationImageFiles = Array.from({ length: itineraryLength }, (_, dayIndex) => {
+        // Preserve existing files if they exist, otherwise create new empty array
+        return accommodationImageFiles[dayIndex] || [];
+      });
+      
+      accommodationImagePreviews = Array.from({ length: itineraryLength }, (_, dayIndex) => {
+        // Preserve existing previews if they exist, otherwise create new empty array
+        return accommodationImagePreviews[dayIndex] || [];
+      });
 
       // Always update meals arrays to match current itinerary structure
       mealsImageFiles = tourData.itinerary.map((day, dayIndex) => {
@@ -277,6 +286,15 @@
   function handleAccommodationImageChange(event: Event, dayIndex: number) {
     const target = event.target as HTMLInputElement;
     const newFiles = Array.from(target.files || []);
+    
+    // Ensure arrays exist before accessing them
+    if (!accommodationImageFiles[dayIndex]) {
+      accommodationImageFiles[dayIndex] = [];
+    }
+    if (!accommodationImagePreviews[dayIndex]) {
+      accommodationImagePreviews[dayIndex] = [];
+    }
+    
     accommodationImageFiles[dayIndex] = [...accommodationImageFiles[dayIndex], ...newFiles];
     accommodationImageFiles = [...accommodationImageFiles];
 
@@ -294,14 +312,20 @@
   }
 
   function removeAccommodationImage(dayIndex: number, imageIndex: number) {
-    accommodationImageFiles[dayIndex] = accommodationImageFiles[dayIndex].filter(
-      (_, i) => i !== imageIndex
-    );
-    accommodationImagePreviews[dayIndex] = accommodationImagePreviews[dayIndex].filter(
-      (_, i) => i !== imageIndex
-    );
-    accommodationImageFiles = [...accommodationImageFiles];
-    accommodationImagePreviews = [...accommodationImagePreviews];
+    // Ensure arrays exist before accessing them
+    if (accommodationImageFiles[dayIndex]) {
+      accommodationImageFiles[dayIndex] = accommodationImageFiles[dayIndex].filter(
+        (_, i) => i !== imageIndex
+      );
+      accommodationImageFiles = [...accommodationImageFiles];
+    }
+    
+    if (accommodationImagePreviews[dayIndex]) {
+      accommodationImagePreviews[dayIndex] = accommodationImagePreviews[dayIndex].filter(
+        (_, i) => i !== imageIndex
+      );
+      accommodationImagePreviews = [...accommodationImagePreviews];
+    }
   }
 
   // Meal image handling
@@ -342,17 +366,17 @@
   function removeMealImage(dayIndex: number, mealIndex: number, imageIndex: number) {
     // Ensure arrays exist before accessing them
     if (mealsImageFiles[dayIndex] && mealsImageFiles[dayIndex][mealIndex]) {
-      mealsImageFiles[dayIndex][mealIndex] = mealsImageFiles[dayIndex][mealIndex].filter(
-        (_, i) => i !== imageIndex
-      );
+    mealsImageFiles[dayIndex][mealIndex] = mealsImageFiles[dayIndex][mealIndex].filter(
+      (_, i) => i !== imageIndex
+    );
       mealsImageFiles = [...mealsImageFiles];
     }
     
     if (mealsImagePreviews[dayIndex] && mealsImagePreviews[dayIndex][mealIndex]) {
-      mealsImagePreviews[dayIndex][mealIndex] = mealsImagePreviews[dayIndex][mealIndex].filter(
-        (_, i) => i !== imageIndex
-      );
-      mealsImagePreviews = [...mealsImagePreviews];
+    mealsImagePreviews[dayIndex][mealIndex] = mealsImagePreviews[dayIndex][mealIndex].filter(
+      (_, i) => i !== imageIndex
+    );
+    mealsImagePreviews = [...mealsImagePreviews];
     }
   }
 
