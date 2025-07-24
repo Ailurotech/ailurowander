@@ -23,17 +23,20 @@
         body: formData,
       });
 
-      const result = await response.json();
-
-      if (result.success) {
-        submitMessage = $t('agent.tours.success');
-        // Redirect to tours page after a short delay
-        setTimeout(() => {
-          goto('/agent/tours');
-        }, 2000);
-      } else {
-        submitError = result.error || $t('agent.tours.error');
+      if (!response.ok) {
+        const errorData = await response.json();
+        submitError = errorData.error || $t('agent.tours.error');
+        return;
       }
+
+      const result = await response.json();
+      
+      // Success - the API returns the created tour object
+      submitMessage = $t('agent.tours.success');
+      // Redirect to tours page after a short delay
+      setTimeout(() => {
+        goto('/agent/tours');
+      }, 2000);
     } catch (error) {
       console.error('Submit error:', error);
       submitError = $t('agent.tours.error');
