@@ -190,7 +190,9 @@ export async function updateTourImages(
   const toursCollection = db.collection('tours');
 
   // Get current tour to preserve existing images
-  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const currentTour = await toursCollection.findOne({
+    _id: new ObjectId(tourId),
+  });
   const existingImages = currentTour?.images || { main: '', gallery: [] };
 
   // Prepare update object - only update fields that have new values
@@ -253,7 +255,9 @@ export async function updateTourItineraryImages(
   const toursCollection = db.collection('tours');
 
   // Get the current tour to preserve existing images
-  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const currentTour = await toursCollection.findOne({
+    _id: new ObjectId(tourId),
+  });
   const existingItinerary = currentTour?.itinerary || [];
 
   // Update each itinerary day with its corresponding image URL, preserving existing images
@@ -376,7 +380,9 @@ export async function updateTourAccommodationAndMealsImages(
   const toursCollection = db.collection('tours');
 
   // Get the current tour to preserve existing images
-  const currentTour = await toursCollection.findOne({ _id: new ObjectId(tourId) });
+  const currentTour = await toursCollection.findOne({
+    _id: new ObjectId(tourId),
+  });
   const existingItinerary = currentTour?.itinerary || [];
 
   // Update each itinerary day with accommodation and meals images

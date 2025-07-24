@@ -74,7 +74,10 @@ export const DELETE: RequestHandler = async ({ url }) => {
     const success = await translationService.deleteTranslation(translationId);
 
     if (success) {
-      return json({ success: true, message: 'Translation deleted successfully' });
+      return json({
+        success: true,
+        message: 'Translation deleted successfully',
+      });
     } else {
       return json({ error: 'Translation not found' }, { status: 404 });
     }
