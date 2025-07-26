@@ -125,6 +125,58 @@
     }
   }
 
+  // Initialize existing images for edit mode
+  $: {
+    if (mode === 'edit') {
+      // Initialize main image preview
+      if (initialData.images?.main && !mainImagePreview && !mainImageFile) {
+        mainImagePreview = initialData.images.main;
+      }
+
+      // Initialize gallery image previews
+      if (initialData.images?.gallery && initialData.images.gallery.length > 0) {
+        // Only initialize once to avoid overwriting new uploads
+        const hasPreviews = galleryImagePreviews.length > 0;
+        const hasFiles = galleryImageFiles.length > 0;
+        if (!hasPreviews || (!hasFiles && hasPreviews)) {
+          galleryImagePreviews = [...initialData.images.gallery];
+        }
+      }
+
+      // Initialize itinerary images
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.image && !itineraryImagePreviews[dayIndex]) {
+            itineraryImagePreviews[dayIndex] = day.image;
+          }
+        });
+      }
+
+      // Initialize accommodation images
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.accommodation?.images && day.accommodation.images.length > 0) {
+            accommodationImagePreviews[dayIndex] = [...day.accommodation.images];
+          }
+        });
+      }
+
+      // Initialize meal images
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.meals) {
+            day.meals.forEach((meal, mealIndex) => {
+              if (meal.images && meal.images.length > 0) {
+                if (!mealsImagePreviews[dayIndex]) mealsImagePreviews[dayIndex] = [];
+                mealsImagePreviews[dayIndex][mealIndex] = [...meal.images];
+              }
+            });
+          }
+        });
+      }
+    }
+  }
+
   // Helper functions
   function addItineraryDay() {
     const newDay = tourData.itinerary.length + 1;

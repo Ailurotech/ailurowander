@@ -7,6 +7,7 @@
   import TourHighlights from '../../../components/tours/TourHighlights.svelte';
   import TourBookingCard from '../../../components/tours/TourBookingCard.svelte';
   import TourItinerary from '../../../components/tours/TourItinerary.svelte';
+  import TourAccommodation from '../../../components/tours/TourAccommodation.svelte';
   import TourInclusionsExclusions from '../../../components/tours/TourInclusionsExclusions.svelte';
   import TourPhotoGallery from '../../../components/tours/TourPhotoGallery.svelte';
   import TourTags from '../../../components/tours/TourTags.svelte';
@@ -58,6 +59,8 @@
   </div>
 
   <TourItinerary {tour} />
+
+  <TourAccommodation {tour} />
 
   <TourInclusionsExclusions {tour} />
 

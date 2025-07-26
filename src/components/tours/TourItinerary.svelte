@@ -6,8 +6,7 @@
 
   export let tour: Tour;
 
-  // Track expanded states for accommodation and meals (accommodation expanded by default)
-  let expandedAccommodation: Record<number, boolean> = {};
+  // Track expanded states for meals only
   let expandedMeals: Record<number, boolean> = {};
 
   // Gallery state
@@ -15,36 +14,9 @@
   let galleryImages: string[] = [];
   let galleryInitialIndex = 0;
 
-  // Initialize accommodation as expanded by default
-  $: if (tour.itinerary) {
-    tour.itinerary.forEach((day, index) => {
-      if (
-        day.accommodation &&
-        day.accommodation.name &&
-        expandedAccommodation[index] === undefined
-      ) {
-        expandedAccommodation[index] = true;
-      }
-    });
-  }
-
-  function toggleAccommodation(dayIndex: number) {
-    expandedAccommodation[dayIndex] = !expandedAccommodation[dayIndex];
-    expandedAccommodation = { ...expandedAccommodation };
-  }
-
   function toggleMeals(dayIndex: number) {
     expandedMeals[dayIndex] = !expandedMeals[dayIndex];
     expandedMeals = { ...expandedMeals };
-  }
-
-  function openAccommodationGallery(dayIndex: number, imageIndex: number) {
-    const day = tour.itinerary[dayIndex];
-    if (day.accommodation?.images) {
-      galleryImages = day.accommodation.images;
-      galleryInitialIndex = imageIndex;
-      galleryOpen = true;
-    }
   }
 
   function openMealGallery(dayIndex: number, mealIndex: number, imageIndex: number) {
@@ -95,78 +67,6 @@
               <h3 class="text-xl font-bold mb-2">{day.title}</h3>
               <p class="mb-4">{day.description}</p>
 
-              {#if day.accommodation && day.accommodation.name}
-                <div class="mt-4">
-                  <button
-                    class="flex items-center justify-between w-full text-left text-sm text-gray-700 hover:text-gray-900 transition-colors"
-                    on:click={() => toggleAccommodation(index)}
-                  >
-                    <div class="flex items-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        class="h-4 w-4 mr-2 text-blue-600"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          stroke-width="2"
-                          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                        />
-                      </svg>
-                      <span class="font-medium"
-                        >{$t('tour_detail.accommodation')}: {day.accommodation.name}</span
-                      >
-                    </div>
-                    <svg
-                      class="h-4 w-4 transition-transform duration-200 {expandedAccommodation[index]
-                        ? 'rotate-90'
-                        : ''}"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </button>
-
-                  <div
-                    class="overflow-hidden transition-all duration-300 ease-in-out {expandedAccommodation[
-                      index
-                    ]
-                      ? 'max-h-[2000px] opacity-100'
-                      : 'max-h-0 opacity-0'}"
-                  >
-                    <div class="mt-3 pl-6">
-                      {#if day.accommodation.description}
-                        <p class="text-sm text-gray-600 mb-3">{day.accommodation.description}</p>
-                      {/if}
-                      {#if day.accommodation.images && day.accommodation.images.length > 0}
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-                          {#each day.accommodation.images as image, imgIndex}
-                            <div class="aspect-[4/3] w-full">
-                              <img
-                                src={image}
-                                alt="Accommodation: {day.accommodation.name}"
-                                class="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
-                                on:click={() => openAccommodationGallery(index, imgIndex)}
-                              />
-                            </div>
-                          {/each}
-                        </div>
-                      {/if}
-                    </div>
-                  </div>
-                </div>
-              {/if}
 
               {#if day.meals && day.meals.length > 0}
                 <div class="mt-4">
@@ -225,13 +125,13 @@
                             <p class="text-sm text-gray-600 mb-2">{meal.description}</p>
                           {/if}
                           {#if meal.images && meal.images.length > 0}
-                            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-md">
                               {#each meal.images as image, imgIndex}
-                                <div class="aspect-[4/3] w-full">
+                                <div class="aspect-square w-full max-w-[80px]">
                                   <img
                                     src={image}
                                     alt="Meal: {meal.name}"
-                                    class="w-full h-full object-cover rounded-lg shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 cursor-pointer"
+                                    class="w-full h-full object-cover rounded-md shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300 cursor-pointer"
                                     on:click={() => openMealGallery(index, mealIndex, imgIndex)}
                                   />
                                 </div>
