@@ -133,14 +133,11 @@
         mainImagePreview = initialData.images.main;
       }
 
-      // Initialize gallery image previews
+      // Initialize gallery image previews - don't duplicate existing images
+      // Existing images will be displayed separately, new uploads go to galleryImagePreviews
       if (initialData.images?.gallery && initialData.images.gallery.length > 0) {
-        // Only initialize once to avoid overwriting new uploads
-        const hasPreviews = galleryImagePreviews.length > 0;
-        const hasFiles = galleryImageFiles.length > 0;
-        if (!hasPreviews || (!hasFiles && hasPreviews)) {
-          galleryImagePreviews = [...initialData.images.gallery];
-        }
+        // Only initialize if we have new uploads, not existing images
+        // Existing images are handled by the separate display section
       }
 
       // Initialize itinerary images
@@ -152,27 +149,16 @@
         });
       }
 
-      // Initialize accommodation images
+      // Initialize accommodation images - don't duplicate existing images
+      // Existing images will be displayed separately, new uploads go to accommodationImagePreviews
       if (initialData.itinerary) {
-        initialData.itinerary.forEach((day, dayIndex) => {
-          if (day.accommodation?.images && day.accommodation.images.length > 0) {
-            accommodationImagePreviews[dayIndex] = [...day.accommodation.images];
-          }
-        });
+        // Do not initialize existing images into preview arrays to avoid duplication
       }
 
-      // Initialize meal images
+      // Initialize meal images - don't duplicate existing images
+      // Existing images will be displayed separately, new uploads go to mealsImagePreviews
       if (initialData.itinerary) {
-        initialData.itinerary.forEach((day, dayIndex) => {
-          if (day.meals) {
-            day.meals.forEach((meal, mealIndex) => {
-              if (meal.images && meal.images.length > 0) {
-                if (!mealsImagePreviews[dayIndex]) mealsImagePreviews[dayIndex] = [];
-                mealsImagePreviews[dayIndex][mealIndex] = [...meal.images];
-              }
-            });
-          }
-        });
+        // Do not initialize existing images into preview arrays to avoid duplication
       }
     }
   }
@@ -971,6 +957,11 @@
                               />
                             </svg>
                           </button>
+                          <div
+                            class="absolute bottom-1 left-1 px-2 py-1 bg-green-500 text-white text-xs rounded"
+                          >
+                            New
+                          </div>
                         </div>
                       {/each}
                     {/if}
@@ -1144,6 +1135,11 @@
                                   />
                                 </svg>
                               </button>
+                              <div
+                                class="absolute bottom-0 left-0 px-1 py-0.5 bg-green-500 text-white text-xs rounded-tr"
+                              >
+                                New
+                              </div>
                             </div>
                           {/each}
                         {/if}
@@ -1470,6 +1466,11 @@
                   />
                 </svg>
               </button>
+              <div
+                class="absolute bottom-2 left-2 px-2 py-1 bg-green-500 text-white text-xs rounded"
+              >
+                New
+              </div>
             </div>
           {/each}
 
