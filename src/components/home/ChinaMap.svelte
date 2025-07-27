@@ -27,6 +27,8 @@
   let imageIndexes: Record<string, number> = {};
 
   let allTours = [];
+  let isDrawerLocked = false;
+  let lockTimeout = null;
 
   onMount(async () => {
     try {
@@ -45,8 +47,22 @@
     mouseY = e.clientY;
   }
 
+  function handleProvinceHover(provinceName: string) {
+    if (!isDrawerLocked) {
+      hoveredProvince = getProvinceByName(provinceName);
+    }
+  }
+
+  function handleProvinceClick(provinceName: string) {
+    hoveredProvince = getProvinceByName(provinceName);
+    isDrawerLocked = true;
+    setTimeout(() => {
+      isDrawerLocked = false;
+    }, 3000);
+  }
+
   function animateResetView() {
-    const duration = 300; // ms
+    const duration = 300;
     const frameRate = 60;
     const totalFrames = Math.round((duration / 1000) * frameRate);
 
@@ -118,7 +134,7 @@
       .map(tour => {
         const image = tour.image || '/images/placeholder.jpg';
         return {
-          city: tour.location, // 改为 location 字段
+          city: tour.location,
           province: tour.location,
           slug: tour.slug ?? '',
           images: [image],
@@ -237,15 +253,48 @@
       const paths = document.querySelectorAll('.province-path');
       paths.forEach(path => {
         const title = path.getAttribute('title') || 'Unknown Province';
+
         path.addEventListener('mouseenter', () => {
+          if (!isDrawerLocked) {
+            hoveredProvince = {
+              id: path.id || '',
+              name: title,
+              description: `Explore tours in ${title}`,
+            };
+            showPopupForProvince(title);
+          }
+        });
+
+        path.addEventListener('mouseleave', hidePopupWithDelay);
+
+        path.addEventListener('click', () => {
           hoveredProvince = {
             id: path.id || '',
             name: title,
             description: `Explore tours in ${title}`,
           };
           showPopupForProvince(title);
+
+          isDrawerLocked = true;
+          if (lockTimeout) clearTimeout(lockTimeout);
+          lockTimeout = setTimeout(() => {
+            isDrawerLocked = false;
+            lockTimeout = null;
+
+            const hoveredPath = document.querySelector('.province-path:hover');
+            if (hoveredPath) {
+              const title = hoveredPath.getAttribute('title') || 'Unknown Province';
+              hoveredProvince = {
+                id: hoveredPath.id || '',
+                name: title,
+                description: `Explore tours in ${title}`,
+              };
+              showPopupForProvince(title);
+            } else {
+              hidePopupWithDelay();
+            }
+          }, 3000);
         });
-        path.addEventListener('mouseleave', hidePopupWithDelay);
       });
     });
   });
@@ -263,99 +312,102 @@
 >
   <button
     on:click={animateResetView}
-    class="absolute top-4 right-4 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition"
+    class="absolute top-4 left-4 z-20 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition"
   >
     Reset View
   </button>
 
-  <div class="w-full h-full flex items-center justify-center">
-    {@html svgContent}
-  </div>
-
-  {#if hoveredProvince}
-    <div
-      id="tour-drawer"
-      class="absolute z-[9999] bg-white border border-gray-300 rounded-xl shadow-2xl w-[420px] max-h-[520px] overflow-y-auto transition-all duration-300"
-      style="top: {popupY}px; left: {popupX}px;"
-      on:mouseenter={() => (popupHovering = true)}
-      on:mouseleave={() => {
-        popupHovering = false;
-        hidePopupWithDelay();
-      }}
-      on:wheel|stopPropagation
-    >
-      <div class="p-5 space-y-5">
-        <div class="text-2xl font-bold text-gray-800 border-b pb-2">
-          {hoveredProvince.name} - Tours
-        </div>
-
-        {#if currentProvinceTours.length > 0}
-          <div class="space-y-4">
-            {#each currentProvinceTours as tour}
-              <div
-                class="rounded-xl border border-gray-200 overflow-hidden shadow hover:shadow-md transition-all bg-white"
-              >
-                <div class="relative w-full h-36 bg-gray-100 overflow-hidden">
-                  <img
-                    src={tour.images[imageIndexes[tour.city] ?? 0]}
-                    alt={tour.city}
-                    class="w-full h-full object-cover transition-opacity duration-300"
-                    on:error={e =>
-                      (e.target.src = 'https://placehold.co/400x180?text=No+Image&font=roboto')}
-                  />
-
-                  {#if tour.images.length > 1}
-                    <button
-                      class="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
-                      on:click={() => changeImageIndex(tour.city, 'prev')}>‹</button
-                    >
-                    <button
-                      class="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
-                      on:click={() => changeImageIndex(tour.city, 'next')}>›</button
-                    >
-                  {/if}
-                </div>
-
-                <div class="p-4 space-y-2">
-                  <div class="text-lg font-bold text-gray-800">{tour.title}</div>
-                  <div class="text-sm text-gray-500 flex items-center gap-2">
-                    <span>📅 {tour.duration}</span>
-                    <span>💰 ${tour.price}</span>
-                  </div>
-                  <div class="text-sm text-gray-600">
-                    {tour.description}
-                  </div>
-                  <a
-                    href={`/tours/${tour.slug}`}
-                    class="inline-flex items-center gap-2 mt-2 px-4 py-1.5 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
-                    target="_blank"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      class="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M14 5l7 7m0 0l-7 7m7-7H3"
-                      />
-                    </svg>
-                    Explore {tour.city}
-                  </a>
-                </div>
-              </div>
-            {/each}
-          </div>
-        {:else}
-          <div class="text-gray-500 text-sm">No tour data available for this province.</div>
-        {/if}
+  <div class="flex w-full h-full">
+    <div class="flex-1 relative">
+      <div class="w-full h-full flex items-center justify-center">
+        {@html svgContent}
       </div>
     </div>
-  {/if}
+
+    {#if hoveredProvince}
+      <div
+        id="tour-drawer"
+        class="w-[420px] h-full border-l-4 border-red-500 shadow-2xl overflow-y-auto transition-all duration-300 backdrop-blur-lg bg-white/90 rounded-l-2xl"
+        on:mouseenter={() => (popupHovering = true)}
+        on:mouseleave={() => {
+          popupHovering = false;
+          hidePopupWithDelay();
+        }}
+        on:wheel|stopPropagation
+      >
+        <div class="p-5 space-y-5">
+          <div class="text-2xl font-bold text-gray-800 border-b pb-2">
+            {hoveredProvince.name} - Tours
+          </div>
+
+          {#if currentProvinceTours.length > 0}
+            <div class="space-y-4">
+              {#each currentProvinceTours as tour}
+                <div
+                  class="rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl hover:border-blue-400 transition-all transform hover:scale-[1.02] bg-white"
+                >
+                  <div class="relative w-full h-36 bg-gray-100 overflow-hidden">
+                    <img
+                      src={tour.images[imageIndexes[tour.city] ?? 0]}
+                      alt={tour.city}
+                      class="w-full h-full object-cover transition-opacity duration-300"
+                      on:error={e =>
+                        (e.target.src = 'https://placehold.co/400x180?text=No+Image&font=roboto')}
+                    />
+
+                    {#if tour.images.length > 1}
+                      <button
+                        class="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
+                        on:click={() => changeImageIndex(tour.city, 'prev')}>‹</button
+                      >
+                      <button
+                        class="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
+                        on:click={() => changeImageIndex(tour.city, 'next')}>›</button
+                      >
+                    {/if}
+                  </div>
+
+                  <div class="p-4 space-y-2">
+                    <div class="text-lg font-semibold text-blue-800">{tour.title}</div>
+                    <div class="text-sm text-gray-500 flex items-center gap-2">
+                      <span>📅 {tour.duration}</span>
+                      <span>💰 ${tour.price}</span>
+                    </div>
+                    <div class="text-sm text-gray-600 leading-relaxed tracking-wide">
+                      {tour.description}
+                    </div>
+                    <a
+                      href={`/tours/${tour.slug}`}
+                      class="inline-flex items-center gap-2 mt-2 px-4 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full hover:from-blue-700 hover:to-indigo-700 transition"
+                      target="_blank"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                      Explore {tour.city}
+                    </a>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          {:else}
+            <div class="text-gray-500 text-sm">No tour data available for this province.</div>
+          {/if}
+        </div>
+      </div>
+    {/if}
+  </div>
 </div>
 
 <style>
