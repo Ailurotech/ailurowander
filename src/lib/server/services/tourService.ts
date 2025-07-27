@@ -184,30 +184,21 @@ export async function uploadTourImages(
  */
 export async function updateTourImages(
   tourId: string,
-  imageUrls: { main: string; gallery: string[] }
+  imageUrls: { main?: string; gallery?: string[] }
 ): Promise<void> {
   const db = await getDB();
   const toursCollection = db.collection('tours');
 
-  // Get current tour to preserve existing images
-  const currentTour = await toursCollection.findOne({
-    _id: new ObjectId(tourId),
-  });
-  const existingImages = currentTour?.images || { main: '', gallery: [] };
-
-  // Prepare update object - only update fields that have new values
   const updateObject: any = {};
 
-  if (imageUrls.main && imageUrls.main.trim() !== '') {
+  if (imageUrls.main !== undefined) {
     updateObject['images.main'] = imageUrls.main;
   }
 
-  if (imageUrls.gallery && imageUrls.gallery.length > 0) {
-    // Replace gallery images with new ones
+  if (imageUrls.gallery !== undefined) {
     updateObject['images.gallery'] = imageUrls.gallery;
   }
 
-  // Only update if there are new images to set
   if (Object.keys(updateObject).length > 0) {
     await toursCollection.updateOne({ _id: new ObjectId(tourId) }, { $set: updateObject });
   }

@@ -14,7 +14,7 @@
     subtitle={$t('tour_detail.gallery_subtitle')}
     background="white"
   >
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-16">
       {#each tour.images.gallery as image, index}
         <div
           class="overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer"

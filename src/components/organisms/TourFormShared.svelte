@@ -91,10 +91,85 @@
       if (itineraryImageFiles.length !== itineraryLength) {
         itineraryImageFiles = new Array(itineraryLength).fill(null);
         itineraryImagePreviews = new Array(itineraryLength).fill(null);
-        accommodationImageFiles = new Array(itineraryLength).fill([]);
-        accommodationImagePreviews = new Array(itineraryLength).fill([]);
-        mealsImageFiles = tourData.itinerary.map(day => (day.meals || []).map(() => []));
-        mealsImagePreviews = tourData.itinerary.map(day => (day.meals || []).map(() => []));
+      }
+      
+      // Always update accommodation arrays to match current itinerary structure
+      accommodationImageFiles = Array.from({ length: itineraryLength }, (_, dayIndex) => {
+        // Preserve existing files if they exist, otherwise create new empty array
+        return accommodationImageFiles[dayIndex] || [];
+      });
+      
+      accommodationImagePreviews = Array.from({ length: itineraryLength }, (_, dayIndex) => {
+        // Preserve existing previews if they exist, otherwise create new empty array
+        return accommodationImagePreviews[dayIndex] || [];
+      });
+
+      // Always update meals arrays to match current itinerary structure
+      mealsImageFiles = tourData.itinerary.map((day, dayIndex) => {
+        const mealsCount = (day.meals || []).length;
+        // Preserve existing files if they exist, otherwise create new empty arrays
+        const existingDayFiles = mealsImageFiles[dayIndex] || [];
+        return Array.from({ length: mealsCount }, (_, mealIndex) => 
+          existingDayFiles[mealIndex] || []
+        );
+      });
+
+      mealsImagePreviews = tourData.itinerary.map((day, dayIndex) => {
+        const mealsCount = (day.meals || []).length;
+        // Preserve existing previews if they exist, otherwise create new empty arrays
+        const existingDayPreviews = mealsImagePreviews[dayIndex] || [];
+        return Array.from({ length: mealsCount }, (_, mealIndex) => 
+          existingDayPreviews[mealIndex] || []
+        );
+      });
+    }
+  }
+
+  // Initialize existing images for edit mode
+  $: {
+    if (mode === 'edit') {
+      // Initialize main image preview
+      if (initialData.images?.main && !mainImagePreview && !mainImageFile) {
+        mainImagePreview = initialData.images.main;
+      }
+
+      // Initialize gallery image previews - only if empty to avoid overwriting new uploads
+      if (initialData.images?.gallery && initialData.images.gallery.length > 0 && galleryImagePreviews.length === 0) {
+        galleryImagePreviews = [...initialData.images.gallery];
+      }
+
+      // Initialize itinerary images
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.image && !itineraryImagePreviews[dayIndex]) {
+            itineraryImagePreviews[dayIndex] = day.image;
+          }
+        });
+      }
+
+      // Initialize accommodation images - only if empty
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.accommodation?.images && day.accommodation.images.length > 0 && (!accommodationImagePreviews[dayIndex] || accommodationImagePreviews[dayIndex].length === 0)) {
+            accommodationImagePreviews[dayIndex] = [...day.accommodation.images];
+          }
+        });
+      }
+
+      // Initialize meal images - only if empty
+      if (initialData.itinerary) {
+        initialData.itinerary.forEach((day, dayIndex) => {
+          if (day.meals) {
+            day.meals.forEach((meal, mealIndex) => {
+              if (meal.images && meal.images.length > 0) {
+                if (!mealsImagePreviews[dayIndex]) mealsImagePreviews[dayIndex] = [];
+                if (!mealsImagePreviews[dayIndex][mealIndex] || mealsImagePreviews[dayIndex][mealIndex].length === 0) {
+                  mealsImagePreviews[dayIndex][mealIndex] = [...meal.images];
+                }
+              }
+            });
+          }
+        });
       }
     }
   }
@@ -136,6 +211,8 @@
         images: [],
       },
     ];
+    // Trigger reactive update
+    tourData.itinerary = [...tourData.itinerary];
   }
 
   function removeMeal(dayIndex: number, mealIndex: number) {
@@ -143,6 +220,8 @@
       tourData.itinerary[dayIndex].meals = tourData.itinerary[dayIndex].meals!.filter(
         (_, i) => i !== mealIndex
       );
+      // Trigger reactive update
+      tourData.itinerary = [...tourData.itinerary];
     }
   }
 
@@ -256,6 +335,15 @@
   function handleAccommodationImageChange(event: Event, dayIndex: number) {
     const target = event.target as HTMLInputElement;
     const newFiles = Array.from(target.files || []);
+    
+    // Ensure arrays exist before accessing them
+    if (!accommodationImageFiles[dayIndex]) {
+      accommodationImageFiles[dayIndex] = [];
+    }
+    if (!accommodationImagePreviews[dayIndex]) {
+      accommodationImagePreviews[dayIndex] = [];
+    }
+    
     accommodationImageFiles[dayIndex] = [...accommodationImageFiles[dayIndex], ...newFiles];
     accommodationImageFiles = [...accommodationImageFiles];
 
@@ -273,20 +361,41 @@
   }
 
   function removeAccommodationImage(dayIndex: number, imageIndex: number) {
-    accommodationImageFiles[dayIndex] = accommodationImageFiles[dayIndex].filter(
-      (_, i) => i !== imageIndex
-    );
-    accommodationImagePreviews[dayIndex] = accommodationImagePreviews[dayIndex].filter(
-      (_, i) => i !== imageIndex
-    );
-    accommodationImageFiles = [...accommodationImageFiles];
-    accommodationImagePreviews = [...accommodationImagePreviews];
+    // Ensure arrays exist before accessing them
+    if (accommodationImageFiles[dayIndex]) {
+      accommodationImageFiles[dayIndex] = accommodationImageFiles[dayIndex].filter(
+        (_, i) => i !== imageIndex
+      );
+      accommodationImageFiles = [...accommodationImageFiles];
+    }
+    
+    if (accommodationImagePreviews[dayIndex]) {
+      accommodationImagePreviews[dayIndex] = accommodationImagePreviews[dayIndex].filter(
+        (_, i) => i !== imageIndex
+      );
+      accommodationImagePreviews = [...accommodationImagePreviews];
+    }
   }
 
   // Meal image handling
   function handleMealImageChange(event: Event, dayIndex: number, mealIndex: number) {
     const target = event.target as HTMLInputElement;
     const newFiles = Array.from(target.files || []);
+    
+    // Ensure arrays exist before accessing them
+    if (!mealsImageFiles[dayIndex]) {
+      mealsImageFiles[dayIndex] = [];
+    }
+    if (!mealsImageFiles[dayIndex][mealIndex]) {
+      mealsImageFiles[dayIndex][mealIndex] = [];
+    }
+    if (!mealsImagePreviews[dayIndex]) {
+      mealsImagePreviews[dayIndex] = [];
+    }
+    if (!mealsImagePreviews[dayIndex][mealIndex]) {
+      mealsImagePreviews[dayIndex][mealIndex] = [];
+    }
+
     mealsImageFiles[dayIndex][mealIndex] = [...mealsImageFiles[dayIndex][mealIndex], ...newFiles];
     mealsImageFiles = [...mealsImageFiles];
 
@@ -304,14 +413,20 @@
   }
 
   function removeMealImage(dayIndex: number, mealIndex: number, imageIndex: number) {
+    // Ensure arrays exist before accessing them
+    if (mealsImageFiles[dayIndex] && mealsImageFiles[dayIndex][mealIndex]) {
     mealsImageFiles[dayIndex][mealIndex] = mealsImageFiles[dayIndex][mealIndex].filter(
       (_, i) => i !== imageIndex
     );
+      mealsImageFiles = [...mealsImageFiles];
+    }
+    
+    if (mealsImagePreviews[dayIndex] && mealsImagePreviews[dayIndex][mealIndex]) {
     mealsImagePreviews[dayIndex][mealIndex] = mealsImagePreviews[dayIndex][mealIndex].filter(
       (_, i) => i !== imageIndex
     );
-    mealsImageFiles = [...mealsImageFiles];
     mealsImagePreviews = [...mealsImagePreviews];
+    }
   }
 
   // Form validation
@@ -822,80 +937,45 @@
                     {$t('agent.tours.accommodation.add_photos')}
                   </label>
                 </div>
-                {#if (accommodationImagePreviews[index] && accommodationImagePreviews[index].length > 0) || (mode === 'edit' && day.accommodation?.images && day.accommodation.images.length > 0)}
+                {#if accommodationImagePreviews[index] && accommodationImagePreviews[index].length > 0}
                   <div class="mt-3 grid grid-cols-2 sm:grid-cols-3 gap-2">
-                    <!-- New uploaded images -->
-                    {#if accommodationImagePreviews[index]}
-                      {#each accommodationImagePreviews[index] as preview, imgIndex}
-                        <div class="relative aspect-[4/3] w-full">
-                          <img
-                            src={preview}
-                            alt="Accommodation preview {imgIndex + 1}"
-                            class="w-full h-full object-cover rounded-lg shadow-sm"
-                          />
-                          <button
-                            type="button"
-                            class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full text-xs"
-                            on:click={() => removeAccommodationImage(index, imgIndex)}
+                    {#each accommodationImagePreviews[index] as preview, imgIndex}
+                      <div class="relative aspect-[4/3] w-full">
+                        <img
+                          src={preview}
+                          alt="Accommodation image {imgIndex + 1}"
+                          class="w-full h-full object-cover rounded-lg shadow-sm"
+                        />
+                        <button
+                          type="button"
+                          class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full text-xs"
+                          on:click={() => {
+                            const existingCount = day.accommodation?.images?.length || 0;
+                            if (mode === 'edit' && imgIndex < existingCount && !removedAccommodationImages.some(removed => removed.dayIndex === index && removed.imageIndex === imgIndex)) {
+                              removeExistingAccommodationImage(index, imgIndex);
+                            } else {
+                              const newImgIndex = imgIndex - existingCount + removedAccommodationImages.filter(r => r.dayIndex === index).length;
+                              removeAccommodationImage(index, newImgIndex);
+                            }
+                          }}
+                        >
+                          <svg
+                            class="h-3 w-3"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            <svg
-                              class="h-3 w-3"
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"
-                              />
-                            </svg>
-                          </button>
-                        </div>
-                      {/each}
-                    {/if}
-
-                    <!-- Existing images in edit mode -->
-                    {#if mode === 'edit' && day.accommodation?.images}
-                      {#each day.accommodation.images as existingImage, imgIndex}
-                        {#if !removedAccommodationImages.some(removed => removed.dayIndex === index && removed.imageIndex === imgIndex)}
-                          <div class="relative aspect-[4/3] w-full">
-                            <img
-                              src={existingImage}
-                              alt="Existing accommodation image {imgIndex + 1}"
-                              class="w-full h-full object-cover rounded-lg shadow-sm"
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M6 18L18 6M6 6l12 12"
                             />
-                            <button
-                              type="button"
-                              class="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full text-xs"
-                              on:click={() => removeExistingAccommodationImage(index, imgIndex)}
-                            >
-                              <svg
-                                class="h-3 w-3"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </button>
-                            <div
-                              class="absolute bottom-1 left-1 px-2 py-1 bg-blue-500 text-white text-xs rounded"
-                            >
-                              Existing
-                            </div>
-                          </div>
-                        {/if}
-                      {/each}
-                    {/if}
+                          </svg>
+                        </button>
+                      </div>
+                    {/each}
                   </div>
                 {/if}
               </div>
@@ -995,81 +1075,47 @@
                         {$t('agent.tours.meals.add_photos')}
                       </label>
                     </div>
-                    {#if (mealsImagePreviews[index] && mealsImagePreviews[index][mealIndex] && mealsImagePreviews[index][mealIndex].length > 0) || (mode === 'edit' && meal.images && meal.images.length > 0)}
+                    {#if mealsImagePreviews[index] && mealsImagePreviews[index][mealIndex] && mealsImagePreviews[index][mealIndex].length > 0}
                       <div class="mt-2 grid grid-cols-3 gap-1">
-                        <!-- New uploaded images -->
-                        {#if mealsImagePreviews[index] && mealsImagePreviews[index][mealIndex]}
-                          {#each mealsImagePreviews[index][mealIndex] as preview, imgIndex}
-                            <div class="relative aspect-[4/3] w-full">
-                              <img
-                                src={preview}
-                                alt="Meal preview {imgIndex + 1}"
-                                class="w-full h-full object-cover rounded shadow-sm"
-                              />
-                              <button
-                                type="button"
-                                class="absolute top-0.5 right-0.5 p-0.5 bg-red-500 text-white rounded-full text-xs"
-                                on:click={() => removeMealImage(index, mealIndex, imgIndex)}
+                        {#each mealsImagePreviews[index][mealIndex] as preview, imgIndex}
+                          <div class="relative aspect-[4/3] w-full">
+                            <img
+                              src={preview}
+                              alt="Meal image {imgIndex + 1}"
+                              class="w-full h-full object-cover rounded shadow-sm"
+                            />
+                            <button
+                              type="button"
+                              class="absolute top-0.5 right-0.5 p-0.5 bg-red-500 text-white rounded-full text-xs"
+                              on:click={() => {
+                                const existingCount = meal.images?.length || 0;
+                                const removedCount = removedMealImages.filter(r => r.dayIndex === index && r.mealIndex === mealIndex).length;
+                                const actualIndex = imgIndex - (existingCount - removedCount);
+                                
+                                if (mode === 'edit' && imgIndex < (existingCount - removedCount)) {
+                                  removeExistingMealImage(index, mealIndex, imgIndex);
+                                } else {
+                                  removeMealImage(index, mealIndex, Math.max(0, actualIndex));
+                                }
+                              }}
+                            >
+                              <svg
+                                class="h-2 w-2"
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
                               >
-                                <svg
-                                  class="h-2 w-2"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                  />
-                                </svg>
-                              </button>
-                            </div>
-                          {/each}
-                        {/if}
-
-                        <!-- Existing images in edit mode -->
-                        {#if mode === 'edit' && meal.images}
-                          {#each meal.images as existingImage, imgIndex}
-                            {#if !removedMealImages.some(removed => removed.dayIndex === index && removed.mealIndex === mealIndex && removed.imageIndex === imgIndex)}
-                              <div class="relative aspect-[4/3] w-full">
-                                <img
-                                  src={existingImage}
-                                  alt="Existing meal image {imgIndex + 1}"
-                                  class="w-full h-full object-cover rounded shadow-sm"
+                                <path
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M6 18L18 6M6 6l12 12"
                                 />
-                                <button
-                                  type="button"
-                                  class="absolute top-0.5 right-0.5 p-0.5 bg-red-500 text-white rounded-full text-xs"
-                                  on:click={() =>
-                                    removeExistingMealImage(index, mealIndex, imgIndex)}
-                                >
-                                  <svg
-                                    class="h-2 w-2"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      stroke-linecap="round"
-                                      stroke-linejoin="round"
-                                      stroke-width="2"
-                                      d="M6 18L18 6M6 6l12 12"
-                                    />
-                                  </svg>
-                                </button>
-                                <div
-                                  class="absolute bottom-0 left-0 px-1 py-0.5 bg-blue-500 text-white text-xs rounded-tr"
-                                >
-                                  Existing
-                                </div>
-                              </div>
-                            {/if}
-                          {/each}
-                        {/if}
+                              </svg>
+                            </button>
+                          </div>
+                        {/each}
                       </div>
                     {/if}
                   </div>
@@ -1324,18 +1370,24 @@
       </div>
       {#if galleryImagePreviews.length > 0 || (mode === 'edit' && tourData.images?.gallery?.length > 0)}
         <div class="mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <!-- New uploaded images -->
           {#each galleryImagePreviews as preview, index}
             <div class="relative aspect-[4/3] w-full">
               <img
                 src={preview}
-                alt="Gallery preview {index + 1}"
+                alt="Gallery image {index + 1}"
                 class="w-full h-full object-cover rounded-lg shadow-sm"
               />
               <button
                 type="button"
                 class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full"
-                on:click={() => removeGalleryImage(index)}
+                on:click={() => {
+                  if (mode === 'edit' && index < (tourData.images?.gallery?.length || 0) && !removedGalleryImages.includes(index)) {
+                    removeExistingGalleryImage(index);
+                  } else {
+                    const newIndex = index - (tourData.images?.gallery?.length || 0) + removedGalleryImages.filter(i => i < (tourData.images?.gallery?.length || 0)).length;
+                    removeGalleryImage(Math.max(0, newIndex));
+                  }
+                }}
               >
                 <svg
                   class="h-4 w-4"
@@ -1354,46 +1406,6 @@
               </button>
             </div>
           {/each}
-
-          <!-- Existing images in edit mode -->
-          {#if mode === 'edit' && tourData.images?.gallery}
-            {#each tourData.images.gallery as existingImage, index}
-              {#if !removedGalleryImages.includes(index)}
-                <div class="relative aspect-[4/3] w-full">
-                  <img
-                    src={existingImage}
-                    alt="Gallery image {index + 1}"
-                    class="w-full h-full object-cover rounded-lg shadow-sm"
-                  />
-                  <button
-                    type="button"
-                    class="absolute top-2 right-2 p-1 bg-red-500 text-white rounded-full"
-                    on:click={() => removeExistingGalleryImage(index)}
-                  >
-                    <svg
-                      class="h-4 w-4"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M6 18L18 6M6 6l12 12"
-                      />
-                    </svg>
-                  </button>
-                  <div
-                    class="absolute bottom-2 left-2 px-2 py-1 bg-blue-500 text-white text-xs rounded"
-                  >
-                    Existing
-                  </div>
-                </div>
-              {/if}
-            {/each}
-          {/if}
         </div>
       {/if}
     </div>

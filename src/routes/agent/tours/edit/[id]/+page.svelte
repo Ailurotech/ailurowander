@@ -48,20 +48,34 @@
     submitError = '';
     submitMessage = '';
 
+    console.log('Frontend: Starting tour update submission...');
+
     try {
+      console.log(`Frontend: Sending request to /api/tours/${tourId}`);
       const response = await fetch(`/api/tours/${tourId}`, {
         method: 'PUT',
         body: formData,
       });
 
+      console.log('Frontend: Response received, status:', response.status);
+
       if (!response.ok) {
-        const errorData = await response.json();
-        submitError = errorData.error || $t('agent.tours.edit_tour.update_failed');
+        console.error('Frontend: Response not OK, status:', response.status);
+        
+        try {
+          const errorData = await response.json();
+          submitError = errorData.error || errorData.details || $t('agent.tours.edit_tour.update_failed');
+        } catch (parseError) {
+          console.error('Frontend: Failed to parse error response:', parseError);
+          submitError = `Server error (${response.status})`;
+        }
         return;
       }
 
       // API returns updated tour directly on success
       const updatedTour = await response.json();
+      console.log('Frontend: Tour updated successfully:', updatedTour);
+      
       submitMessage = $t('agent.tours.edit_tour.update_success');
 
       // Redirect to tours page after a short delay
@@ -69,8 +83,15 @@
         goto('/agent/tours');
       }, 2000);
     } catch (error) {
-      console.error('Submit error:', error);
-      submitError = $t('agent.tours.edit_tour.update_failed');
+      console.error('Frontend: Submit error:', error);
+      if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        submitError = 'Network error: Could not connect to server';
+      } else if (error instanceof Error && error.message.includes('Unexpected end of JSON input')) {
+        submitError = 'Server error: Empty or invalid response received';
+      } else {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        submitError = `Error: ${errorMessage}`;
+      }
     } finally {
       isSubmitting = false;
     }

@@ -1,4 +1,6 @@
 import { json } from '@sveltejs/kit';
+import { getDB } from '$lib/server/db';
+import { ObjectId } from 'mongodb';
 import {
   getTourById,
   updateTour,
@@ -66,6 +68,10 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       exclusions: formData.getAll('notIncluded') as string[],
     };
 
+    // Handle image removals
+    const removedGalleryImages = JSON.parse((formData.get('removedGalleryImages') as string) || '[]') as number[];
+    const removeMainImage = formData.get('removeMainImage') === 'true';
+
     // Update the tour first
     const updatedTour = await updateTour(id, tourData);
 
@@ -91,10 +97,38 @@ export const PUT = async ({ params, request }: RequestEvent) => {
         id
       );
 
-      // Update tour with image URLs (function now preserves existing images when new ones aren't provided)
+      // Handle image updates and removals
+      const toursCollection = await getDB().then(db => db.collection('tours'));
+      const currentTour = await toursCollection.findOne({ _id: new ObjectId(id) });
+      const existingImages = currentTour?.images || { main: '', gallery: [] };
+
+      // Prepare final image URLs
+      let finalMainImage = existingImages.main;
+      let finalGalleryImages = [...existingImages.gallery];
+
+      // Remove main image if requested
+      if (removeMainImage) {
+        finalMainImage = '';
+      }
+
+      // Remove specified gallery images
+      if (removedGalleryImages.length > 0) {
+        finalGalleryImages = finalGalleryImages.filter((_, index) => !removedGalleryImages.includes(index));
+      }
+
+      // Add new images
+      if (hasValidMainImage) {
+        finalMainImage = imageUrls.main;
+      }
+
+      if (hasValidGalleryImages) {
+        finalGalleryImages = [...finalGalleryImages, ...imageUrls.gallery];
+      }
+
+      // Update tour with final image URLs
       await updateTourImages(id, {
-        main: hasValidMainImage ? imageUrls.main : '',
-        gallery: hasValidGalleryImages ? imageUrls.gallery : [],
+        main: finalMainImage,
+        gallery: finalGalleryImages,
       });
     }
 
