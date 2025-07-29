@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import cityToProvinceMap from './cityToProvinceMap.json';
 
-  // Province data structure
   interface Province {
     id: string;
     name: string;
@@ -9,115 +9,405 @@
   }
 
   let hoveredProvince: Province | null = null;
+  let currentProvinceTours = [];
   let svgContent = '';
+  let viewBox = { x: -100, y: -100, width: 1000, height: 800 };
 
-  async function loadSvg() {
+  let isDragging = false;
+  let startX = 0;
+  let startY = 0;
+  let startViewBox = { x: 0, y: 0 };
+
+  let mouseX = 0;
+  let mouseY = 0;
+  let popupX = 0;
+  let popupY = 0;
+  let popupHovering = false;
+  let closeTimeout: ReturnType<typeof setTimeout> | null = null;
+  let imageIndexes: Record<string, number> = {};
+
+  let allTours = [];
+  let isDrawerLocked = false;
+  let lockTimeout = null;
+
+  onMount(async () => {
     try {
-      const response = await fetch('/chinaHigh.svg');
-      svgContent = await response.text();
-
-      // Create a temporary div to parse the SVG
-      const tempDiv = document.createElement('div');
-      tempDiv.innerHTML = svgContent;
-
-      // Get the SVG element
-      const svg = tempDiv.querySelector('svg');
-      console.log('SVG element found:', !!svg);
-
-      if (svg) {
-        // Set viewBox to show the entire map
-        svg.setAttribute('viewBox', '0 0 1000 800');
-        svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-        svg.setAttribute('class', 'china-map');
-      }
-
-      // Add hover effects to all paths
-      const paths = tempDiv.querySelectorAll('path');
-      console.log('Number of paths found:', paths.length);
-
-      paths.forEach((path, index) => {
-        console.log(`Processing path ${index}:`, {
-          id: path.id,
-          hasTitle: !!path.querySelector('title'),
-          titleAttribute: path.getAttribute('title'),
-        });
-        path.setAttribute('class', 'province-path');
-        path.setAttribute('fill', '#e5e7eb');
-        path.setAttribute('stroke', '#9ca3af');
-        path.setAttribute('stroke-width', '1');
-
-        // Get the title from the path's title element
-        const titleElement = path.querySelector('title');
-        const title = titleElement
-          ? titleElement.textContent
-          : path.getAttribute('title') || 'Unknown Province';
-
-        // Debug log
-        console.log('Path found:', {
-          id: path.id,
-          title: title,
-          hasTitleElement: !!titleElement,
-          titleAttribute: path.getAttribute('title'),
-        });
-
-        path.addEventListener('mouseenter', () => {
-          console.log('Mouse entered path:', {
-            title,
-            pathId: path.id,
-            currentHoveredProvince: hoveredProvince,
-          });
-          hoveredProvince = {
-            id: path.id || (title as string).toLowerCase().replace(/\s+/g, '-'),
-            name: title as string,
-            description: `Explore tours and attractions in ${title}`,
-          };
-          console.log('Updated hoveredProvince:', hoveredProvince);
-        });
-
-        path.addEventListener('mouseleave', () => {
-          console.log('Mouse left path:', {
-            title,
-            pathId: path.id,
-            currentHoveredProvince: hoveredProvince,
-          });
-          hoveredProvince = null;
-          console.log('Cleared hoveredProvince');
-        });
-      });
-
-      // Update the SVG content
-      svgContent = tempDiv.innerHTML;
+      const res = await fetch('/api/tours');
+      allTours = await res.json();
+      console.log('Fetched tours:', allTours);
     } catch (error) {
-      console.error('Error loading SVG:', error);
+      console.error('Failed to fetch tours:', error);
+    }
+  });
+
+  let totalViews = Object.values(allTours).reduce((acc, t) => acc + t.views, 0);
+
+  function handleGlobalMouseMove(e: MouseEvent) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+  }
+
+  function handleProvinceHover(provinceName: string) {
+    if (!isDrawerLocked) {
+      hoveredProvince = getProvinceByName(provinceName);
     }
   }
 
-  onMount(() => {
-    loadSvg();
+  function handleProvinceClick(provinceName: string) {
+    hoveredProvince = getProvinceByName(provinceName);
+    isDrawerLocked = true;
+    setTimeout(() => {
+      isDrawerLocked = false;
+    }, 3000);
+  }
+
+  function animateResetView() {
+    const duration = 300;
+    const frameRate = 60;
+    const totalFrames = Math.round((duration / 1000) * frameRate);
+
+    const start = { ...viewBox };
+    const end = { x: -100, y: -100, width: 1000, height: 800 };
+
+    let frame = 0;
+
+    const animate = () => {
+      frame++;
+      const progress = frame / totalFrames;
+
+      viewBox = {
+        x: start.x + (end.x - start.x) * progress,
+        y: start.y + (end.y - start.y) * progress,
+        width: start.width + (end.width - start.width) * progress,
+        height: start.height + (end.height - start.height) * progress,
+      };
+
+      updateViewBox();
+
+      if (frame < totalFrames) {
+        requestAnimationFrame(animate);
+      }
+    };
+
+    requestAnimationFrame(animate);
+  }
+
+  const normalizedCityToProvinceMap = Object.fromEntries(
+    Object.entries(cityToProvinceMap).map(([city, province]) => [city.toLowerCase(), province])
+  );
+  function getProvinceFromTour(tour) {
+    const city = (tour.location || tour.destination || '').toLowerCase();
+    return normalizedCityToProvinceMap[city] || city;
+  }
+
+  function showPopupForProvince(name: string) {
+    const popupWidth = 420;
+    const popupHeight = 500;
+
+    const container = document.querySelector('.china-map')?.parentElement;
+    const rect = container?.getBoundingClientRect();
+
+    let relativeMouseX = mouseX - (rect?.left ?? 0);
+    let relativeMouseY = mouseY - (rect?.top ?? 0);
+
+    let desiredX = relativeMouseX + 10;
+    let desiredY = relativeMouseY + 10;
+
+    if (desiredX + popupWidth > container?.clientWidth) {
+      desiredX = relativeMouseX - popupWidth - 10;
+    }
+    if (desiredY + popupHeight > container?.clientHeight) {
+      desiredY = relativeMouseY - popupHeight - 10;
+    }
+
+    popupX = Math.max(
+      10,
+      Math.min(desiredX, (container?.clientWidth ?? window.innerWidth) - popupWidth - 10)
+    );
+    popupY = Math.max(
+      10,
+      Math.min(desiredY, (container?.clientHeight ?? window.innerHeight) - popupHeight - 10)
+    );
+
+    currentProvinceTours = allTours
+      .filter(tour => getProvinceFromTour(tour) === name)
+      .map(tour => {
+        const image = tour.image || '/images/placeholder.jpg';
+        return {
+          city: tour.location,
+          province: tour.location,
+          slug: tour.slug ?? '',
+          images: [image],
+          duration: tour.duration ?? 'N/A',
+          price: tour.price ?? 'N/A',
+          description: tour.description ?? '',
+          title: tour.title ?? tour.location,
+        };
+      });
+
+    if (closeTimeout) clearTimeout(closeTimeout);
+  }
+
+  function hidePopupWithDelay() {
+    if (closeTimeout) clearTimeout(closeTimeout);
+    closeTimeout = setTimeout(() => {
+      if (!popupHovering) {
+        hoveredProvince = null;
+        currentProvinceTours = [];
+      }
+    }, 1500);
+  }
+
+  function changeImageIndex(city: string, direction: 'prev' | 'next') {
+    const max = tourData[city]?.images.length || 0;
+    if (max === 0) return;
+
+    const current = imageIndexes[city] ?? 0;
+    if (direction === 'next') {
+      imageIndexes[city] = (current + 1) % max;
+    } else {
+      imageIndexes[city] = (current - 1 + max) % max;
+    }
+  }
+
+  async function loadSvg() {
+    const response = await fetch('/chinaHigh.svg');
+    const raw = await response.text();
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = raw;
+
+    const svg = tempDiv.querySelector('svg');
+    if (svg) {
+      svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
+      svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+      svg.setAttribute('class', 'china-map');
+
+      const paths = svg.querySelectorAll('path');
+      paths.forEach(path => {
+        path.classList.add('province-path');
+      });
+    }
+
+    return tempDiv.innerHTML;
+  }
+
+  function handleMouseDown(event: MouseEvent) {
+    isDragging = true;
+    startX = event.clientX;
+    startY = event.clientY;
+    startViewBox = { x: viewBox.x, y: viewBox.y };
+  }
+
+  function handleMouseMove(event: MouseEvent) {
+    if (!isDragging) return;
+    const deltaX = (event.clientX - startX) * (viewBox.width / event.currentTarget.clientWidth);
+    const deltaY = (event.clientY - startY) * (viewBox.height / event.currentTarget.clientHeight);
+
+    viewBox = {
+      ...viewBox,
+      x: startViewBox.x - deltaX,
+      y: startViewBox.y - deltaY,
+    };
+
+    updateViewBox();
+  }
+
+  function handleMouseUp() {
+    isDragging = false;
+  }
+
+  function handleWheel(event: WheelEvent) {
+    event.preventDefault();
+    const zoomFactor = 0.1;
+    const delta = event.deltaY > 0 ? 1 : -1;
+
+    const zoomCenterX =
+      (event.offsetX / event.currentTarget.clientWidth) * viewBox.width + viewBox.x;
+    const zoomCenterY =
+      (event.offsetY / event.currentTarget.clientHeight) * viewBox.height + viewBox.y;
+
+    const newWidth = viewBox.width * (1 + zoomFactor * delta);
+    const newHeight = viewBox.height * (1 + zoomFactor * delta);
+
+    viewBox = {
+      x: zoomCenterX - (zoomCenterX - viewBox.x) * (newWidth / viewBox.width),
+      y: zoomCenterY - (zoomCenterY - viewBox.y) * (newHeight / viewBox.height),
+      width: newWidth,
+      height: newHeight,
+    };
+
+    updateViewBox();
+  }
+
+  function updateViewBox() {
+    const svg = document.querySelector('.china-map') as SVGElement;
+    if (svg) {
+      svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.width} ${viewBox.height}`);
+    }
+  }
+
+  onMount(async () => {
+    svgContent = await loadSvg();
+    requestAnimationFrame(() => {
+      const paths = document.querySelectorAll('.province-path');
+      paths.forEach(path => {
+        const title = path.getAttribute('title') || 'Unknown Province';
+
+        path.addEventListener('mouseenter', () => {
+          if (!isDrawerLocked) {
+            hoveredProvince = {
+              id: path.id || '',
+              name: title,
+              description: `Explore tours in ${title}`,
+            };
+            showPopupForProvince(title);
+          }
+        });
+
+        path.addEventListener('mouseleave', hidePopupWithDelay);
+
+        path.addEventListener('click', () => {
+          hoveredProvince = {
+            id: path.id || '',
+            name: title,
+            description: `Explore tours in ${title}`,
+          };
+          showPopupForProvince(title);
+
+          isDrawerLocked = true;
+          if (lockTimeout) clearTimeout(lockTimeout);
+          lockTimeout = setTimeout(() => {
+            isDrawerLocked = false;
+            lockTimeout = null;
+
+            const hoveredPath = document.querySelector('.province-path:hover');
+            if (hoveredPath) {
+              const title = hoveredPath.getAttribute('title') || 'Unknown Province';
+              hoveredProvince = {
+                id: hoveredPath.id || '',
+                name: title,
+                description: `Explore tours in ${title}`,
+              };
+              showPopupForProvince(title);
+            } else {
+              hidePopupWithDelay();
+            }
+          }, 3000);
+        });
+      });
+    });
   });
 </script>
 
-<div class="relative w-full h-[600px] bg-white rounded-lg shadow-lg overflow-hidden">
-  <div class="w-full h-full flex items-center justify-center">
-    {@html svgContent}
-  </div>
+<svelte:window on:mousemove={handleGlobalMouseMove} />
 
-  <!-- Province Description Panel -->
-  {#if hoveredProvince}
-    <div
-      class="absolute top-4 right-4 w-80 bg-white rounded-lg shadow-xl p-4 transform transition-all duration-300"
-      style="max-height: calc(100% - 2rem); overflow-y: auto;"
-    >
-      <h3 class="text-xl font-bold mb-2">{hoveredProvince.name}</h3>
-      <p class="text-neutral-600">{hoveredProvince.description}</p>
-      <a
-        href="/tours/{hoveredProvince.id}"
-        class="mt-4 inline-block text-red-600 hover:text-red-700 font-medium"
-      >
-        View Tours →
-      </a>
+<div
+  class="relative w-full h-[600px] bg-white rounded-lg shadow-lg overflow-hidden"
+  on:mousedown={handleMouseDown}
+  on:mousemove={handleMouseMove}
+  on:mouseup={handleMouseUp}
+  on:mouseleave={handleMouseUp}
+  on:wheel={handleWheel}
+>
+  <button
+    on:click={animateResetView}
+    class="absolute top-4 left-4 z-20 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 transition"
+  >
+    Reset View
+  </button>
+
+  <div class="flex w-full h-full">
+    <div class="flex-1 relative">
+      <div class="w-full h-full flex items-center justify-center">
+        {@html svgContent}
+      </div>
     </div>
-  {/if}
+
+    {#if hoveredProvince}
+      <div
+        id="tour-drawer"
+        class="w-[420px] h-full border-l-4 border-red-500 shadow-2xl overflow-y-auto transition-all duration-300 backdrop-blur-lg bg-white/90 rounded-l-2xl"
+        on:mouseenter={() => (popupHovering = true)}
+        on:mouseleave={() => {
+          popupHovering = false;
+          hidePopupWithDelay();
+        }}
+        on:wheel|stopPropagation
+      >
+        <div class="p-5 space-y-5">
+          <div class="text-2xl font-bold text-gray-800 border-b pb-2">
+            {hoveredProvince.name} - Tours
+          </div>
+
+          {#if currentProvinceTours.length > 0}
+            <div class="space-y-4">
+              {#each currentProvinceTours as tour}
+                <div
+                  class="rounded-2xl border border-gray-200 overflow-hidden shadow-md hover:shadow-xl hover:border-blue-400 transition-all transform hover:scale-[1.02] bg-white"
+                >
+                  <div class="relative w-full h-36 bg-gray-100 overflow-hidden">
+                    <img
+                      src={tour.images[imageIndexes[tour.city] ?? 0]}
+                      alt={tour.city}
+                      class="w-full h-full object-cover transition-opacity duration-300"
+                      on:error={e =>
+                        (e.target.src = 'https://placehold.co/400x180?text=No+Image&font=roboto')}
+                    />
+
+                    {#if tour.images.length > 1}
+                      <button
+                        class="absolute top-1/2 left-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
+                        on:click={() => changeImageIndex(tour.city, 'prev')}>‹</button
+                      >
+                      <button
+                        class="absolute top-1/2 right-1 transform -translate-y-1/2 bg-white bg-opacity-70 rounded-full w-6 h-6 flex items-center justify-center text-gray-800 hover:bg-opacity-90"
+                        on:click={() => changeImageIndex(tour.city, 'next')}>›</button
+                      >
+                    {/if}
+                  </div>
+
+                  <div class="p-4 space-y-2">
+                    <div class="text-lg font-semibold text-blue-800">{tour.title}</div>
+                    <div class="text-sm text-gray-500 flex items-center gap-2">
+                      <span>📅 {tour.duration}</span>
+                      <span>💰 ${tour.price}</span>
+                    </div>
+                    <div class="text-sm text-gray-600 leading-relaxed tracking-wide">
+                      {tour.description}
+                    </div>
+                    <a
+                      href={`/tours/${tour.slug}`}
+                      class="inline-flex items-center gap-2 mt-2 px-4 py-1.5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-full hover:from-blue-700 hover:to-indigo-700 transition"
+                      target="_blank"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-4 w-4"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M14 5l7 7m0 0l-7 7m7-7H3"
+                        />
+                      </svg>
+                      Explore {tour.city}
+                    </a>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          {:else}
+            <div class="text-gray-500 text-sm">No tour data available for this province.</div>
+          {/if}
+        </div>
+      </div>
+    {/if}
+  </div>
 </div>
 
 <style>
@@ -126,6 +416,11 @@
     height: 100%;
     min-width: 800px;
     min-height: 600px;
+    cursor: grab;
+  }
+
+  :global(.china-map:active) {
+    cursor: grabbing;
   }
 
   :global(.province-path) {

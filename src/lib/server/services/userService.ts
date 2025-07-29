@@ -67,7 +67,9 @@ export async function createUser(userData: {
 
   // Check if username already exists
   console.log(`createUser: Checking if username ${userData.username} already exists`);
-  const existingUser = await usersCollection.findOne({ username: userData.username });
+  const existingUser = await usersCollection.findOne({
+    username: userData.username,
+  });
   if (existingUser) {
     console.log(`createUser: Username ${userData.username} already exists`);
     throw new Error('Username already exists');

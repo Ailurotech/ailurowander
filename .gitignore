@@ -145,3 +145,5 @@ dist
 .svelte-kit/
 
 scripts/create-admin.js
+
+.DS_Store
