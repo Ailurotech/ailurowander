@@ -9,21 +9,21 @@
   // Team members data
   const teamMembers = [
     {
-      name: 'Sarah Chen',
-      role: 'Founder & CEO',
-      bio: 'With over 15 years of experience in Asian tourism, Sarah founded AiluroWander to share her passion for authentic travel experiences.',
+      name: $t('about.team.members.qing_zhuge.name'),
+      role: $t('about.team.members.qing_zhuge.role'),
+      bio: $t('about.team.members.qing_zhuge.bio'),
       image: '/images/team/sarah.jpg',
     },
     {
-      name: 'Michael Wong',
-      role: 'Head of Operations',
-      bio: 'Michael ensures every tour runs smoothly, bringing his expertise in logistics and customer service to create seamless travel experiences.',
+      name: $t('about.team.members.jing_li.name'),
+      role: $t('about.team.members.jing_li.role'),
+      bio: $t('about.team.members.jing_li.bio'),
       image: '/images/team/michael.jpg',
     },
     {
-      name: 'Li Wei',
-      role: 'Senior Tour Guide',
-      bio: 'A certified tour guide with deep knowledge of Chinese history and culture, Li brings destinations to life with engaging storytelling.',
+      name: $t('about.team.members.max_z.name'),
+      role: $t('about.team.members.max_z.role'),
+      bio: $t('about.team.members.max_z.bio'),
       image: '/images/team/li.jpg',
     },
   ];
@@ -32,27 +32,23 @@
   const whyChooseUs = [
     {
       icon: 'temple',
-      title: 'Local Expertise',
-      description:
-        'Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special.',
+      title: $t('about.why_choose_us.local_expertise.title'),
+      description: $t('about.why_choose_us.local_expertise.description'),
     },
     {
       icon: 'dragon',
-      title: 'Cultural Immersion',
-      description:
-        'We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions.',
+      title: $t('about.why_choose_us.cultural_immersion.title'),
+      description: $t('about.why_choose_us.cultural_immersion.description'),
     },
     {
       icon: 'panda',
-      title: 'Personalized Service',
-      description:
-        'Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests.',
+      title: $t('about.why_choose_us.personalized_service.title'),
+      description: $t('about.why_choose_us.personalized_service.description'),
     },
     {
       icon: 'lantern',
-      title: 'Quality Assurance',
-      description:
-        'We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety.',
+      title: $t('about.why_choose_us.quality_assurance.title'),
+      description: $t('about.why_choose_us.quality_assurance.description'),
     },
   ];
 </script>

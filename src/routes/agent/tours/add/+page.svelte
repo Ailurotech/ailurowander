@@ -24,8 +24,17 @@
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        submitError = errorData.error || $t('agent.tours.error');
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          // If response is not JSON, get the text
+          const errorText = await response.text();
+          console.error('Server response (not JSON):', errorText);
+          submitError = `Server error (${response.status}): ${errorText}`;
+          return;
+        }
+        submitError = errorData.error || errorData.details || $t('agent.tours.error');
         return;
       }
 
@@ -39,7 +48,14 @@
         }, 2000);
     } catch (error) {
       console.error('Submit error:', error);
-      submitError = $t('agent.tours.error');
+      if (error instanceof SyntaxError) {
+        submitError = 'Server returned invalid JSON. Check the console for details.';
+      } else if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+        submitError = 'Network error: Could not connect to server';
+      } else {
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+        submitError = `Error: ${errorMessage}`;
+      }
     } finally {
       isSubmitting = false;
     }

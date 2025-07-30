@@ -18,6 +18,7 @@ export async function POST({ request }: RequestEvent) {
 
   try {
     const formData = await request.formData();
+    console.log('API: Form data received, fields:', Array.from(formData.keys()));
 
     // Extract tour data from form
     const tourData: Omit<Tour, '_id' | 'createdAt' | 'updatedAt'> = {
@@ -160,6 +161,11 @@ export async function POST({ request }: RequestEvent) {
     console.error('API: POST /api/tours/create - Error creating tour:', errorMessage);
     console.error('Error stack:', errorStack);
 
-    return json({ error: 'Failed to create tour', details: errorMessage }, { status: 500 });
+    // Ensure we always return valid JSON, even for internal server errors
+    return json({ 
+      error: 'Failed to create tour', 
+      details: errorMessage,
+      timestamp: new Date().toISOString()
+    }, { status: 500 });
   }
 }
