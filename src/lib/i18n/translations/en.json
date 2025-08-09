@@ -318,7 +318,42 @@
     },
     "team": {
       "title": "Meet Our Team",
-      "subtitle": "The Experts Behind Your Journey"
+      "subtitle": "The Experts Behind Your Journey",
+      "members": {
+        "qing_zhuge": {
+          "name": "Qing Zhuge",
+          "role": "Founder & CEO",
+          "bio": "Qing Zhuge brings more than 15 years of strategic leadership and deep market insight to ailurowander. As CEO, Qing drives our mission to redefine travel in Asia, combining an intimate understanding of the continent's diverse cultures with decades of industry experience. Their vision focuses on crafting personalized, meaningful experiences that go beyond the ordinary, connecting travelers authentically with destinations. Qing's expertise lies in anticipating traveler needs, fostering key partnerships, and ensuring ailurowander remains at the forefront of creating unforgettable, expertly guided explorations across Asia."
+        },
+        "jing_li": {
+          "name": "Jing Li",
+          "role": "Head of Operations",
+          "bio": "Jing Li is the operational backbone and technological visionary of ailurowander. With over 15 years dedicated to the intricacies of Asian travel logistics, Jing leverages deep expertise to design and manage the systems that make every adventure flawless. From optimizing complex itineraries across diverse regions to implementing cutting-edge tools for real-time support, Jing ensures the seamless execution that defines the ailurowander experience. Their passion lies in solving the hidden challenges of travel, empowering our team to deliver truly effortless and enriching journeys for every client."
+        },
+        "max_z": {
+          "name": "Max Z",
+          "role": "Senior Tour Guide",
+          "bio": "Max Z is the heart of ailurowander's client-centric approach, with over 10 years specializing in transforming travel aspirations into reality across Asia. Their deep regional knowledge and meticulous attention to detail ensure every itinerary is uniquely crafted for discovery, comfort, and cultural immersion. They lead our team of specialists, fostering unparalleled relationships and providing insightful guidance at every step. Their passion is understanding each traveler's desires and meticulously building journeys that create lasting memories and a deep connection to Asia."
+        }
+      }
+    },
+    "why_choose_us": {
+      "local_expertise": {
+        "title": "Local Expertise",
+        "description": "Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special."
+      },
+      "cultural_immersion": {
+        "title": "Cultural Immersion",
+        "description": "We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions."
+      },
+      "personalized_service": {
+        "title": "Personalized Service",
+        "description": "Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests."
+      },
+      "quality_assurance": {
+        "title": "Quality Assurance",
+        "description": "We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety."
+      }
     },
     "cta": {
       "title": "Ready to Start Your Asian Adventure?",

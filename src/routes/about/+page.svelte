@@ -9,21 +9,21 @@
   // Team members data
   const teamMembers = [
     {
-      name: 'Sarah Chen',
-      role: 'Founder & CEO',
-      bio: 'With over 15 years of experience in Asian tourism, Sarah founded AiluroWander to share her passion for authentic travel experiences.',
+      name: $t('about.team.members.qing_zhuge.name'),
+      role: $t('about.team.members.qing_zhuge.role'),
+      bio: $t('about.team.members.qing_zhuge.bio'),
       image: '/images/team/sarah.jpg',
     },
     {
-      name: 'Michael Wong',
-      role: 'Head of Operations',
-      bio: 'Michael ensures every tour runs smoothly, bringing his expertise in logistics and customer service to create seamless travel experiences.',
+      name: $t('about.team.members.jing_li.name'),
+      role: $t('about.team.members.jing_li.role'),
+      bio: $t('about.team.members.jing_li.bio'),
       image: '/images/team/michael.jpg',
     },
     {
-      name: 'Li Wei',
-      role: 'Senior Tour Guide',
-      bio: 'A certified tour guide with deep knowledge of Chinese history and culture, Li brings destinations to life with engaging storytelling.',
+      name: $t('about.team.members.max_z.name'),
+      role: $t('about.team.members.max_z.role'),
+      bio: $t('about.team.members.max_z.bio'),
       image: '/images/team/li.jpg',
     },
   ];
