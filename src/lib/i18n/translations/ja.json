@@ -8,6 +8,7 @@
     "tours": "ツアー",
     "about": "会社概要",
     "contact": "お問い合わせ",
+    "search": "検索",
     "admin": "管理画面"
   },
   "home": {
@@ -16,6 +17,10 @@
       "subtitle": "中国の美しさ、文化、歴史を紹介する専門家が厳選したツアー",
       "cta_primary": "ツアーを探す",
       "cta_secondary": "お問い合わせ"
+    },
+    "map": {
+      "explore_china_by_region": "地域別に中国を探検",
+      "discover_tours_by_region": "中国各省のツアーをご覧ください。地域にカーソルを合わせると利用可能なツアーやその地域についての詳細が表示されます。"
     },
     "featured": {
       "title": "おすすめツアー",
@@ -108,7 +113,25 @@
     },
     "why_choose": {
       "title": "私たちを選ぶ理由",
-      "subtitle": "AiluroWanderの違いを体験する"
+      "subtitle": "AiluroWanderの違いを体験する",
+      "points": {
+        "local_expertise": {
+          "title": "現地の専門知識",
+          "description": "私たちのチームは、旅を特別なものにする隠れた名所や本物の体験を知っている現地の専門家で構成されています。"
+        },
+        "cultural_immersion": {
+          "title": "文化への没入",
+          "description": "典型的な観光地を超えて、現地の伝統とつながる本物の文化体験を提供します。"
+        },
+        "personalized_service": {
+          "title": "パーソナライズされたサービス",
+          "description": "各ツアーはあなたの希望に合わせて設計され、ユニークで忘れられない体験を保証します。"
+        },
+        "quality_assurance": {
+          "title": "品質保証",
+          "description": "宿泊、交通、ガイドの全てにおいて最高水準を維持し、快適で安全な旅行をお約束します。"
+        }
+      }
     },
     "team": {
       "title": "私たちのチームに会う",

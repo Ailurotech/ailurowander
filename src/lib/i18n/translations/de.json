@@ -8,6 +8,7 @@
     "tours": "Touren",
     "about": "Über uns",
     "contact": "Kontakt",
+    "search": "Suchen",  
     "admin": "Admin"
   },
   "home": {
@@ -16,6 +17,10 @@
       "subtitle": "Fachkundig kuratierte Touren, die die Schönheit, Kultur und Geschichte Chinas präsentieren",
       "cta_primary": "Touren erkunden",
       "cta_secondary": "Kontaktiere uns"
+    },
+    "map": {
+      "explore_china_by_region": "China nach Region erkunden",
+      "discover_tours_by_region": "Entdecken Sie unsere Touren in den verschiedenen Provinzen Chinas. Bewegen Sie den Mauszeiger über eine Region, um verfügbare Touren zu sehen und mehr über die jeweilige Region zu erfahren."
     },
     "featured": {
       "title": "Ausgewählte Touren",
@@ -108,7 +113,25 @@
     },
     "why_choose": {
       "title": "Warum uns wählen",
-      "subtitle": "Erleben Sie den AiluroWander-Unterschied"
+      "subtitle": "Erleben Sie den AiluroWander-Unterschied",
+      "points": {
+        "local_expertise": {
+          "title": "Lokale Expertise",
+          "description": "Unser Team besteht aus lokalen Expertinnen und Experten, die die versteckten Highlights und authentischen Erlebnisse kennen, die Ihre Reise besonders machen."
+        },
+        "cultural_immersion": {
+          "title": "Kulturelles Eintauchen",
+          "description": "Wir gehen über typische Touristenorte hinaus und bieten echte kulturelle Erfahrungen, die Sie mit lokalen Traditionen verbinden."
+        },
+        "personalized_service": {
+          "title": "Personalisierter Service",
+          "description": "Jede Tour wird auf Ihre Vorlieben zugeschnitten und garantiert ein einzigartiges, unvergessliches Erlebnis, das zu Ihren Interessen passt."
+        },
+        "quality_assurance": {
+          "title": "Qualitätssicherung",
+          "description": "Wir halten höchste Standards bei Unterkunft, Transport und Reiseleitung ein, um Ihren Komfort und Ihre Sicherheit zu gewährleisten."
+        }
+      }
     },
     "team": {
       "title": "Lernen Sie unser Team kennen",

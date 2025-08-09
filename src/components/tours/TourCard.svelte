@@ -6,6 +6,23 @@
   import ChineseIcon from '../atoms/ChineseIcon.svelte';
   import LoadingSkeleton from '../atoms/LoadingSkeleton.svelte';
   import { slugify } from '$lib/utils/slugify';
+  import zh from '$lib/i18n/translations/zh.json';
+  import { onMount } from 'svelte';
+
+  function findTranslationKeyByValue(value: string, base = zh, prefix = ''): string | null {
+    for (const key in base) {
+      const current = base[key];
+      const currentPath = prefix ? `${prefix}.${key}` : key;
+
+      if (typeof current === 'string') {
+        if (current.trim() === value.trim()) return currentPath;
+      } else if (typeof current === 'object' && current !== null) {
+        const nested = findTranslationKeyByValue(value, current, currentPath);
+        if (nested) return nested;
+      }
+    }
+    return null;
+  }
 
   export let tour: {
     id: string | number;
@@ -20,6 +37,11 @@
     isPopular?: boolean;
     isLoading?: boolean;
   };
+
+   onMount(() => {
+    console.log('✅ Received tour:', tour);
+    console.log('✅ tour.title:', tour?.title);
+  });
 
   // Determine which icon to use based on tour name/location
   const getIconForTour = (title: string) => {
@@ -64,13 +86,13 @@
   </div>
 {:else}
   <Card
-    title={tour.title}
-    description={tour.description}
+    title={$t(findTranslationKeyByValue(tour.title) || tour.title)}
+    description={$t(findTranslationKeyByValue(tour.description) || tour.description)}
     image={tour.image}
     imageAlt={`${tour.title} tour`}
     {badge}
     {icon}
-    link={{ url: `/tours/${slugify(tour.title)}`, text: 'View Details' }}
+    link={{ url: `/tours/${slugify(tour.title)}`, text: $t('tours.view_details') }}
     decorative={true}
   >
     <div class="flex flex-col">

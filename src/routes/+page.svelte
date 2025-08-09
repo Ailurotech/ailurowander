@@ -204,10 +204,9 @@
 <Section variant="light" spacing="lg">
   <svelte:fragment slot="header">
     <div class="text-center mb-12">
-      <h2 class="mb-3">Explore China by Region</h2>
+      <h2 class="mb-3">{$t('home.map.explore_china_by_region')}</h2>
       <p class="text-lg text-neutral-700 max-w-2xl mx-auto">
-        Discover our tours across different provinces of China. Hover over a region to see available
-        tours and learn more about each area.
+        {$t('home.map.discover_tours_by_region')}
       </p>
     </div>
   </svelte:fragment>

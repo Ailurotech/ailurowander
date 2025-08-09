@@ -28,31 +28,27 @@
     },
   ];
 
-  // Why choose us points
+  // Why choose us points (use i18n keys instead of hardcoded English)
   const whyChooseUs = [
     {
       icon: 'temple',
-      title: 'Local Expertise',
-      description:
-        'Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special.',
+      titleKey: 'about.why_choose.points.local_expertise.title',
+      descKey: 'about.why_choose.points.local_expertise.description',
     },
     {
       icon: 'dragon',
-      title: 'Cultural Immersion',
-      description:
-        'We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions.',
+      titleKey: 'about.why_choose.points.cultural_immersion.title',
+      descKey: 'about.why_choose.points.cultural_immersion.description',
     },
     {
       icon: 'panda',
-      title: 'Personalized Service',
-      description:
-        'Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests.',
+      titleKey: 'about.why_choose.points.personalized_service.title',
+      descKey: 'about.why_choose.points.personalized_service.description',
     },
     {
       icon: 'lantern',
-      title: 'Quality Assurance',
-      description:
-        'We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety.',
+      titleKey: 'about.why_choose.points.quality_assurance.title',
+      descKey: 'about.why_choose.points.quality_assurance.description',
     },
   ];
 </script>
@@ -137,8 +133,8 @@
   <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
     {#each whyChooseUs as item}
       <Card
-        title={item.title}
-        description={item.description}
+        title={$t(item.titleKey)}
+        description={$t(item.descKey)}
         icon={{
           name: item.icon as
             | 'great-wall'

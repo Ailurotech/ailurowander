@@ -1,6 +1,6 @@
 <script lang="ts">
   import { page } from '$app/stores';
-  import { locale, supportedLanguages, setLocale } from '$lib/i18n';
+  import { locale, supportedLanguages, setLocale, t } from '$lib/i18n';
 
   let isMenuOpen = false;
   let isLanguageMenuOpen = false;
@@ -62,32 +62,32 @@
           href="/"
           class="hover:text-secondary {$page.url.pathname === '/'
             ? 'font-bold border-b-2 border-secondary'
-            : ''}">Home</a
+            : ''}">{$t('nav.home')}</a
         >
         <a
           href="/tours"
           class="hover:text-secondary {$page.url.pathname.startsWith('/tours')
             ? 'font-bold border-b-2 border-secondary'
-            : ''}">Tours</a
+            : ''}">{$t('nav.tours')}</a
         >
         <a
           href="/about"
           class="hover:text-secondary {$page.url.pathname === '/about'
             ? 'font-bold border-b-2 border-secondary'
-            : ''}">About</a
+            : ''}">{$t('nav.about')}</a
         >
         <a
           href="/contact"
           class="hover:text-secondary {$page.url.pathname === '/contact'
             ? 'font-bold border-b-2 border-secondary'
-            : ''}">Contact</a
+            : ''}">{$t('nav.contact')}</a
         >
       </nav>
 
       <!-- Search and Language -->
       <div class="hidden md:flex items-center space-x-4">
         <div class="relative">
-          <input type="text" placeholder="Search" class="input py-1 text-gray-900 w-40 lg:w-64" />
+          <input type="text" placeholder={$t('nav.search')} class="input py-1 text-gray-900 w-40 lg:w-64" />
           <button class="absolute right-2 top-1/2 -translate-y-1/2" aria-label="Search">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -172,27 +172,27 @@
       <nav class="md:hidden py-4 border-t border-white/20 mt-3 space-y-3">
         <a
           href="/"
-          class="block hover:text-secondary {$page.url.pathname === '/' ? 'font-bold' : ''}">Home</a
+          class="block hover:text-secondary {$page.url.pathname === '/' ? 'font-bold' : ''}">{$t('nav.home')}</a
         >
         <a
           href="/tours"
           class="block hover:text-secondary {$page.url.pathname.startsWith('/tours')
             ? 'font-bold'
-            : ''}">Tours</a
+            : ''}">{$t('nav.tours')}</a
         >
         <a
           href="/about"
           class="block hover:text-secondary {$page.url.pathname === '/about' ? 'font-bold' : ''}"
-          >About</a
+          >{$t('nav.about')}</a
         >
         <a
           href="/contact"
           class="block hover:text-secondary {$page.url.pathname === '/contact' ? 'font-bold' : ''}"
-          >Contact</a
+          >{$t('nav.contact')}</a
         >
 
         <div class="pt-3 border-t border-white/20">
-          <input type="text" placeholder="Search" class="input py-1 text-gray-900 w-full mb-3" />
+          <input type="text" placeholder={$t('nav.search')} class="input py-1 text-gray-900 w-full mb-3" />
 
           <!-- Mobile Language Selector -->
           <div class="flex flex-wrap gap-2">
