@@ -8,6 +8,7 @@
     "tours": "旅游路线",
     "about": "关于我们",
     "contact": "联系我们",
+    "search": "搜索",
     "admin": "管理后台"
   },
   "home": {
@@ -16,6 +17,10 @@
       "subtitle": "精心策划的旅游路线，展示中国的美丽、文化和历史",
       "cta_primary": "探索旅游路线",
       "cta_secondary": "联系我们"
+    },
+    "map": {
+      "explore_china_by_region": "按地区探索中国",
+      "discover_tours_by_region": "发现中国各省的旅游路线。将鼠标悬停在区域上以查看可用的旅游路线和该地区的更多信息。"
     },
     "featured": {
       "title": "精选旅游路线",
@@ -291,7 +296,25 @@
     },
     "why_choose": {
       "title": "为什么选择我们",
-      "subtitle": "体验AiluroWander的与众不同"
+      "subtitle": "体验AiluroWander的与众不同",
+      "points": {
+        "local_expertise": {
+          "title": "本地专业",
+          "description": "我们的团队由本地专家组成，熟悉隐藏的宝藏与地道体验，让你的旅程更特别。"
+        },
+        "cultural_immersion": {
+          "title": "文化沉浸",
+          "description": "我们不仅停留在常规景点，而是带你深入当地传统，获得真正的文化连接。"
+        },
+        "personalized_service": {
+          "title": "个性化服务",
+          "description": "每条路线都会根据你的偏好量身定制，确保与兴趣匹配、独一无二且难忘的体验。"
+        },
+        "quality_assurance": {
+          "title": "品质保障",
+          "description": "从住宿、交通到导游，我们坚持高标准，确保你的舒适与安全。"
+        }
+      }
     },
     "team": {
       "title": "认识我们的团队",
