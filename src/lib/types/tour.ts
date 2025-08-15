@@ -24,6 +24,11 @@ export interface Tour {
     day: number;
     title: string;
     description: string;
+    includedMeals?: {
+      breakfast?: boolean;
+      lunch?: boolean;
+      dinner?: boolean;
+    };
     accommodation?: {
       name: string;
       description?: string;
@@ -83,6 +88,11 @@ export interface TourFormData {
     day: number;
     title: string;
     description: string;
+    includedMeals?: {
+      breakfast?: boolean;
+      lunch?: boolean;
+      dinner?: boolean;
+    };
     accommodation?: {
       name: string;
       description?: string;

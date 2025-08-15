@@ -29,7 +29,21 @@
   // Open gallery popup
   function openGallery(index: number) {
     currentGalleryIndex = index;
-    galleryImages = [tour.images.main, ...(tour.images.gallery || [])];
+    const images: string[] = [];
+    if (tour.images?.main) images.push(tour.images.main);
+    if (Array.isArray(tour.images?.gallery)) images.push(...tour.images.gallery);
+    if (Array.isArray(tour.itinerary)) {
+      for (const day of tour.itinerary) {
+        if (day?.image) images.push(day.image);
+        if (Array.isArray(day?.accommodation?.images)) images.push(...(day.accommodation!.images as string[]));
+        if (Array.isArray(day?.meals)) {
+          for (const meal of day.meals) {
+            if (Array.isArray(meal?.images)) images.push(...(meal.images as string[]));
+          }
+        }
+      }
+    }
+    galleryImages = images;
     isGalleryOpen = true;
   }
 

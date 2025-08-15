@@ -184,6 +184,7 @@
         title: `Day ${newDay}`,
         description: '',
         accommodation: { name: '', description: '', images: [] },
+        includedMeals: { breakfast: false, lunch: false, dinner: false },
         meals: [],
       },
     ];
@@ -982,146 +983,23 @@
             </div>
           </div>
 
-          <!-- Meals Section -->
+          <!-- Meals Included (checkboxes) -->
           <div class="form-group mt-6">
-            <div class="flex justify-between items-center mb-3">
-              <h4 class="font-medium">{$t('agent.tours.meals.title')}</h4>
-              <button
-                type="button"
-                class="text-xs btn btn--secondary"
-                on:click={() => addMeal(index)}
-              >
-                {$t('agent.tours.meals.add_meal')}
-              </button>
+            <h4 class="font-medium mb-2">{$t('agent.tours.meals.title')}</h4>
+            <div class="flex items-center gap-6">
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" bind:checked={tourData.itinerary[index].includedMeals!.breakfast} />
+                <span>{$t('agent.tours.meals.breakfast') || 'Breakfast'}</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" bind:checked={tourData.itinerary[index].includedMeals!.lunch} />
+                <span>{$t('agent.tours.meals.lunch') || 'Lunch'}</span>
+              </label>
+              <label class="inline-flex items-center gap-2 text-sm">
+                <input type="checkbox" bind:checked={tourData.itinerary[index].includedMeals!.dinner} />
+                <span>{$t('agent.tours.meals.dinner') || 'Dinner'}</span>
+              </label>
             </div>
-            {#each day.meals || [] as meal, mealIndex}
-              <div class="border border-neutral-100 rounded p-3 mb-3">
-                <div class="flex justify-between items-center mb-2">
-                  <span class="text-sm font-medium"
-                    >{$t('agent.tours.meals.meal_number')} {mealIndex + 1}</span
-                  >
-                  <button
-                    type="button"
-                    class="text-red-500 hover:text-red-700 text-xs"
-                    on:click={() => removeMeal(index, mealIndex)}
-                    >{$t('agent.tours.meals.remove')}</button
-                  >
-                </div>
-                <div class="space-y-2">
-                  <div>
-                    <label class="form-label text-xs">{$t('agent.tours.meals.meal_name')}</label>
-                    <div class="flex gap-2">
-                      <input
-                        type="text"
-                        bind:value={meal.name}
-                        class="input flex-1 text-sm"
-                        placeholder={$t('agent.tours.meals.meal_name_placeholder')}
-                      />
-                      <TranslateButton
-                        text={meal.name || '餐食名称'}
-                        context="meal_name"
-                        category="food"
-                        size="sm"
-                        on:apply={e => (meal.name = e.detail.translation)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label class="form-label text-xs">{$t('agent.tours.meals.description')}</label>
-                    <div class="flex gap-2">
-                      <textarea
-                        bind:value={meal.description}
-                        class="input flex-1 h-12 text-sm"
-                        placeholder={$t('agent.tours.meals.description_placeholder')}
-                      ></textarea>
-                      <TranslateButton
-                        text={meal.description || '餐食描述'}
-                        context="meal_description"
-                        category="food"
-                        size="sm"
-                        on:apply={e => (meal.description = e.detail.translation)}
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label class="form-label text-xs">{$t('agent.tours.meals.photos')}</label>
-                    <div class="mt-1">
-                      <input
-                        type="file"
-                        id="meal-images-{index}-{mealIndex}"
-                        accept="image/*"
-                        multiple
-                        on:change={e => handleMealImageChange(e, index, mealIndex)}
-                        class="hidden"
-                      />
-                      <label
-                        for="meal-images-{index}-{mealIndex}"
-                        class="cursor-pointer inline-flex items-center px-2 py-1 border border-neutral-300 rounded-md shadow-sm text-xs font-medium text-neutral-700 bg-white hover:bg-neutral-50"
-                      >
-                        <svg
-                          class="h-3 w-3 mr-1 text-neutral-400"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                          />
-                        </svg>
-                        {$t('agent.tours.meals.add_photos')}
-                      </label>
-                    </div>
-                    {#if mealsImagePreviews[index] && mealsImagePreviews[index][mealIndex] && mealsImagePreviews[index][mealIndex].length > 0}
-                      <div class="mt-2 grid grid-cols-3 gap-1">
-                        {#each mealsImagePreviews[index][mealIndex] as preview, imgIndex}
-                          <div class="relative aspect-[4/3] w-full">
-                            <img
-                              src={preview}
-                              alt="Meal image {imgIndex + 1}"
-                              class="w-full h-full object-cover rounded shadow-sm"
-                            />
-                            <button
-                              type="button"
-                              class="absolute top-0.5 right-0.5 p-0.5 bg-red-500 text-white rounded-full text-xs"
-                              on:click={() => {
-                                const existingCount = meal.images?.length || 0;
-                                const removedCount = removedMealImages.filter(r => r.dayIndex === index && r.mealIndex === mealIndex).length;
-                                const actualIndex = imgIndex - (existingCount - removedCount);
-                                
-                                if (mode === 'edit' && imgIndex < (existingCount - removedCount)) {
-                                  removeExistingMealImage(index, mealIndex, imgIndex);
-                                } else {
-                                  removeMealImage(index, mealIndex, Math.max(0, actualIndex));
-                                }
-                              }}
-                            >
-                              <svg
-                                class="h-2 w-2"
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                              >
-                                <path
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M6 18L18 6M6 6l12 12"
-                                />
-                              </svg>
-                            </button>
-                          </div>
-                        {/each}
-                      </div>
-                    {/if}
-                  </div>
-                </div>
-              </div>
-            {/each}
           </div>
         </div>
       {/each}

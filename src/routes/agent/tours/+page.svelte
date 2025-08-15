@@ -76,7 +76,7 @@
         price: typeof tour.price === 'number' ? tour.price : 0,
         location: tour.destination, // Use destination as location
         destination: tour.destination,
-        isActive: tour.featured !== undefined ? tour.featured : true, // Use featured as isActive for now
+        isActive: tour.isActive !== undefined ? tour.isActive : true,
         featured: tour.featured,
         iconType: determineIconType(tour.destination), // Assign icon based on destination
       }));

@@ -4,7 +4,6 @@ import { json as jsonResponse } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { getDB } from '$lib/server/db';
 import { ObjectId } from 'mongodb';
-import type { RequestEvent } from '@sveltejs/kit';
 
 export const GET = async ({ url }: RequestEvent) => {
   console.log('API: GET /api/tours - Fetching tours');
