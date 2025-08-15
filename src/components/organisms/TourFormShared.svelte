@@ -122,6 +122,16 @@
           existingDayPreviews[mealIndex] || []
         );
       });
+
+      // Ensure each day has includedMeals initialized
+      tourData.itinerary = tourData.itinerary.map(day => ({
+        ...day,
+        includedMeals: {
+          breakfast: day.includedMeals?.breakfast ?? false,
+          lunch: day.includedMeals?.lunch ?? false,
+          dinner: day.includedMeals?.dinner ?? false,
+        },
+      }));
     }
   }
 
