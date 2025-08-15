@@ -81,18 +81,17 @@ export const PUT = async ({ params, request }: RequestEvent) => {
 
     // Handle image uploads if present
     const mainImage = formData.get('mainImage') as File | null;
-    const galleryImages = formData.getAll('galleryImages') as File[];
+    const galleryImages = (formData.getAll('galleryImages') as File[]).filter(img => img && img.size > 0);
 
     // Only attempt to upload if we have valid files
     const hasValidMainImage = mainImage && mainImage.size > 0;
-    const validGalleryImages = galleryImages.filter(img => img.size > 0);
-    const hasValidGalleryImages = validGalleryImages.length > 0;
+    const hasValidGalleryImages = galleryImages.length > 0;
 
     if (hasValidMainImage || hasValidGalleryImages) {
       const imageUrls = await uploadTourImages(
         {
-          main: hasValidMainImage ? mainImage! : new File([], 'placeholder.jpg'),
-          gallery: validGalleryImages,
+          main: hasValidMainImage ? mainImage! : undefined,
+          gallery: galleryImages,
         },
         id
       );

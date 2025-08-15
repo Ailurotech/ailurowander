@@ -13,6 +13,16 @@ const s3Client = new S3Client({
 
 const BUCKET_NAME = env.S3_BUCKET_NAME || '';
 
+// Expose a simple configuration check for consumers
+export function isS3Configured(): boolean {
+  return Boolean(
+    BUCKET_NAME &&
+    (env.S3_REGION || 'us-east-1') &&
+    env.S3_ACCESS_KEY_ID &&
+    env.S3_SECRET_ACCESS_KEY
+  );
+}
+
 /**
  * Upload a file to S3
  * @param file The file buffer, stream, or ArrayBuffer to upload

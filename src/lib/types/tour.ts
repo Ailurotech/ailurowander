@@ -5,6 +5,7 @@ export interface Tour {
   title: string;
   description: string;
   longDescription?: string;
+  isActive: boolean;
   images: {
     main: string;
     gallery?: string[];
@@ -58,6 +59,7 @@ export interface TourSummary {
   price: number;
   destination: string;
   featured: boolean;
+  isActive: boolean;
 }
 
 export interface TourFormData {

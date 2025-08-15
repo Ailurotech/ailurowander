@@ -53,13 +53,15 @@ export async function POST({ request }: RequestEvent) {
     }
 
     // Handle image uploads
-    const mainImage = formData.get('mainImage') as File;
-    const galleryImages = formData.getAll('galleryImages') as File[];
+    const mainImage = formData.get('mainImage') as File | null;
+    const galleryImages = (formData.getAll('galleryImages') as File[]).filter(
+      (f) => f && f.size > 0
+    );
 
-    if (mainImage || galleryImages.length > 0) {
+    if ((mainImage && mainImage.size > 0) || galleryImages.length > 0) {
       const imageUrls = await uploadTourImages(
         {
-          main: mainImage,
+          main: mainImage && mainImage.size > 0 ? mainImage : undefined,
           gallery: galleryImages,
         },
         tour._id.toString()

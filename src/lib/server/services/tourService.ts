@@ -2,7 +2,7 @@ import { ObjectId } from 'mongodb';
 import { getTours } from '../db';
 import type { Tour, TourSummary } from '$lib/types/tour';
 import { getDB } from '$lib/server/db';
-import { uploadToS3, generateS3Key } from '$lib/server/s3';
+import { uploadToS3, generateS3Key, isS3Configured } from '$lib/server/s3';
 
 // Get all tours or featured tours
 export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> {
@@ -31,6 +31,7 @@ export async function getAllTours(featuredOnly = false): Promise<TourSummary[]> 
     price: tour.price?.amount || 0,
     destination: tour.destination || '',
     featured: tour.featured || false,
+    isActive: tour.isActive !== undefined ? tour.isActive : (tour.featured || false),
   }));
 }
 
@@ -65,6 +66,7 @@ export async function createTour(
 
   const newTour: Tour = {
     ...tour,
+    isActive: (tour as any).isActive !== undefined ? (tour as any).isActive : true,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
@@ -137,6 +139,7 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
     price: tour.price.amount,
     destination: tour.destination,
     featured: tour.featured,
+    isActive: tour.isActive !== undefined ? tour.isActive : (tour.featured || false),
   }));
 }
 
@@ -147,29 +150,45 @@ export async function searchTours(query: string): Promise<TourSummary[]> {
  * @returns Object containing URLs for main and gallery images
  */
 export async function uploadTourImages(
-  images: { main: File; gallery: File[] },
+  images: { main?: File | null; gallery?: File[] },
   tourId: string
-): Promise<{ main: string; gallery: string[] }> {
+): Promise<{ main?: string; gallery?: string[] }> {
   try {
-    // Upload main image
-    const mainImageKey = generateS3Key(images.main.name, `tours/${tourId}/`);
-    const mainImageUrl = await uploadToS3(
-      await images.main.arrayBuffer(),
-      mainImageKey,
-      images.main.type
-    );
+    if (!isS3Configured()) {
+      console.warn('uploadTourImages skipped: S3 is not configured');
+      return {};
+    }
+    // Upload main image if provided
+    let mainImageUrl: string | undefined;
+    if (images.main && (images.main as File).size > 0) {
+      const mainFile = images.main as File;
+      const mainImageKey = generateS3Key(mainFile.name, `tours/${tourId}/`);
+      mainImageUrl = await uploadToS3(
+        await mainFile.arrayBuffer(),
+        mainImageKey,
+        mainFile.type
+      );
+    }
 
     // Upload gallery images
-    const galleryUrls = await Promise.all(
-      images.gallery.map(async image => {
-        const key = generateS3Key(image.name, `tours/${tourId}/gallery/`);
-        return uploadToS3(await image.arrayBuffer(), key, image.type);
-      })
-    );
+    let galleryUrls: string[] | undefined;
+    if (images.gallery && images.gallery.length > 0) {
+      const validGalleryImages = images.gallery.filter(img => img && img.size > 0);
+      if (validGalleryImages.length > 0) {
+        galleryUrls = await Promise.all(
+          validGalleryImages.map(async image => {
+            const key = generateS3Key(image.name, `tours/${tourId}/gallery/`);
+            return uploadToS3(await image.arrayBuffer(), key, image.type);
+          })
+        );
+      } else {
+        galleryUrls = [];
+      }
+    }
 
     return {
-      main: mainImageUrl,
-      gallery: galleryUrls,
+      ...(mainImageUrl !== undefined ? { main: mainImageUrl } : {}),
+      ...(galleryUrls !== undefined ? { gallery: galleryUrls } : {}),
     };
   } catch (error) {
     console.error('Error uploading tour images:', error);
@@ -215,6 +234,10 @@ export async function uploadItineraryImages(
   tourId: string
 ): Promise<(string | undefined)[]> {
   try {
+    if (!isS3Configured()) {
+      console.warn('uploadItineraryImages skipped: S3 is not configured');
+      return itineraryImages.map(() => undefined);
+    }
     const imageUrls = await Promise.all(
       itineraryImages.map(async (image, index) => {
         if (!image) return undefined;
@@ -279,6 +302,10 @@ export async function uploadAccommodationImages(
   tourId: string
 ): Promise<string[][]> {
   try {
+    if (!isS3Configured()) {
+      console.warn('uploadAccommodationImages skipped: S3 is not configured');
+      return accommodationImages.map(() => []);
+    }
     const imageUrls: string[][] = [];
 
     for (let dayIndex = 0; dayIndex < accommodationImages.length; dayIndex++) {
@@ -317,6 +344,10 @@ export async function uploadMealsImages(
   tourId: string
 ): Promise<string[][][]> {
   try {
+    if (!isS3Configured()) {
+      console.warn('uploadMealsImages skipped: S3 is not configured');
+      return mealsImages.map(day => day.map(() => []));
+    }
     const imageUrls: string[][][] = [];
 
     for (let dayIndex = 0; dayIndex < mealsImages.length; dayIndex++) {

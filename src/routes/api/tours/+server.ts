@@ -1,5 +1,9 @@
 import { json } from '@sveltejs/kit';
 import { getAllTours, searchTours } from '$lib/server/services/tourService';
+import { json as jsonResponse } from '@sveltejs/kit';
+import type { RequestEvent } from '@sveltejs/kit';
+import { getDB } from '$lib/server/db';
+import { ObjectId } from 'mongodb';
 import type { RequestEvent } from '@sveltejs/kit';
 
 export const GET = async ({ url }: RequestEvent) => {
@@ -36,5 +40,42 @@ export const GET = async ({ url }: RequestEvent) => {
     console.error('Error stack:', errorStack);
 
     return json({ error: 'Failed to fetch tours', details: errorMessage }, { status: 500 });
+  }
+};
+
+// Support partial updates for tour properties like isActive
+export const PATCH = async ({ request }: RequestEvent) => {
+  try {
+    const body = await request.json();
+    const { id, isActive, featured } = body as { id?: string; isActive?: boolean; featured?: boolean };
+
+    if (!id) {
+      return jsonResponse({ error: 'Tour ID is required' }, { status: 400 });
+    }
+
+    if (!ObjectId.isValid(id)) {
+      return jsonResponse({ error: 'Invalid Tour ID' }, { status: 400 });
+    }
+
+    const db = await getDB();
+    const toursCollection = db.collection('tours');
+
+    const update: Record<string, unknown> = { updatedAt: new Date() };
+    if (typeof isActive === 'boolean') update.isActive = isActive;
+    if (typeof featured === 'boolean') update.featured = featured;
+
+    if (Object.keys(update).length === 1) {
+      return jsonResponse({ error: 'No valid fields to update' }, { status: 400 });
+    }
+
+    const result = await toursCollection.updateOne({ _id: new ObjectId(id) }, { $set: update });
+    if (result.matchedCount === 0) {
+      return jsonResponse({ error: 'Tour not found' }, { status: 404 });
+    }
+
+    return jsonResponse({ success: true });
+  } catch (error) {
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    return jsonResponse({ error: 'Failed to update tour', details: errorMessage }, { status: 500 });
   }
 };

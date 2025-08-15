@@ -174,13 +174,14 @@
       const newStatus = !tour.isActive;
 
       // Update on server
-      const response = await fetch(`/api/tours/${tourId}`, {
+      const response = await fetch(`/api/tours`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          featured: newStatus, // Update featured status on server
+          id: tourId,
+          isActive: newStatus,
         }),
       });
 
@@ -191,7 +192,7 @@
       // Update locally
       tours = tours.map(t => {
         if (t._id === tourId) {
-          return { ...t, isActive: newStatus, featured: newStatus };
+          return { ...t, isActive: newStatus };
         }
         return t;
       });
