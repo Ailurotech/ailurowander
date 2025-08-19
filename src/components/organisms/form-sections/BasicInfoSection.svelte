@@ -199,14 +199,13 @@
 
   <div class="form-group">
     <label for="subtitle" class="form-label"
-      >{$t('agent.tours.subtitle_label')}*</label
+      >{$t('agent.tours.subtitle_label')}</label
     >
     <div class="flex gap-2">
       <input
         type="text"
         id="subtitle"
         bind:value={tourData.subtitle}
-        required
         class="input flex-1"
         placeholder={$t('agent.tours.subtitle_placeholder')}
         maxlength="150"
@@ -220,7 +219,7 @@
       />
     </div>
     <div class="text-xs text-neutral-500 mt-1">
-      {tourData.subtitle.length}/150 characters
+      {(tourData.subtitle || '').length}/150 characters
     </div>
   </div>
 

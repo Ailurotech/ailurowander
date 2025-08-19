@@ -25,7 +25,7 @@
     duration: initialData.duration || { days: 0, nights: 0 },
     price: initialData.price || { amount: 0, currency: 'USD' },
     destination: initialData.destination || '',
-    maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people
+    maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people for form display
     highlights: initialData.highlights || [],
     inclusions: initialData.inclusions || [
       'Hotel accommodation',

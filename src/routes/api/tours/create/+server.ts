@@ -37,11 +37,11 @@ export async function POST({ request }: RequestEvent) {
 
     // Extract tour data from form
     const maxGroupSizeValue = formData.get('maxGroupSize') as string;
-    const maxGroupSize = maxGroupSizeValue ? parseInt(maxGroupSizeValue) : 10;
+    const maxGroupSize = maxGroupSizeValue ? parseInt(maxGroupSizeValue) : undefined;
     
     const tourData: Omit<Tour, '_id' | 'createdAt' | 'updatedAt'> = {
       title: formData.get('title') as string,
-      subtitle: formData.get('subtitle') as string,
+      subtitle: formData.get('subtitle') as string || undefined,
       description: formData.get('description') as string,
       destination: formData.get('destination') as string,
       duration: {
@@ -54,7 +54,7 @@ export async function POST({ request }: RequestEvent) {
       },
       featured: formData.get('featured') === 'true',
       isActive: true,
-      maxGroupSize: maxGroupSize, // Store the exact value entered
+      maxGroupSize: maxGroupSize, // Store the exact value entered or undefined if not provided
       images: {
         main: '',
         gallery: [],

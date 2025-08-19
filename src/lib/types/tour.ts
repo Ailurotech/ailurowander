@@ -3,7 +3,7 @@ import { ObjectId } from 'mongodb';
 export interface Tour {
   _id?: ObjectId;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
   longDescription?: string;
   isActive: boolean;
@@ -20,7 +20,7 @@ export interface Tour {
     currency: string;
   };
   destination: string;
-  maxGroupSize: number; // Maximum number of people allowed in the tour group
+  maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   itinerary: {
     day: number;
@@ -72,7 +72,7 @@ export interface TourSummary {
 export interface TourFormData {
   _id?: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   description: string;
   duration: {
     days: number;
@@ -83,7 +83,7 @@ export interface TourFormData {
     currency: string;
   };
   destination: string;
-  maxGroupSize: number; // Maximum number of people allowed in the tour group
+  maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   inclusions: string[];
   exclusions: string[];

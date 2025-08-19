@@ -21,7 +21,7 @@
     duration: initialData.duration || { days: 0, nights: 0 },
     price: initialData.price || { amount: 0, currency: 'USD' },
     destination: initialData.destination || '',
-    maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people
+    maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people for form display
     highlights: initialData.highlights || [],
     inclusions: initialData.inclusions || [
       'Hotel accommodation',
@@ -507,7 +507,9 @@
 
     // Add basic tour data
     formData.append('title', tourData.title);
-    formData.append('subtitle', tourData.subtitle);
+    if (tourData.subtitle) {
+      formData.append('subtitle', tourData.subtitle);
+    }
     formData.append('description', tourData.description);
     formData.append('destination', tourData.destination);
     formData.append('durationDays', tourData.duration.days.toString());
@@ -739,13 +741,12 @@
     <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.description_label')}</h2>
 
     <div class="form-group">
-      <label for="subtitle" class="form-label">{$t('agent.tours.subtitle_label')}*</label>
+      <label for="subtitle" class="form-label">{$t('agent.tours.subtitle_label')}</label>
       <div class="flex gap-2">
         <input
           type="text"
           id="subtitle"
           bind:value={tourData.subtitle}
-          required
           class="input flex-1"
           placeholder={$t('agent.tours.subtitle_placeholder')}
           maxlength="150"
@@ -759,7 +760,7 @@
         />
       </div>
       <div class="text-xs text-neutral-500 mt-1">
-        {tourData.subtitle.length}/150 characters
+        {(tourData.subtitle || '').length}/150 characters
       </div>
     </div>
 

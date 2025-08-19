@@ -65,11 +65,11 @@ export const PUT = async ({ params, request }: RequestEvent) => {
 
     // Extract tour data from form
     const maxGroupSizeValue = formData.get('maxGroupSize') as string;
-    const maxGroupSize = maxGroupSizeValue ? parseInt(maxGroupSizeValue) : 10;
+    const maxGroupSize = maxGroupSizeValue ? parseInt(maxGroupSizeValue) : undefined;
     
     const tourData: Partial<Tour> = {
       title: formData.get('title') as string,
-      subtitle: formData.get('subtitle') as string,
+      subtitle: formData.get('subtitle') as string || undefined,
       description: formData.get('description') as string,
       destination: formData.get('destination') as string,
       duration: {
@@ -81,7 +81,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
         currency: 'USD',
       },
       featured: formData.get('featured') === 'true',
-      maxGroupSize: maxGroupSize, // Store the exact value entered
+      maxGroupSize: maxGroupSize, // Store the exact value entered or undefined if not provided
       itinerary: JSON.parse((formData.get('itinerary') as string) || '[]'),
       highlights: formData.getAll('highlights') as string[],
       inclusions: formData.getAll('included') as string[],
