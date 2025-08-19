@@ -16,11 +16,12 @@
   let tourData: TourFormData = {
     _id: initialData._id || '',
     title: initialData.title || '',
+    subtitle: initialData.subtitle || '',
     description: initialData.description || '',
     duration: initialData.duration || { days: 0, nights: 0 },
     price: initialData.price || { amount: 0, currency: 'USD' },
     destination: initialData.destination || '',
-    maxGroupSize: initialData.maxGroupSize || 10,
+    maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people
     highlights: initialData.highlights || [],
     inclusions: initialData.inclusions || [
       'Hotel accommodation',
@@ -446,6 +447,51 @@
     if (!tourData.description) return $t('agent.tours.validation.description_required');
     if (!tourData.destination) return $t('agent.tours.validation.destination_required');
     if (mode === 'add' && !mainImageFile) return $t('agent.tours.validation.main_image_required');
+    
+    // Validate file sizes (10MB per image)
+    const maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
+    
+    if (mainImageFile && mainImageFile.size > maxFileSize) {
+      return `Main image is too large (${(mainImageFile.size / (1024 * 1024)).toFixed(2)}MB). Maximum allowed size is 10MB.`;
+    }
+    
+    for (let i = 0; i < galleryImageFiles.length; i++) {
+      const file = galleryImageFiles[i];
+      if (file && file.size > maxFileSize) {
+        return `Gallery image ${i + 1} is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum allowed size is 10MB.`;
+      }
+    }
+    
+    for (let i = 0; i < itineraryImageFiles.length; i++) {
+      const file = itineraryImageFiles[i];
+      if (file && file.size > maxFileSize) {
+        return `Itinerary image for day ${i + 1} is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum allowed size is 10MB.`;
+      }
+    }
+    
+    for (let dayIndex = 0; dayIndex < accommodationImageFiles.length; dayIndex++) {
+      const dayImages = accommodationImageFiles[dayIndex];
+      for (let imgIndex = 0; imgIndex < dayImages.length; imgIndex++) {
+        const file = dayImages[imgIndex];
+        if (file && file.size > maxFileSize) {
+          return `Accommodation image ${imgIndex + 1} for day ${dayIndex + 1} is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum allowed size is 10MB.`;
+        }
+      }
+    }
+    
+    for (let dayIndex = 0; dayIndex < mealsImageFiles.length; dayIndex++) {
+      const dayMeals = mealsImageFiles[dayIndex];
+      for (let mealIndex = 0; mealIndex < dayMeals.length; mealIndex++) {
+        const mealImages = dayMeals[mealIndex];
+        for (let imgIndex = 0; imgIndex < mealImages.length; imgIndex++) {
+          const file = mealImages[imgIndex];
+          if (file && file.size > maxFileSize) {
+            return `Meal image ${imgIndex + 1} for meal ${mealIndex + 1} on day ${dayIndex + 1} is too large (${(file.size / (1024 * 1024)).toFixed(2)}MB). Maximum allowed size is 10MB.`;
+          }
+        }
+      }
+    }
+    
     return null;
   }
 
@@ -461,6 +507,7 @@
 
     // Add basic tour data
     formData.append('title', tourData.title);
+    formData.append('subtitle', tourData.subtitle);
     formData.append('description', tourData.description);
     formData.append('destination', tourData.destination);
     formData.append('durationDays', tourData.duration.days.toString());
@@ -468,7 +515,7 @@
     formData.append('price', tourData.price.amount.toString());
     formData.append('featured', tourData.featured.toString());
     formData.append('discount', tourData.discount.toString());
-    formData.append('maxGroupSize', tourData.maxGroupSize.toString());
+    formData.append('maxGroupSize', (tourData.maxGroupSize || 10).toString());
 
     // Add arrays
     tourData.highlights.forEach(item => formData.append('highlights', item));
@@ -643,9 +690,11 @@
           id="max-group-size"
           bind:value={tourData.maxGroupSize}
           min="1"
+          max="50"
           class="input w-full"
           placeholder={$t('agent.tours.max_group_size_placeholder')}
         />
+        <p class="text-xs text-neutral-500 mt-1">Enter the maximum number of people for this tour (1-50)</p>
       </div>
     </div>
 
@@ -690,6 +739,31 @@
     <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.description_label')}</h2>
 
     <div class="form-group">
+      <label for="subtitle" class="form-label">{$t('agent.tours.subtitle_label')}*</label>
+      <div class="flex gap-2">
+        <input
+          type="text"
+          id="subtitle"
+          bind:value={tourData.subtitle}
+          required
+          class="input flex-1"
+          placeholder={$t('agent.tours.subtitle_placeholder')}
+          maxlength="150"
+        />
+        <TranslateButton
+          text={tourData.subtitle}
+          context="tour_subtitle"
+          category="tours"
+          size="sm"
+          on:apply={e => (tourData.subtitle = e.detail.translation)}
+        />
+      </div>
+      <div class="text-xs text-neutral-500 mt-1">
+        {tourData.subtitle.length}/150 characters
+      </div>
+    </div>
+
+    <div class="form-group mt-4">
       <label for="description" class="form-label">{$t('agent.tours.description_label')}*</label>
       <div class="flex gap-2">
         <textarea

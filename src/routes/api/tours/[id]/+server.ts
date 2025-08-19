@@ -46,11 +46,30 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       return json({ error: 'Tour ID is required' }, { status: 400 });
     }
 
+    // Check if the request size is too large before processing
+    const contentLength = request.headers.get('content-length');
+    if (contentLength) {
+      const sizeInMB = parseInt(contentLength) / (1024 * 1024);
+      console.log(`Request size: ${sizeInMB.toFixed(2)}MB`);
+      
+      // Allow up to 50MB for tour updates with images
+      if (sizeInMB > 50) {
+        return json({ 
+          error: 'Request too large', 
+          details: `Request size (${sizeInMB.toFixed(2)}MB) exceeds maximum allowed size of 50MB` 
+        }, { status: 413 });
+      }
+    }
+
     const formData = await request.formData();
 
     // Extract tour data from form
+    const maxGroupSizeValue = formData.get('maxGroupSize') as string;
+    const maxGroupSize = maxGroupSizeValue ? parseInt(maxGroupSizeValue) : 10;
+    
     const tourData: Partial<Tour> = {
       title: formData.get('title') as string,
+      subtitle: formData.get('subtitle') as string,
       description: formData.get('description') as string,
       destination: formData.get('destination') as string,
       duration: {
@@ -62,6 +81,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
         currency: 'USD',
       },
       featured: formData.get('featured') === 'true',
+      maxGroupSize: maxGroupSize, // Store the exact value entered
       itinerary: JSON.parse((formData.get('itinerary') as string) || '[]'),
       highlights: formData.getAll('highlights') as string[],
       inclusions: formData.getAll('included') as string[],
@@ -79,9 +99,29 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       return json({ error: 'Tour not found' }, { status: 404 });
     }
 
-    // Handle image uploads if present
+    // Handle image uploads if present with size validation
     const mainImage = formData.get('mainImage') as File | null;
     const galleryImages = (formData.getAll('galleryImages') as File[]).filter(img => img && img.size > 0);
+
+    // Validate individual file sizes (10MB per image)
+    const maxFileSize = 10 * 1024 * 1024; // 10MB in bytes
+    
+    if (mainImage && mainImage.size > maxFileSize) {
+      return json({ 
+        error: 'Main image too large', 
+        details: `Main image size (${(mainImage.size / (1024 * 1024)).toFixed(2)}MB) exceeds maximum allowed size of 10MB` 
+      }, { status: 413 });
+    }
+
+    for (let i = 0; i < galleryImages.length; i++) {
+      const image = galleryImages[i];
+      if (image.size > maxFileSize) {
+        return json({ 
+          error: 'Gallery image too large', 
+          details: `Gallery image ${i + 1} size (${(image.size / (1024 * 1024)).toFixed(2)}MB) exceeds maximum allowed size of 10MB` 
+        }, { status: 413 });
+      }
+    }
 
     // Only attempt to upload if we have valid files
     const hasValidMainImage = mainImage && mainImage.size > 0;

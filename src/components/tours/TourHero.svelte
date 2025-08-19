@@ -42,7 +42,7 @@
       <span class="ml-2 text-lg font-medium">{tour.destination}</span>
     </div>
     <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-3xl">{tour.title}</h1>
-    <p class="text-xl max-w-2xl mb-8">{tour.description}</p>
+    <p class="text-xl max-w-2xl mb-8">{tour.subtitle || tour.description}</p>
     <div class="flex flex-wrap gap-4 items-center justify-center">
       <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
         <span class="mr-2">⏱️</span>

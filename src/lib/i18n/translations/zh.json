@@ -80,7 +80,8 @@
     "starting_from": "起价",
     "group_size": "团队规模",
     "up_to": "最多",
-    "people": "人"
+    "people": "人",
+    "unlimited": "无限制"
   },
   "agent": {
     "login": {
@@ -115,6 +116,8 @@
       "basic_info": "基本信息",
       "title_label": "旅游路线标题",
       "title_placeholder": "输入旅游路线标题",
+      "subtitle_label": "副标题",
+      "subtitle_placeholder": "输入将在旅游页面标题中显示的简短副标题",
       "description_label": "描述",
       "description_placeholder": "输入旅游路线描述",
 
@@ -170,7 +173,8 @@
       "featured_description": "精选旅游路线将在首页突出显示。",
       "tags_description": "这些标签帮助用户在搜索中找到您的旅游路线。用逗号分隔输入多个标签。",
       "discount_placeholder": "例如：200",
-      "max_group_size_placeholder": "例如：12",
+      "max_group_size_placeholder": "0 = 无限制，或输入具体数字",
+      "max_group_size_help": "设为0表示无限制团队人数，或输入具体的最大人数。",
       "icons": {
         "great_wall": "长城",
         "forbidden_city": "紫禁城",

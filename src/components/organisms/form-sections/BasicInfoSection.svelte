@@ -149,9 +149,11 @@
         id="max-group-size"
         bind:value={tourData.maxGroupSize}
         min="1"
+        max="50"
         class="input w-full"
-        placeholder="e.g. 12"
+        placeholder={$t('agent.tours.max_group_size_placeholder')}
       />
+      <p class="text-xs text-neutral-500 mt-1">Enter the maximum number of people for this tour (1-50)</p>
     </div>
   </div>
 
@@ -196,29 +198,29 @@
   <h2 class="text-xl font-heading font-bold mb-4">{$t('agent.tours.description_label')}</h2>
 
   <div class="form-group">
-    <label for="shortDescription" class="form-label"
-      >{$t('agent.tours.short_description_label')}*</label
+    <label for="subtitle" class="form-label"
+      >{$t('agent.tours.subtitle_label')}*</label
     >
     <div class="flex gap-2">
       <input
         type="text"
-        id="shortDescription"
-        bind:value={tourData.shortDescription}
+        id="subtitle"
+        bind:value={tourData.subtitle}
         required
         class="input flex-1"
-        placeholder={$t('agent.tours.short_description_placeholder')}
+        placeholder={$t('agent.tours.subtitle_placeholder')}
         maxlength="150"
       />
       <TranslateButton
-        text={tourData.shortDescription}
-        context="tour_short_description"
+        text={tourData.subtitle}
+        context="tour_subtitle"
         category="tours"
         size="sm"
-        on:apply={e => (tourData.shortDescription = e.detail.translation)}
+        on:apply={e => (tourData.subtitle = e.detail.translation)}
       />
     </div>
     <div class="text-xs text-neutral-500 mt-1">
-      {tourData.shortDescription.length}/150 characters
+      {tourData.subtitle.length}/150 characters
     </div>
   </div>
 
