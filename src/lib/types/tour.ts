@@ -3,8 +3,10 @@ import { ObjectId } from 'mongodb';
 export interface Tour {
   _id?: ObjectId;
   title: string;
+  subtitle?: string;
   description: string;
   longDescription?: string;
+  isActive: boolean;
   images: {
     main: string;
     gallery?: string[];
@@ -18,11 +20,17 @@ export interface Tour {
     currency: string;
   };
   destination: string;
+  maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   itinerary: {
     day: number;
     title: string;
     description: string;
+    includedMeals?: {
+      breakfast?: boolean;
+      lunch?: boolean;
+      dinner?: boolean;
+    };
     accommodation?: {
       name: string;
       description?: string;
@@ -58,11 +66,13 @@ export interface TourSummary {
   price: number;
   destination: string;
   featured: boolean;
+  isActive: boolean;
 }
 
 export interface TourFormData {
   _id?: string;
   title: string;
+  subtitle?: string;
   description: string;
   duration: {
     days: number;
@@ -73,7 +83,7 @@ export interface TourFormData {
     currency: string;
   };
   destination: string;
-  maxGroupSize: number;
+  maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   inclusions: string[];
   exclusions: string[];
@@ -81,6 +91,11 @@ export interface TourFormData {
     day: number;
     title: string;
     description: string;
+    includedMeals?: {
+      breakfast?: boolean;
+      lunch?: boolean;
+      dinner?: boolean;
+    };
     accommodation?: {
       name: string;
       description?: string;

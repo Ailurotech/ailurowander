@@ -76,7 +76,7 @@
         price: typeof tour.price === 'number' ? tour.price : 0,
         location: tour.destination, // Use destination as location
         destination: tour.destination,
-        isActive: tour.featured !== undefined ? tour.featured : true, // Use featured as isActive for now
+        isActive: tour.isActive !== undefined ? tour.isActive : true,
         featured: tour.featured,
         iconType: determineIconType(tour.destination), // Assign icon based on destination
       }));
@@ -174,13 +174,14 @@
       const newStatus = !tour.isActive;
 
       // Update on server
-      const response = await fetch(`/api/tours/${tourId}`, {
+      const response = await fetch(`/api/tours`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          featured: newStatus, // Update featured status on server
+          id: tourId,
+          isActive: newStatus,
         }),
       });
 
@@ -191,7 +192,7 @@
       // Update locally
       tours = tours.map(t => {
         if (t._id === tourId) {
-          return { ...t, isActive: newStatus, featured: newStatus };
+          return { ...t, isActive: newStatus };
         }
         return t;
       });

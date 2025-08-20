@@ -35,7 +35,13 @@
     </div>
     <div class="flex justify-between items-center">
       <span class="text-gray-600">{$t('tour_detail.group_size')}</span>
-      <span>{$t('tours.up_to')} 15 {$t('tours.people')}</span>
+      <span>
+        {#if tour.maxGroupSize && tour.maxGroupSize > 0}
+          {$t('tours.up_to')} {tour.maxGroupSize} {$t('tours.people')}
+        {:else}
+          {$t('tours.unlimited')}
+        {/if}
+      </span>
     </div>
   </div>
 

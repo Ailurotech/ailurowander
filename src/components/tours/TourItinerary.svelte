@@ -6,9 +6,6 @@
 
   export let tour: Tour;
 
-  // Track expanded states for meals only
-  let expandedMeals: Record<number, boolean> = {};
-
   // Gallery state
   let galleryOpen = false;
   let galleryImages: string[] = [];
@@ -27,6 +24,7 @@
       galleryOpen = true;
     }
   }
+
 
   function openDayImageGallery(dayIndex: number) {
     const day = tour.itinerary[dayIndex];
@@ -93,7 +91,6 @@
             <div class="flex-1">
               <h3 class="text-xl font-bold mb-2">{day.title}</h3>
               <p class="mb-4">{day.description}</p>
-
 
               {#if day.meals && day.meals.length > 0}
                 <div class="mt-4">
@@ -175,17 +172,24 @@
                   </div>
                 </div>
               {/if}
+
             </div>
 
             <!-- Image Section -->
             {#if day.image}
               <div class="md:w-80 md:flex-shrink-0">
-                <img
-                  src={day.image}
-                  alt="Day {day.day} - {day.title}"
-                  class="w-full h-48 md:h-full md:min-h-[200px] object-cover rounded-lg shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+                <button
+                  type="button"
+                  class="w-full h-full"
                   on:click={() => openDayImageGallery(index)}
-                />
+                  aria-label={`Open image for day ${day.day}`}
+                >
+                  <img
+                    src={day.image}
+                    alt="Day {day.day} - {day.title}"
+                    class="w-full h-48 md:h-full md:min-h-[200px] object-cover rounded-lg shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+                  />
+                </button>
               </div>
             {/if}
           </div>

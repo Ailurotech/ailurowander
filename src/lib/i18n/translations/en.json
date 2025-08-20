@@ -85,7 +85,8 @@
     "starting_from": "Starting from",
     "group_size": "Group Size",
     "up_to": "Up to",
-    "people": "people"
+    "people": "people",
+    "unlimited": "Unlimited"
   },
   "agent": {
     "login": {
@@ -120,6 +121,8 @@
       "basic_info": "Basic Information",
       "title_label": "Tour Title",
       "title_placeholder": "Enter tour title",
+      "subtitle_label": "Subtitle",
+      "subtitle_placeholder": "Enter a brief subtitle that will appear in the tour header",
       "description_label": "Description",
       "description_placeholder": "Enter tour description",
 
@@ -175,7 +178,8 @@
       "featured_description": "Featured tours are highlighted on the home page.",
       "tags_description": "These tags help users find your tour in searches. Enter multiple tags separated by commas.",
       "discount_placeholder": "e.g. 200",
-      "max_group_size_placeholder": "e.g. 12",
+      "max_group_size_placeholder": "0 = Unlimited, or enter specific number",
+      "max_group_size_help": "Leave as 0 for unlimited group size, or enter a specific maximum number.",
       "icons": {
         "great_wall": "Great Wall",
         "forbidden_city": "Forbidden City",
