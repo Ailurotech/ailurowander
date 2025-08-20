@@ -21,8 +21,8 @@
 
   function openMealGallery(dayIndex: number, mealIndex: number, imageIndex: number) {
     const meal = tour.itinerary[dayIndex].meals?.[mealIndex];
-    if (meal?.images) {
-      galleryImages = meal.images;
+    if (meal && typeof meal === 'object' && 'images' in meal && (meal as any).images) {
+      galleryImages = (meal as any).images as string[];
       galleryInitialIndex = imageIndex;
       galleryOpen = true;
     }
@@ -39,6 +39,33 @@
 
   function closeGallery() {
     galleryOpen = false;
+  }
+
+  // ---- meal translation helpers ----
+  const mealEmoji: Record<string, string> = {
+    breakfast: '🍳',
+    lunch: '🥗',
+    dinner: '🍜'
+  };
+
+  function mealKey(name: string = ''): string {
+    const n = name.trim();
+    return n.startsWith('agent.') ? n : `agent.tours.meals.${n.toLowerCase()}`;
+  }
+
+  function trMeal(name: string = ''): string {
+    const key = mealKey(name);
+    const translated = $t(key);
+    return translated === key ? name : translated;
+  }
+
+  // 返回餐食的展示名（兼容 string 或 { name, ... }）
+  function mealDisplayName(meal: unknown): string {
+    if (typeof meal === 'string') return meal;
+    if (meal && typeof meal === 'object' && 'name' in (meal as any)) {
+      return (meal as any).name ?? '';
+    }
+    return '';
   }
 </script>
 
@@ -120,17 +147,21 @@
                     <div class="mt-3 pl-6 space-y-3">
                       {#each day.meals as meal, mealIndex}
                         <div class="p-3 bg-gray-50 rounded-lg">
-                          <h5 class="font-medium text-sm text-gray-800 mb-1">{meal.name}</h5>
-                          {#if meal.description}
-                            <p class="text-sm text-gray-600 mb-2">{meal.description}</p>
+                          <h5 class="font-medium text-sm text-gray-800 mb-1">
+                            {mealEmoji[mealDisplayName(meal).toLowerCase()] || ''} {trMeal(mealDisplayName(meal))}
+                          </h5>
+
+                          {#if typeof meal === 'object' && meal && 'description' in meal && (meal as any).description}
+                            <p class="text-sm text-gray-600 mb-2">{(meal as any).description}</p>
                           {/if}
-                          {#if meal.images && meal.images.length > 0}
+
+                          {#if typeof meal === 'object' && meal && 'images' in meal && (meal as any).images && (meal as any).images.length > 0}
                             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 max-w-md">
-                              {#each meal.images as image, imgIndex}
+                              {#each (meal as any).images as image, imgIndex}
                                 <div class="aspect-square w-full max-w-[80px]">
                                   <img
                                     src={image}
-                                    alt="Meal: {meal.name}"
+                                    alt={`Meal: ${trMeal(mealDisplayName(meal))}`}
                                     class="w-full h-full object-cover rounded-md shadow-sm hover:shadow-md hover:scale-105 transition-all duration-300 cursor-pointer"
                                     on:click={() => openMealGallery(index, mealIndex, imgIndex)}
                                   />

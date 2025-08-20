@@ -217,7 +217,10 @@
         "photos": "餐食照片",
         "add_photos": "添加照片",
         "remove": "删除",
-        "existing": "现有"
+        "existing": "现有",
+        "breakfast": "早餐",
+        "lunch": "午餐",
+        "dinner": "晚餐"
       },
       "edit_tour": {
         "title": "编辑旅游路线",

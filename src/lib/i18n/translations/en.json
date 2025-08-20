@@ -217,7 +217,10 @@
         "photos": "Meal Photos",
         "add_photos": "Add Photos",
         "remove": "Remove",
-        "existing": "Existing"
+        "existing": "Existing",
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner"
       },
       "edit_tour": {
         "title": "Edit Tour",

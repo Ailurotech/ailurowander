@@ -257,5 +257,14 @@
     "terms": "Términos y Condiciones",
     "connect": "Conectar",
     "rights": "Todos los derechos reservados"
+  },
+  "agent": {
+    "tours": {
+      "meals": {
+        "breakfast": "Desayuno",
+        "lunch": "Almuerzo",
+        "dinner": "Cena"
+      }
+    }
   }
 }

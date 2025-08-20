@@ -257,5 +257,14 @@
     "terms": "AGB",
     "connect": "Verbinden",
     "rights": "Alle Rechte vorbehalten"
+  },
+  "agent": {
+    "tours": {
+      "meals": {
+        "breakfast": "Frühstück",
+        "lunch": "Mittagessen",
+        "dinner": "Abendessen"
+      }
+    }
   }
 }

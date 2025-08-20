@@ -257,5 +257,14 @@
     "terms": "利用規約",
     "connect": "接続する",
     "rights": "全著作権所有"
+  },
+  "agent": {
+    "tours": {
+      "meals": {
+        "breakfast": "朝食",
+        "lunch": "昼食",
+        "dinner": "夕食"
+      }
+    }
   }
 }
