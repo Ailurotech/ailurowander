@@ -33,10 +33,17 @@
     if (!n) return '';
     if (n.startsWith('agent.')) return n;
     return `agent.tours.meals.${n.toLowerCase()}`;
+  function mealKey(name = ''): string {
+    const n = (name || '').trim();
+    if (!n) return '';
+    if (n.startsWith('agent.')) return n;
+    return `agent.tours.meals.${n.toLowerCase()}`;
   }
 
   function trMeal(name = ''): string {
+  function trMeal(name = ''): string {
     const key = mealKey(name);
+    if (!key) return '';
     if (!key) return '';
     const translated = $t(key);
     return translated === key ? name : translated;
@@ -61,6 +68,7 @@
     {#each tour.itinerary || [] as day, index}
       <div
         class="relative pl-8 border-l-2 border-primary pb-8 {index === tour.itinerary.length - 1 ? 'border-transparent' : ''}"
+        class="relative pl-8 border-l-2 border-primary pb-8 {index === tour.itinerary.length - 1 ? 'border-transparent' : ''}"
       >
         <div
           class="absolute -left-4 top-0 bg-primary text-white rounded-full w-8 h-8 flex items-center justify-center font-bold"
@@ -68,8 +76,10 @@
           {day.day}
         </div>
 
+
         <div class="bg-white p-6 rounded-lg shadow-md border border-gray-100">
           <div class="flex flex-col md:flex-row gap-6">
+            <!-- Content -->
             <!-- Content -->
             <div class="flex-1">
               <h3 class="text-xl font-bold mb-2">{day.title}</h3>
@@ -95,7 +105,6 @@
                   {/if}
                 </div>
               {:else if day.meals && day.meals.length > 0}
-                <!-- 兼容旧数据：显示列表（无画廊） -->
                 <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-gray-700">
                   {#each day.meals as meal}
                     {#key meal}
@@ -111,8 +120,21 @@
             </div>
 
             <!-- Image -->
+            <!-- Image -->
             {#if day.image}
               <div class="md:w-80 md:flex-shrink-0">
+                <button
+                  type="button"
+                  class="w-full h-full"
+                  on:click={() => openDayImageGallery(index)}
+                  aria-label={`Open image for day ${day.day}`}
+                >
+                  <img
+                    src={day.image}
+                    alt="Day {day.day} - {day.title}"
+                    class="w-full h-48 md:h-full md:min-h-[200px] object-cover rounded-lg shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-300"
+                  />
+                </button>
                 <button
                   type="button"
                   class="w-full h-full"
