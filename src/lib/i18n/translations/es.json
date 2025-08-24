@@ -8,6 +8,7 @@
     "tours": "Tours",
     "about": "Nosotros",
     "contact": "Contacto",
+    "search": "Buscar",
     "admin": "Admin"
   },
   "home": {
@@ -16,6 +17,10 @@
       "subtitle": "Tours cuidadosamente seleccionados que muestran la belleza, cultura e historia de China",
       "cta_primary": "Explorar Tours",
       "cta_secondary": "Contáctenos"
+    },
+    "map": {
+      "explore_china_by_region": "Explorar China por Región",
+      "discover_tours_by_region": "Descubra nuestros tours en las diferentes provincias de China. Pase el cursor sobre una región para ver los tours disponibles y obtener más información sobre la región."
     },
     "featured": {
       "title": "Tours Destacados",
@@ -108,7 +113,25 @@
     },
     "why_choose": {
       "title": "Por Qué Elegirnos",
-      "subtitle": "Experimente la Diferencia AiluroWander"
+      "subtitle": "Experimente la Diferencia AiluroWander",
+      "points": {
+        "local_expertise": {
+          "title": "Experiencia Local",
+          "description": "Nuestro equipo está formado por expertos locales que conocen los rincones secretos y las experiencias auténticas que harán especial su viaje."
+        },
+        "cultural_immersion": {
+          "title": "Inmersión Cultural",
+          "description": "Vamos más allá de los lugares turísticos típicos para ofrecer experiencias culturales genuinas que le conectan con las tradiciones locales."
+        },
+        "personalized_service": {
+          "title": "Servicio Personalizado",
+          "description": "Cada tour se adapta a sus preferencias, garantizando una experiencia única e inolvidable acorde a sus intereses."
+        },
+        "quality_assurance": {
+          "title": "Garantía de Calidad",
+          "description": "Mantenemos los más altos estándares en alojamiento, transporte y guías para garantizar su comodidad y seguridad."
+        }
+      }
     },
     "team": {
       "title": "Conozca Nuestro Equipo",
@@ -234,5 +257,14 @@
     "terms": "Términos y Condiciones",
     "connect": "Conectar",
     "rights": "Todos los derechos reservados"
+  },
+  "agent": {
+    "tours": {
+      "meals": {
+        "breakfast": "Desayuno",
+        "lunch": "Almuerzo",
+        "dinner": "Cena"
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@
     "tours": "Tours",
     "about": "About",
     "contact": "Contact",
+    "search": "Search",  
     "admin": "Admin"
   },
   "home": {
@@ -16,6 +17,10 @@
       "subtitle": "Expertly curated tours that showcase the beauty, culture, and history of China",
       "cta_primary": "Explore Tours",
       "cta_secondary": "Contact Us"
+    },
+    "map": {
+      "explore_china_by_region": "Explore China by Region",
+      "discover_tours_by_region": "Discover our tours across different provinces of China. Hover over a region to see available tours and learn more about each area."
     },
     "featured": {
       "title": "Featured Tours",
@@ -216,7 +221,10 @@
         "photos": "Meal Photos",
         "add_photos": "Add Photos",
         "remove": "Remove",
-        "existing": "Existing"
+        "existing": "Existing",
+        "breakfast": "Breakfast",
+        "lunch": "Lunch",
+        "dinner": "Dinner"
       },
       "edit_tour": {
         "title": "Edit Tour",
@@ -295,7 +303,25 @@
     },
     "why_choose": {
       "title": "Why Choose Us",
-      "subtitle": "Experience the AiluroWander Difference"
+      "subtitle": "Experience the AiluroWander Difference",
+      "points": {
+        "local_expertise": {
+          "title": "Local Expertise",
+          "description": "Our team consists of local experts who know the hidden gems and authentic experiences that make your journey special."
+        },
+        "cultural_immersion": {
+          "title": "Cultural Immersion",
+          "description": "We go beyond typical tourist spots to provide genuine cultural experiences that connect you with local traditions."
+        },
+        "personalized_service": {
+          "title": "Personalized Service",
+          "description": "Every tour is tailored to your preferences, ensuring a unique and memorable experience that matches your interests."
+        },
+        "quality_assurance": {
+          "title": "Quality Assurance",
+          "description": "We maintain the highest standards in accommodation, transportation, and guides to ensure your comfort and safety."
+        }
+      }
     },
     "team": {
       "title": "Meet Our Team",

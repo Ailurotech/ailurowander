@@ -28,27 +28,27 @@
     },
   ];
 
-  // Why choose us points
+  // Why choose us points (use i18n keys instead of hardcoded English)
   const whyChooseUs = [
     {
       icon: 'temple',
-      title: $t('about.why_choose_us.local_expertise.title'),
-      description: $t('about.why_choose_us.local_expertise.description'),
+      titleKey: 'about.why_choose.points.local_expertise.title',
+      descKey: 'about.why_choose.points.local_expertise.description',
     },
     {
       icon: 'dragon',
-      title: $t('about.why_choose_us.cultural_immersion.title'),
-      description: $t('about.why_choose_us.cultural_immersion.description'),
+      titleKey: 'about.why_choose.points.cultural_immersion.title',
+      descKey: 'about.why_choose.points.cultural_immersion.description',
     },
     {
       icon: 'panda',
-      title: $t('about.why_choose_us.personalized_service.title'),
-      description: $t('about.why_choose_us.personalized_service.description'),
+      titleKey: 'about.why_choose.points.personalized_service.title',
+      descKey: 'about.why_choose.points.personalized_service.description',
     },
     {
       icon: 'lantern',
-      title: $t('about.why_choose_us.quality_assurance.title'),
-      description: $t('about.why_choose_us.quality_assurance.description'),
+      titleKey: 'about.why_choose.points.quality_assurance.title',
+      descKey: 'about.why_choose.points.quality_assurance.description',
     },
   ];
 </script>
@@ -133,8 +133,8 @@
   <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
     {#each whyChooseUs as item}
       <Card
-        title={item.title}
-        description={item.description}
+        title={$t(item.titleKey)}
+        description={$t(item.descKey)}
         icon={{
           name: item.icon as
             | 'great-wall'
