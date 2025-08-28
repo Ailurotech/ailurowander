@@ -84,7 +84,15 @@
 
   <TourCTA />
 
-  <RelatedTours />
+  <script lang="ts">
+    import RelatedTours from '$components/tours/RelatedTours.svelte';
+    export let data;
+    const { tour } = data;
+  </script>
+
+  {#if tour?.tags?.length}
+    <RelatedTours currentTourId={tour._id} tags={tour.tags} />
+  {/if}
 
   <!-- Photo Gallery Popup -->
   <PhotoGalleryPopup

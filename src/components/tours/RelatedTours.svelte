@@ -1,74 +1,89 @@
 <script lang="ts">
   import { t } from '$lib/i18n';
   import Section from '../common/Section.svelte';
+  import TourCard from './TourCard.svelte';
+  import { onMount } from 'svelte';
+  import { get } from 'svelte/store';
+
+  export let currentTourId: string;
+  export let tags: string[] = [];
+
+  let loading = true;
+  let error = '';
+  let related: any[] = [];
+
+  // Normalize API tour shape to the TourCard props that expect simple fields
+  function normalizeForCard(t: any, tFn: (k: string) => string) {
+    return {
+      id: t._id || t.id,
+      title: t.title,
+      description: t.description,
+      image: t.image || t.images?.[0] || '',
+      duration:
+        typeof t.duration === 'string'
+          ? t.duration
+          : (t.duration?.days ? `${t.duration.days} ${tFn('tours.days')}` : ''),
+      // price can be a number or an object like { amount, currency }
+      price: typeof t.price === 'number' ? t.price : (t.price?.amount ?? 0),
+      location: t.destination,
+      isPopular: !!t.featured
+    };
+  }
+
+  async function load() {
+    loading = true;
+    error = '';
+    related = [];
+    try {
+      if (!tags?.length) { loading = false; return; }
+      const params = new URLSearchParams({
+        tags: tags.join(','),
+        excludeId: currentTourId,
+        limit: '3'
+      });
+      const res = await fetch(`/api/tours/related?${params.toString()}`);
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      const tFn = get(t);
+      related = Array.isArray(data) ? data.map((x) => normalizeForCard(x, tFn)) : [];
+    } catch (e) {
+      error = e instanceof Error ? e.message : 'Failed to load related tours';
+    } finally {
+      loading = false;
+    }
+  }
+
+  let _key = '';
+  onMount(load);
+  $: {
+    const newKey = `${currentTourId}|${(tags || []).join(',')}`;
+    if (newKey !== _key) {
+      _key = newKey;
+      load();
+    }
+  }
 </script>
 
-<!-- Related Tours -->
 <Section
   title={$t('tour_detail.related_tours')}
   subtitle={$t('tour_detail.related_subtitle')}
   background="white"
 >
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-    <!-- Sample related tours - These would be dynamically populated -->
-    <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-      <figure class="h-48">
-        <img
-          src="/images/tours/beijing.webp"
-          alt="Beijing Tour"
-          class="w-full h-full object-cover"
-        />
-      </figure>
-      <div class="card-body">
-        <h3 class="card-title">Beijing Explorer</h3>
-        <p class="text-gray-600 mb-4">Discover the imperial wonders of China's capital</p>
-        <div class="flex justify-between items-center">
-          <span class="text-primary font-bold">$799</span>
-          <span class="badge badge-outline">5 days</span>
-        </div>
-        <div class="card-actions justify-end mt-4">
-          <a href="/tours/beijing-explorer" class="btn btn-secondary w-full">View Details</a>
-        </div>
-      </div>
+  {#if loading}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {#each Array(3) as _, i}
+        <TourCard tour={{ id: i, title: '', description: '', image: '', duration: '', price: 0, isLoading: true }} />
+      {/each}
     </div>
-
-    <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-      <figure class="h-48">
-        <img src="/images/tours/xian.jpg" alt="Xi'an Tour" class="w-full h-full object-cover" />
-      </figure>
-      <div class="card-body">
-        <h3 class="card-title">Xi'an Discovery</h3>
-        <p class="text-gray-600 mb-4">Journey to the ancient city and Terracotta Warriors</p>
-        <div class="flex justify-between items-center">
-          <span class="text-primary font-bold">$699</span>
-          <span class="badge badge-outline">4 days</span>
-        </div>
-        <div class="card-actions justify-end mt-4">
-          <a href="/tours/xian-discovery" class="btn btn-secondary w-full">View Details</a>
-        </div>
-      </div>
+  {:else if error}
+    <p class="text-sm text-red-600">{error}</p>
+  {:else if !related.length}
+    <p class="text-sm text-neutral-500">{$t('tours.page.no_tours_found')}</p>
+  {:else}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {#each related as tour}
+        <TourCard {tour} />
+      {/each}
     </div>
-
-    <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 h-full">
-      <figure class="h-48">
-        <img
-          src="/images/tours/shanghai.jpg"
-          alt="Shanghai Tour"
-          class="w-full h-full object-cover"
-        />
-      </figure>
-      <div class="card-body">
-        <h3 class="card-title">Shanghai Urban Adventure</h3>
-        <p class="text-gray-600 mb-4">Experience the city where tradition meets modernity</p>
-        <div class="flex justify-between items-center">
-          <span class="text-primary font-bold">$749</span>
-          <span class="badge badge-outline">4 days</span>
-        </div>
-        <div class="card-actions justify-end mt-4">
-          <a href="/tours/shanghai-urban-adventure" class="btn btn-secondary w-full">View Details</a
-          >
-        </div>
-      </div>
-    </div>
-  </div>
+  {/if}
 </Section>

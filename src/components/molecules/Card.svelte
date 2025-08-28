@@ -88,6 +88,8 @@
         <a
           href={link.url}
           class="btn btn-accent text-white bg-primary font-semibold hover:bg-primary hover:scale-105 hover:text-white transition-all duration-200 text-center py-3 px-6 rounded-lg"
+          data-sveltekit-preload-data
+          on:click|stopPropagation
         >
           {link.text}
         </a>
