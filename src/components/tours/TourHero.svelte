@@ -37,13 +37,12 @@
   <div
     class="relative z-20 container mx-auto px-4 flex flex-col justify-center items-center h-[60vh] text-white text-center"
   >
-    <div class="inline-flex items-center mb-4">
+    <div class="inline-flex items-center mb-6">
       <ChineseIcon icon={iconData.icon} color="white" size="lg" />
       <span class="ml-2 text-lg font-medium">{tour.destination}</span>
     </div>
-    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 max-w-3xl">{tour.title}</h1>
-    <p class="text-xl max-w-2xl mb-8">{tour.subtitle || tour.description}</p>
-    <div class="flex flex-wrap gap-4 items-center justify-center">
+    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 max-w-3xl leading-tight">{tour.title}</h1>
+    <div class="flex flex-wrap gap-4 items-center justify-center mt-2">
       <div class="flex items-center bg-white/20 backdrop-blur-sm rounded-full px-4 py-2">
         <span class="mr-2">⏱️</span>
         <span>{tour.duration.days} days, {tour.duration.nights} nights</span>
