@@ -11,14 +11,33 @@ import {
 } from '$lib/server/services/tourService';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Tour } from '$lib/types/tour';
+import { validateSession } from '$lib/server/services/authService';
+
+// Add authentication check helper
+async function checkAuth(event: RequestEvent) {
+  const sessionToken = event.cookies.get('agent_session');
+  
+  if (!sessionToken) {
+    return false;
+  }
+  
+  const agent = await validateSession(sessionToken);
+  return !!agent;
+}
 
 // In a real application, this endpoint would be protected by authentication
-export async function POST({ request }: RequestEvent) {
+export async function POST(event: RequestEvent) {
+  // Check authentication
+  const isAuthenticated = await checkAuth(event);
+  if (!isAuthenticated) {
+    return json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   console.log('API: POST /api/tours/create - Creating new tour');
 
   try {
     // Check if the request size is too large before processing
-    const contentLength = request.headers.get('content-length');
+    const contentLength = event.request.headers.get('content-length');
     if (contentLength) {
       const sizeInMB = parseInt(contentLength) / (1024 * 1024);
       console.log(`Request size: ${sizeInMB.toFixed(2)}MB`);
@@ -32,7 +51,7 @@ export async function POST({ request }: RequestEvent) {
       }
     }
 
-    const formData = await request.formData();
+    const formData = await event.request.formData();
     console.log('API: Form data received, fields:', Array.from(formData.keys()));
 
     // Extract tour data from form
@@ -109,7 +128,9 @@ export async function POST({ request }: RequestEvent) {
       );
 
       // Update tour with image URLs
-      await updateTourImages(tour._id.toString(), imageUrls);
+      if (imageUrls.main || imageUrls.gallery) {
+        await updateTourImages(tour._id.toString(), imageUrls);
+      }
     }
 
     // Handle itinerary image uploads

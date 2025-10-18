@@ -15,10 +15,29 @@ import {
 } from '$lib/server/services/tourService';
 import type { RequestEvent } from '@sveltejs/kit';
 import type { Tour } from '$lib/types/tour';
+import { validateSession } from '$lib/server/services/authService';
 
-export const GET = async ({ params }: RequestEvent) => {
+// Add authentication check helper
+async function checkAuth(event: RequestEvent) {
+  const sessionToken = event.cookies.get('agent_session');
+  
+  if (!sessionToken) {
+    return false;
+  }
+  
+  const agent = await validateSession(sessionToken);
+  return !!agent;
+}
+
+export const GET = async (event: RequestEvent) => {
+  // Check authentication for all methods
+  const isAuthenticated = await checkAuth(event);
+  if (!isAuthenticated) {
+    return json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    const id = params.id;
+    const id = event.params.id;
     if (!id) {
       return json({ error: 'Tour ID is required' }, { status: 400 });
     }
@@ -36,18 +55,21 @@ export const GET = async ({ params }: RequestEvent) => {
   }
 };
 
-// The following endpoints would typically be protected by authentication
-// in a production application
+export const PUT = async (event: RequestEvent) => {
+  // Check authentication for all methods
+  const isAuthenticated = await checkAuth(event);
+  if (!isAuthenticated) {
+    return json({ error: 'Unauthorized' }, { status: 401 });
+  }
 
-export const PUT = async ({ params, request }: RequestEvent) => {
   try {
-    const id = params.id;
+    const id = event.params.id;
     if (!id) {
       return json({ error: 'Tour ID is required' }, { status: 400 });
     }
 
     // Check if the request size is too large before processing
-    const contentLength = request.headers.get('content-length');
+    const contentLength = event.request.headers.get('content-length');
     if (contentLength) {
       const sizeInMB = parseInt(contentLength) / (1024 * 1024);
       console.log(`Request size: ${sizeInMB.toFixed(2)}MB`);
@@ -61,7 +83,7 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       }
     }
 
-    const formData = await request.formData();
+    const formData = await event.request.formData();
 
     // Extract tour data from form
     const maxGroupSizeValue = formData.get('maxGroupSize') as string;
@@ -156,11 +178,11 @@ export const PUT = async ({ params, request }: RequestEvent) => {
       }
 
       // Add new images
-      if (hasValidMainImage) {
+      if (hasValidMainImage && imageUrls.main) {
         finalMainImage = imageUrls.main;
       }
 
-      if (hasValidGalleryImages) {
+      if (hasValidGalleryImages && imageUrls.gallery) {
         finalGalleryImages = [...finalGalleryImages, ...imageUrls.gallery];
       }
 
@@ -267,9 +289,15 @@ export const PUT = async ({ params, request }: RequestEvent) => {
   }
 };
 
-export const DELETE = async ({ params }: RequestEvent) => {
+export const DELETE = async (event: RequestEvent) => {
+  // Check authentication for all methods
+  const isAuthenticated = await checkAuth(event);
+  if (!isAuthenticated) {
+    return json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    const id = params.id;
+    const id = event.params.id;
     if (!id) {
       return json({ error: 'Tour ID is required' }, { status: 400 });
     }

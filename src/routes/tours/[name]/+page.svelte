@@ -62,14 +62,15 @@
 
 <!-- Tour Information -->
 <div class="container mx-auto px-4 py-12">
-  <!-- Main Content and Booking Card -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-    <div class="lg:col-span-2">
+  <div class="flex flex-col lg:flex-row gap-8 mb-16">
+    <div class="lg:w-2/3">
       <TourContent {tour} />
       <TourHighlights {tour} />
     </div>
 
-    <TourBookingCard {tour} />
+    <div class="lg:w-1/3">
+      <TourBookingCard {tour} />
+    </div>
   </div>
 
   <TourItinerary {tour} />
