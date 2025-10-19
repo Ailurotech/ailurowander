@@ -13,6 +13,7 @@
   import TourTags from '../../../components/tours/TourTags.svelte';
   import TourCTA from '../../../components/tours/TourCTA.svelte';
   import RelatedTours from '../../../components/tours/RelatedTours.svelte';
+  import BestTravelTime from '../../../components/tours/BestTravelTime.svelte';
 
   // Data loaded from +page.ts
   export let data: {
@@ -65,6 +66,7 @@
   <div class="flex flex-col lg:flex-row gap-8 mb-16">
     <div class="lg:w-2/3">
       <TourContent {tour} />
+      <BestTravelTime />
       <TourHighlights {tour} />
     </div>
 
