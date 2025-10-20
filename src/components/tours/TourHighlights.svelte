@@ -33,6 +33,6 @@
       {/each}
     </div>
   {:else}
-    <p class="text-gray-600">Highlights information will be available soon.</p>
+    <p class="text-gray-600">{$t('tour_detail.highlights_coming_soon')}</p>
   {/if}
 </div>

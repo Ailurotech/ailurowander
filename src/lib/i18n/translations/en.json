@@ -74,6 +74,21 @@
       "available_tours": "Available Tours",
       "available_tours_subtitle": "Find your perfect adventure from our carefully curated collection of tours"
     },
+    "best_travel_time": {
+      "title": "When to go",
+      "description": "The best times to visit China are in spring, April to May and autumn, September to October, when the days are warm and rainfall and humidity low.",
+      "city": "City",
+      "month": "Month",
+      "loading": "Loading weather data...",
+      "error": "Failed to load weather data. Please try again later.",
+      "temperature": "Temperature",
+      "rainfall": "Rainfall",
+      "cities": {
+        "beijing": "Beijing",
+        "shanghai": "Shanghai",
+        "xian": "Xi'an"
+      }
+    },
     "duration": "Duration",
     "price": "Price",
     "from": "from",
@@ -417,6 +432,7 @@
     "free_cancellation": "Free cancellation up to 30 days before",
     "customer_support": "24/7 customer support",
     "highlights": "Tour Highlights",
+    "highlights_coming_soon": "Highlights information will be available soon.",
     "itinerary": "Tour Itinerary",
     "itinerary_subtitle": "Day-by-day schedule of your journey",
     "day": "Day",

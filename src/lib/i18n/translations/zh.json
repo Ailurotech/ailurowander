@@ -74,6 +74,21 @@
       "available_tours": "可用旅游路线",
       "available_tours_subtitle": "从我们精心策划的旅游路线集合中找到您的完美冒险"
     },
+    "best_travel_time": {
+      "title": "最佳旅游时间",
+      "description": "游览中国的最佳时间是春季4月至5月和秋季9月至10月，此时天气温暖，降雨量和湿度较低。",
+      "city": "城市",
+      "month": "月",
+      "loading": "正在加载天气数据...",
+      "error": "加载天气数据失败，请稍后重试。",
+      "temperature": "温度",
+      "rainfall": "降水量",
+      "cities": {
+        "beijing": "北京",
+        "shanghai": "上海",
+        "xian": "西安"
+      }
+    },
     "duration": "行程天数",
     "price": "价格",
     "from": "起价",
@@ -417,6 +432,7 @@
     "free_cancellation": "出发前30天免费取消",
     "customer_support": "24/7客户支持",
     "highlights": "旅游亮点",
+    "highlights_coming_soon": "亮点信息即将推出。",
     "itinerary": "旅游行程",
     "itinerary_subtitle": "您旅程的每日安排",
     "day": "天",
