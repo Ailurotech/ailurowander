@@ -66,7 +66,7 @@
   <div class="flex flex-col lg:flex-row gap-8 mb-16">
     <div class="lg:w-2/3">
       <TourContent {tour} />
-      <BestTravelTime />
+      <BestTravelTime {tour} />
       <TourHighlights {tour} />
     </div>
 
