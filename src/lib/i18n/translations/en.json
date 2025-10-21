@@ -74,6 +74,26 @@
       "available_tours": "Available Tours",
       "available_tours_subtitle": "Find your perfect adventure from our carefully curated collection of tours"
     },
+    "pricing_availability": {
+      "title": "Pricing & Availability",
+      "from": "from",
+      "reviews": "Reviews",
+      "call_to_book": "Call to book",
+      "description": "All of our tour departures include international flights and taxes in the price unless a land only option is selected",
+      "all_dates": "All Dates",
+      "departure": "Departure",
+      "all_departures": "All",
+      "room": "Room",
+      "rooms": "Rooms",
+      "guest": "Guest",
+      "guests": "Guests",
+      "land_only": "Land Only",
+      "depart_date": "DEPART DATE",
+      "return_date": "RETURN DATE",
+      "price": "PRICE",
+      "availability": "AVAILABILITY",
+      "book_online": "Book Online"
+    },
     "best_travel_time": {
       "title": "When to go",
       "description": "The best times to visit China are in spring, April to May and autumn, September to October, when the days are warm and rainfall and humidity low.",

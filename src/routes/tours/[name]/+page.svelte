@@ -14,6 +14,7 @@
   import TourCTA from '../../../components/tours/TourCTA.svelte';
   import RelatedTours from '../../../components/tours/RelatedTours.svelte';
   import BestTravelTime from '../../../components/tours/BestTravelTime.svelte';
+  import PricingAvailability from '../../../components/tours/PricingAvailability.svelte';
 
   // Data loaded from +page.ts
   export let data: {
@@ -67,10 +68,12 @@
     <div class="lg:w-2/3">
       <TourContent {tour} />
       <BestTravelTime {tour} />
+      <PricingAvailability {tour} />
       <TourHighlights {tour} />
     </div>
 
     <div class="lg:w-1/3">
+      <PricingAvailability {tour} />
       <TourBookingCard {tour} />
     </div>
   </div>

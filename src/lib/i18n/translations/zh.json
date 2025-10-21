@@ -74,6 +74,26 @@
       "available_tours": "可用旅游路线",
       "available_tours_subtitle": "从我们精心策划的旅游路线集合中找到您的完美冒险"
     },
+    "pricing_availability": {
+      "title": "团期价格与预订",
+      "from": "起价",
+      "reviews": "评价",
+      "call_to_book": "致电预订",
+      "description": "我们的所有旅游出发日期都包含国际航班和税费，除非选择仅含陆地服务的选项",
+      "all_dates": "所有日期",
+      "departure": "出发地",
+      "all_departures": "全部",
+      "room": "房间",
+      "rooms": "房间",
+      "guest": "客人",
+      "guests": "客人",
+      "land_only": "仅含陆地服务",
+      "depart_date": "出发日期",
+      "return_date": "返回日期",
+      "price": "价格",
+      "availability": "名额",
+      "book_online": "在线预订"
+    },
     "best_travel_time": {
       "title": "最佳旅游时间",
       "description": "游览中国的最佳时间是春季4月至5月和秋季9月至10月，此时天气温暖，降雨量和湿度较低。",
