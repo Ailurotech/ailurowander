@@ -214,17 +214,40 @@ async function getClimateData(
 	}
 }
 
+// Extract primary city from destination string
+function extractPrimaryCity(destination: string): string {
+	// Remove extra whitespace and normalize
+	const normalized = destination.trim();
+
+	// Try to match against known cities first (handles multi-word cities)
+	const knownCities = Object.keys(CITY_COORDINATES);
+	for (const city of knownCities) {
+		if (normalized.toLowerCase().includes(city.toLowerCase())) {
+			return city;
+		}
+	}
+
+	// If no known city found, extract the first segment
+	// This handles cases like "Beijing Xi'an Leshan" -> "Beijing"
+	const firstSegment = normalized.split(/\s+/)[0];
+	return firstSegment;
+}
+
 export const GET = async ({ url }: RequestEvent) => {
 	console.log('API: GET /api/weather - Fetching weather data');
 
 	try {
-		const city = url.searchParams.get('city');
+		const destination = url.searchParams.get('city');
 
-		if (!city) {
+		if (!destination) {
 			return json({ error: 'City parameter is required' }, { status: 400 });
 		}
 
-		console.log(`API: GET /api/weather - City: ${city}`);
+		console.log(`API: GET /api/weather - Destination: ${destination}`);
+
+		// Extract the primary city from the destination string
+		const city = extractPrimaryCity(destination);
+		console.log(`API: GET /api/weather - Extracted primary city: ${city}`);
 
 		// Step 1: Geocode the city
 		const location = await geocodeCity(city);
@@ -232,7 +255,7 @@ export const GET = async ({ url }: RequestEvent) => {
 			return json(
 				{
 					error: 'City not found',
-					message: `Could not find location data for: ${city}`
+					message: `Could not find location data for: ${city} (from destination: ${destination})`
 				},
 				{ status: 404 }
 			);
