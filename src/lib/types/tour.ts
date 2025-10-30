@@ -20,6 +20,7 @@ export interface Tour {
     currency: string;
   };
   destination: string;
+  weatherCity?: string; // City to use for weather display (optional, falls back to destination)
   maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   itinerary: {
@@ -83,6 +84,7 @@ export interface TourFormData {
     currency: string;
   };
   destination: string;
+  weatherCity?: string; // City to use for weather display (optional, falls back to destination)
   maxGroupSize?: number; // Maximum number of people allowed in the tour group
   highlights: string[];
   inclusions: string[];

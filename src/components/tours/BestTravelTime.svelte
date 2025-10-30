@@ -29,17 +29,17 @@
     error = null;
 
     try {
-      // 从tour.destination获取城市名称
-      const destination = tour.destination;
+      // 优先使用weatherCity，如果没有则使用destination
+      const city = tour.weatherCity || tour.destination;
 
-      if (!destination) {
-        throw new Error('No destination specified');
+      if (!city) {
+        throw new Error('No city specified');
       }
 
-      console.log('Fetching weather data for destination:', destination);
+      console.log('Fetching weather data for city:', city);
 
       // 调用天气API
-      const response = await fetch(`/api/weather?city=${encodeURIComponent(destination)}`);
+      const response = await fetch(`/api/weather?city=${encodeURIComponent(city)}`);
 
       if (!response.ok) {
         const errorData = await response.json();

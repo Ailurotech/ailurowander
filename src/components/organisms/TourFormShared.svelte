@@ -21,6 +21,7 @@
     duration: initialData.duration || { days: 0, nights: 0 },
     price: initialData.price || { amount: 0, currency: 'USD' },
     destination: initialData.destination || '',
+    weatherCity: initialData.weatherCity || '',
     maxGroupSize: initialData.maxGroupSize || 10, // Default to 10 people for form display
     highlights: initialData.highlights || [],
     inclusions: initialData.inclusions || [
@@ -512,6 +513,9 @@
     }
     formData.append('description', tourData.description);
     formData.append('destination', tourData.destination);
+    if (tourData.weatherCity) {
+      formData.append('weatherCity', tourData.weatherCity);
+    }
     formData.append('durationDays', tourData.duration.days.toString());
     formData.append('durationNights', tourData.duration.nights.toString());
     formData.append('price', tourData.price.amount.toString());
@@ -612,6 +616,27 @@
             on:apply={e => (tourData.destination = e.detail.translation)}
           />
         </div>
+      </div>
+
+      <div class="form-group">
+        <label for="weatherCity" class="form-label">{$t('agent.tours.weather_city_label')}</label>
+        <div class="flex gap-2">
+          <input
+            type="text"
+            id="weatherCity"
+            bind:value={tourData.weatherCity}
+            class="input flex-1"
+            placeholder={$t('agent.tours.weather_city_placeholder')}
+          />
+          <TranslateButton
+            text={tourData.weatherCity || ''}
+            context="tour_weather_city"
+            category="destinations"
+            size="sm"
+            on:apply={e => (tourData.weatherCity = e.detail.translation)}
+          />
+        </div>
+        <p class="text-sm text-gray-600 mt-1">{$t('agent.tours.weather_city_hint')}</p>
       </div>
 
       <div class="form-group">
