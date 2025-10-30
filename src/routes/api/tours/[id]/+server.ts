@@ -94,6 +94,7 @@ export const PUT = async (event: RequestEvent) => {
       subtitle: formData.get('subtitle') as string || undefined,
       description: formData.get('description') as string,
       destination: formData.get('destination') as string,
+      weatherCity: formData.get('weatherCity') as string || undefined,
       duration: {
         days: parseInt(formData.get('durationDays') as string),
         nights: parseInt(formData.get('durationNights') as string),

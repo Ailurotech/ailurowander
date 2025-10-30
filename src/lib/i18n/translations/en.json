@@ -163,6 +163,9 @@
 
       "destination_label": "Destination",
       "destination_placeholder": "Enter destination",
+      "weather_city_label": "Weather City (Optional)",
+      "weather_city_placeholder": "Enter city for weather display (e.g., Beijing)",
+      "weather_city_hint": "Specify a single city to display weather data. Leave empty to use the first city from destination.",
       "duration_label": "Duration",
       "days": "Days",
       "nights": "Nights",

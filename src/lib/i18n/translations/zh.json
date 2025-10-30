@@ -163,6 +163,9 @@
 
       "destination_label": "目的地",
       "destination_placeholder": "输入目的地",
+      "weather_city_label": "天气城市（可选）",
+      "weather_city_placeholder": "输入显示天气的城市（例如：北京）",
+      "weather_city_hint": "指定单个城市以显示天气数据。留空则使用目的地中的第一个城市。",
       "duration_label": "行程天数",
       "days": "天数",
       "nights": "夜数",
